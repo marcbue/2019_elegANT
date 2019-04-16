@@ -1,0 +1,2 @@
+The docs are for documenting the code.
+It would be awesome to automate the creation.
