@@ -1,4 +1,4 @@
-from src.model.model import Player
+from src.model.player import Player
 
 name = "franz"
 color = "red"
