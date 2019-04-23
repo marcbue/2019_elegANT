@@ -107,3 +107,10 @@ venv.bak/
 # temp files
 *.*~
 *.sw*
+
+# Pycharm config files
+*.iml
+*.xml
+
+# Pickle save files
+*.p
