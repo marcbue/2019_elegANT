@@ -37,5 +37,5 @@ def test_data_storage():
     player = Player(name, color)
     player.store_data()
     player2 = Player(name, color)
-    player2.read_data()
+    player2.read_data(filename=str(name) + ".p")
     assert player.__dict__ == player2.__dict__
