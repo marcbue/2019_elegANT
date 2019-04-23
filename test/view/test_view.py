@@ -1,5 +1,4 @@
 from src.view.view import View
-import pygame
 
 
 def test_view_name():
