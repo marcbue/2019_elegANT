@@ -23,7 +23,7 @@ def test_name_getter():
 
 def test_color_setter():
     player = Player(name, color)
-    new_color = "herbert"
+    new_color = "rosa"
     player.set_color(new_color)
     assert player.color == new_color
 

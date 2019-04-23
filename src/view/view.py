@@ -9,6 +9,7 @@ class View:
         self.screen = pygame.display.set_mode(self.size)
 
     def get_event(self):
+        """returns event or false if no event is triggered"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return "quit"
