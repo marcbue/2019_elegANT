@@ -18,6 +18,7 @@ class View:
         pygame.init()
         self.size = width, height
         self.screen = pygame.display.set_mode(self.size)
+        self.color = self.screen.fill((247, 247,247))
         self.mouse_pos = pygame.mouse.get_pos()
         self.mouse_event = pygame.mouse.get_pressed()
         self.elements = {}
@@ -25,11 +26,11 @@ class View:
     def start_view(self):
         self.elements = {}
         #self.add_element(Button(self, "start_button", 0, 10, 100, 200))
-        text = Text(self, "headline", 500, 200, -1, -1, 115)
+        text = Text(self, "headline", 250,100, -1, -1, 115)
         text.set_text("ElegANT")
         self.add_element(text)
         self.add_element(Button(self,"button1",850,200,-1,-1, 25,(200,0,0),(255,0,0))) #red
-        self.add_element(Button(self,"button2",850,500,-1,-1, 25,(200,200,0),(255,255,0))) #yellow
+        self.add_element(Button(self,"button2",850,500,-1,-1, 25,(200,200,0),(235,235,0))) #yellow
         self.add_element(Button(self,"button3",700,350,-1,-1, 25,(0,0,205),(0,0,255))) #blue
         self.add_element(Button(self,"button4",1000,350,-1,-1, 25,(255,20,147),(255,75,202))) #pink
         self.add_element(Button(self,"button5",750,460,-1,-1, 25,(178,58,238),(191,62,255))) #purple
