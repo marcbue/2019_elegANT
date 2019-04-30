@@ -1,8 +1,10 @@
-class Ant:
+from .game_object import Game_object
+
+class Ant(Game_object):
     def __init__(self, player, position):
+        super(Ant, self).__init__(position)
         # TODO: assign id
         self.color = player.get_color()
-        self.position = position
         self.has_food = False
         self.energy = 100
 
@@ -21,7 +23,7 @@ class Ant:
             pass
 
         # 2. elif it smells, go to smell
-        # 3. ove randomly
+        # 3. move randomly
 
     def set_trace(self):
         if self.has_food:
