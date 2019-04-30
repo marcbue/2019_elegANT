@@ -38,7 +38,10 @@ class View:
         self.add_element(Button(self,"button7",750,250,-1,-1, 25,(0,200,0),(0,255,0))) #green
         self.add_element(Button(self,"button8",950,460,-1,-1, 25,(255,165,0),(255,200,20))) #orange
                 
-        
+        self.add_element(StartBox(self,"start_box",750,320,200,60,(33,29,35),(140,136,141))) #black-ish -> grey
+        start_text = Text(self, "start_text", 850,350,-1,-1, 45) 
+        start_text.set_text("START!")
+        self.add_element(start_text)              
     
     def add_element(self, ui_element):
         self.elements[ui_element.identifier] = ui_element
@@ -75,8 +78,6 @@ class ViewElement:
         self.w = width
         self.h = height
         self.events = {}
- 
-
     
     def draw(self):
         pass
@@ -96,7 +97,6 @@ class Text(ViewElement):
         super(Text, self).__init__(view, identifier, x, y, width, height)
         self.fontsize = fontsize
         
-    
     def set_text(self,text):
         self.text = text
         largeText = pygame.font.SysFont('centuryschoolbook',self.fontsize)
@@ -110,7 +110,6 @@ class Text(ViewElement):
 
 class UIElement(ViewElement):
     pass
-
 
 class Button(UIElement):
     def __init__(self, view, identifier, x, y, width, height, radius, color1, color2,):
@@ -146,7 +145,40 @@ class Button(UIElement):
                     fnct(args)
         #self.color = self.color1
 
+        
+class StartBox(UIElement):
+    def __init__(self, view, identifier, x, y, width, height, color1, color2,):
+        super(StartBox, self).__init__(view, identifier, x, y, width, height)
+        self.color1 = color1
+        self.color2 = color2
+        self.color = color1
+        self.width = width
+        self.height = height
+        self.on("hover", self.change_color, self.color2)
+        self.on("leave", self.change_color, self.color1)
+    
+    def change_color(self, new_color):
+        self.color = new_color
+        
+    def draw(self):
+        pygame.draw.rect(self.view.screen, self.color, (self.x, self.y, self.width, self.height))
+        #pygame.draw.circle(self.view.screen, self.color, (self.x, self.y), self.radius)
 
+    def event_listener(self):
+        pos = self.view.mouse_pos
+        event = self.view.mouse_event
+        
+        if self.x+self.width > pos[0] > self.x and self.y+self.width > pos[1] > self.y:
+            if "hover" in self.events:
+                for fnct, args in self.events["hover"]:
+                    fnct(args)
+            if "click" in self.events and event[0] == 1:
+                for fnct, args in self.events["click"]:
+                    fnct(args)
+        else:
+            if "leave" in self.events:
+                for fnct, args in self.events["leave"]:
+                    fnct(args)            
 # In[ ]:
 
 
@@ -161,6 +193,7 @@ class Controller:
         
         start_message = self.view.get_element_by_id("headline")
         first_button = self.view.get_element_by_id("button1")
+        start_button = self.view.get_element_by_id("start_box")
         
         #start_button.on("click", greet)
         #first_button.on("hover", lambda: print("Hover!"))
@@ -177,7 +210,3 @@ controller = Controller()
 
 
 # In[ ]:
-
-
-
-
