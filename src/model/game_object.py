@@ -1,4 +1,4 @@
-class Game_object:
+class GameObject:
 
     def __init__(self, position):
         self.pos = position

@@ -1,6 +1,6 @@
-from .game_object import Game_object
+from .game_object import GameObject
 
-class Food(Game_object):
+class Food(GameObject):
 
     def __init__(self, position, size):
         super(Food, self).__init__(position)

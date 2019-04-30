@@ -1,8 +1,8 @@
-from .game_object import Game_object
+from .game_object import GameObject
 
-class Nest(Game_object):
 
-    def __init__(self, position, size, color, health=100):
+class Nest(GameObject):
+    def __init__(self, position, color, size=10, health=100):
         super(Nest, self).__init__(position)
         # TODO: also needs id
         self.color = color

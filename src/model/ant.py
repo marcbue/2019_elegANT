@@ -1,6 +1,7 @@
-from .game_object import Game_object
+from .game_object import GameObject
 
-class Ant(Game_object):
+
+class Ant(GameObject):
     def __init__(self, player, position):
         super(Ant, self).__init__(position)
         # TODO: assign id
