@@ -1,5 +1,6 @@
 from .game_object import GameObject
 
+
 class Ant(GameObject):
 
     """
@@ -47,7 +48,9 @@ class Ant(GameObject):
 
         :return:
         """
-        self.has_food = False
+        if self.position == nest.position():
+            self.has_food = False
+            nest.increase_food(1)
 
     def load_food(self):
         """ Flip (has_food) variable to true when the ant finds food
