@@ -12,7 +12,7 @@ class KdTreeAndDict(World):
         self.all_objects = {}
         self.kd_tree = cKDTree()
 
-    def get_k_nearest(self, position):
+    def get_k_nearest(self, position, k):
         # Inheriting class should return k nearest neigbours of the passed position
         pass
 
@@ -37,7 +37,7 @@ class KdTreeAndDict(World):
     def update(self):
         pass
 
-    def create_nests(self, color_list, position_list, size=10, health=100):
+    def create_nests(self, color_list, position_list, size, health):
         for position, color in zip(position_list, color_list):
             self.all_objects.setdefault(position, []).append(Nest(position, color, size, health))
         self._update_tree()

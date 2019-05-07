@@ -6,7 +6,11 @@ from abc import ABC, abstractmethod
 class World(ABC):
 
     @abstractmethod
-    def get_k_nearest(self, position):
+    def get_k_nearest(self, position, k):
+        # Inheriting class should return k nearest neigbours of the passed position
+        raise NotImplementedError("Please use subclassing.")
+
+    def get_at_position(self, position):
         # Inheriting class should return k nearest neigbours of the passed position
         raise NotImplementedError("Please use subclassing.")
 
@@ -37,7 +41,7 @@ class World(ABC):
         raise NotImplementedError("Please use subclassing.")
 
     @abstractmethod
-    def create_nests(self, color_list, position_list):
+    def create_nests(self, color_list, position_list, size, health):
         raise NotImplementedError("Please use subclassing.")
 
     @abstractmethod
