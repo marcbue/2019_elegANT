@@ -50,6 +50,7 @@ class Nest(GameObject):
 
         """
         self.food += food_amount
+        return food
 
     def create_ant(self):
         """ Create new ant to this nest after checking if the nest has enough food.
