@@ -28,8 +28,9 @@ class View:
     def change_view_state(self, state):
         if self.state == state:
             return
-        # Destroy all UI elements that are no longer needed
+        # Destroy all UI elements that are no longer needed and clear screen
         self.elements = {}
+        self.screen.fill((247, 247, 247))
         # Construct new UI elements for the requested state
         if state == View.STARTVIEW:
             self.state = View.STARTVIEW
@@ -60,8 +61,9 @@ class View:
         self.add_element(ColorSelector(self, "colour_selector", 850, 350, 150, player_colors))
 
         # add element for start button and the text on it
-        self.add_element(
-            Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square'))  # orange
+        start_button = Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
+        self.add_element(start_button)
+            
         starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
         starttext.set_text("START")
         self.add_element(starttext)
