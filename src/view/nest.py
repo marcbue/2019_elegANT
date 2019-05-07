@@ -1,3 +1,5 @@
+from view_element import ViewElement
+
 class Nest(ViewElement):
     def __init__(self, view, identifier, x, y, radius, color):
         super(Nest, self).__init__(view, identifier, x, y)
