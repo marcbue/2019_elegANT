@@ -2,6 +2,7 @@ import sys
 import pygame
 from text import Text
 from button import Button
+from color_selector import ColorSelector
 from input_box import InputBox
 from nest import Nest
 from ant import Ant
@@ -15,7 +16,7 @@ class View:
     def __init__(self, width, height):
         pygame.init()
 
-        self.state = None #View.STARTVIEW
+        self.state = None
         self.size = width, height
         self.screen = pygame.display.set_mode(self.size)
         self.color = self.screen.fill((247, 247, 247))
@@ -45,18 +46,20 @@ class View:
         text.set_text("ElegANT")
         self.add_element(text)
 
-        # add element for choosing each color of ant
-        self.add_element(Button(self, "red_button", 850, 200, -1, -1, 25, (220, 0, 0), (255, 84, 84)))  # red
-        self.add_element(Button(self, "peach_button", 850, 500, -1, -1, 25, (255, 160, 125), (255, 218, 185)))  # peach
-        self.add_element(Button(self, "blue_button", 700, 350, -1, -1, 25, (0, 0, 255), (30, 144, 255)))  # blue
-        self.add_element(Button(self, "pink_button", 1000, 350, -1, -1, 25, (255, 20, 147), (255, 95, 225)))  # pink
-        self.add_element(Button(self, "purple_button", 750, 460, -1, -1, 25, (178, 58, 238), (171, 130, 255)))  # purple
-        self.add_element(
-            Button(self, "light_green_button", 950, 250, -1, -1, 25, (0, 245, 255), (187, 255, 255)))  # turquoise
-        self.add_element(Button(self, "green_button", 750, 250, -1, -1, 25, (0, 200, 0), (0, 255, 0)))  # green
-        self.add_element(Button(self, "orange_button", 950, 460, -1, -1, 25, (255, 165, 0), (255, 210, 30)))  # orange
+        # Add elemt for choosing players color
+        player_colors = [
+            (220, 0, 0),
+            (255, 160, 125),
+            (0, 0, 255),
+            (255, 20, 147),
+            (178, 58, 238),
+            (0, 245, 255),
+            (0, 200, 0),
+            (255, 165, 0)
+        ]
+        self.add_element(ColorSelector(self, "colour_selector", 850, 350, 150, player_colors))
 
-        # add element for starØt button and the text on it
+        # add element for start button and the text on it
         self.add_element(
             Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square'))  # orange
         starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
