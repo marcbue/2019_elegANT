@@ -34,20 +34,20 @@ class Button(UIElement):
                     self.y - self.radius:
                 # if "hover" in self.events:
                 #     for fnct, args in self.events["hover"]:
-                #         fnct(args)
+                #         fnct(**args)
                 if "click" in self.events and event.type == pygame.MOUSEBUTTONDOWN:
                     print('click_circle')
                     for fnct, args in self.events["click"]:
-                        fnct(args)
+                        fnct(**args)
         #     else:
         #         if "leave" in self.events:
         #             for fnct, args in self.events["leave"]:
-        #                 fnct(args)
+        #                 fnct(**args)
         if self.shape == 'square':
             if self.x + self.width > pos[0] > self.x and self.y + self.height > pos[1] > self.y:
                 # if "hover" in self.events:
                 #     for fnct, args in self.events["hover"]:
-                #         fnct(args)
+                #         fnct(**args)
                 if "click" in self.events and event.type == pygame.MOUSEBUTTONDOWN:
                     print('click')
                     for fnct, args in self.events["click"]:
