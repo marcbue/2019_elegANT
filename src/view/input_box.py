@@ -17,6 +17,7 @@ class InputBox(UIElement):
         self.on("keyback", self.keyback,newtext=self.text)
 
     def mouse_click(self, newcolor):
+        print(newcolor)
         self.active = not self.active
         self.color = newcolor
 
@@ -42,7 +43,7 @@ class InputBox(UIElement):
             if self.rect.collidepoint(pos):
                 if "mouseclick" in self.events:
                     for fnct, args in self.events["mouseclick"]:
-                        fnct(args)
+                        fnct(**args)
             else:
                 self.active = False
         if event.type == pygame.KEYDOWN:
