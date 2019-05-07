@@ -1,3 +1,5 @@
+# Interface used by GameState
+# Implementation is done currently by KdTreeAndDict
 class World:
     def get_k_nearest(self, position):
         # Inheriting class should return k nearest neigbours of the passed position
@@ -24,10 +26,10 @@ class World:
     def update(self):
         pass
 
-    def create_nests(self, color_list, position_list):
+    def create_nest(self, nest_position, color, size, health):
         pass
 
-    def create_ants(self, nest, amount):
+    def create_ants(self, nest_position, amount):
         pass
 
     def create_food(self, position_list, size_list):
