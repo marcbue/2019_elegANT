@@ -11,11 +11,11 @@ class Ant(GameObject):
             Attributes
             ----------
             color: string
-                a list of players id that are currently in the game
+                a string of the ant color
             position: list
-                a list of all game objects and their positions
+                a list of the ant coordinates
             has_food: boolean
-                a flag that speicifies whether the ant has food or not
+                a flag that specifies whether the ant has food or not
             energy: int
                 a number that specifies current energy value the ant has
 
