@@ -15,7 +15,7 @@ class ViewElement:
         print('event not handled')
         pass
 
-    def on(self, event, fnct, *args):
+    def on(self, event, fnct, **kwargs):
         if event not in self.events:
             self.events[event] = []
-        self.events[event].append((fnct, args))
+        self.events[event].append((fnct, kwargs))
