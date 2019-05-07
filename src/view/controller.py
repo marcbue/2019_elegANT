@@ -3,7 +3,7 @@ from view import View
 class Controller:
     def __init__(self):
         self.view = View(1300, 800)
-        self.view.change_view_state(View.GAMEVIEW)
+        self.view.change_view_state(View.STARTVIEW)
 
         # start_message = self.view.get_element_by_id("headline")
         # first_button = self.view.get_element_by_id("start_button")

@@ -8,13 +8,13 @@ from input_box import InputBox
 
 # View
 class View:
-    STARTVIEW = '_start-view'
+    STARTVIEW = 'start-view'
     GAMEVIEW = 'game-view'
 
     def __init__(self, width, height):
         pygame.init()
 
-        self.state = View.STARTVIEW
+        self.state = None #View.STARTVIEW
         self.size = width, height
         self.screen = pygame.display.set_mode(self.size)
         self.color = self.screen.fill((247, 247, 247))
@@ -25,14 +25,15 @@ class View:
 
     def change_view_state(self, state):
         if self.state == state:
-            # return
-            self.state = state
+            return
         # Destroy all UI elements that are no longer needed
         self.elements = {}
         # Construct new UI elements for the requested state
-        if self.state == View.STARTVIEW:
+        if state == View.STARTVIEW:
+            self.state = View.STARTVIEW
             self._start_view()
-        if self.state == View.GAMEVIEW:
+        if state == View.GAMEVIEW:
+            self.state = View.GAMEVIEW
             self._game_view()
 
     def _start_view(self):
