@@ -20,5 +20,6 @@ class Controller:
             self.view.draw()
 
 
-controller = Controller()
-controller.game_loop()
+if __name__ == "__main__":
+    controller = Controller()
+    controller.game_loop()
