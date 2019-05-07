@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 class World(ABC):
 
     @abstractmethod
-    def get_k_nearest(self, position):
+    def get_k_nearest(self, position, k):
         # Inheriting class should return k nearest neigbours of the passed position
         raise NotImplementedError("Please use subclassing.")
 

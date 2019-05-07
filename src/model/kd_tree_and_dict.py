@@ -12,9 +12,9 @@ class KdTreeAndDict(World):
         self.all_objects = {}
         self.kd_tree = cKDTree()
 
-    def get_k_nearest(self, position):
-        # Inheriting class should return k nearest neigbours of the passed position
-        pass
+    def get_k_nearest(self, position, k = 1):
+        # TODO: can multithread if called with many params and -1
+        self.kd_tree.query(np.array(position), k, p = 2)
 
     def get_rectangle_region(self, top_left, bottom_right):
         #
