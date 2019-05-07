@@ -11,7 +11,6 @@ class Button(UIElement):
         self.shape = shape
         self.width = width
         self.height = height
-        self.on('click', lambda: pass)
 
     def change_color(self, new_color):
         self.color = new_color
@@ -54,3 +53,4 @@ class Button(UIElement):
             #     if "leave" in self.events:
             #         for fnct, args in self.events["leave"]:
             #             fnct(args)
+
