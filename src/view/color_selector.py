@@ -14,9 +14,9 @@ class ColorSelector(UIElement):
             x = int(radius * math.cos(i * ((2 * math.pi) / colors_n))) + self.x
             y = int(radius * math.sin(i * ((2 * math.pi) / colors_n))) + self.y
             button = Button(self.view, f"c{i}", x, y, -1, -1, 25, rgb, rgb_dark, "circle")
-            button.on("click", self._select_color, clicked_button=button)
+            button.on("click", self._select_color, button_clicked=button)
             self.buttons.append(button)
-        self._select_color((button, ))
+        self._select_color(button)
         
     def draw(self):
         for button in self.buttons:
@@ -29,7 +29,8 @@ class ColorSelector(UIElement):
     def get_selection(self):
         return self.color
     
-    def _select_color(self, clicked_button):
+    def _select_color(self, button_clicked):
+        print(button_clicked)
         self.color = button_clicked.color1
         for button in self.buttons:
             button.change_color(button.color2)
