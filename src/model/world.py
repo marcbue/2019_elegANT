@@ -23,7 +23,7 @@ class World(ABC):
         raise NotImplementedError("Please use subclassing.")
 
     @abstractmethod
-    def get_k_nearest_list(self, position_list):
+    def get_k_nearest_list(self, position_list, k_list):
         # Inheriting class should return k nearest neigbours of the passed position
         raise NotImplementedError("Please use subclassing.")
 
