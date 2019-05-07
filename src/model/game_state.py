@@ -33,8 +33,7 @@ class GameState:
     def __init__(self, player_list):
         """ Initialize player list and create nests for all the players
 
-        Keyword arguments:
-        player_list -- list that contains current players IDs
+        :param player_list: (list) that contains current players IDs
 
         """
         self.players = player_list
@@ -48,12 +47,12 @@ class GameState:
         self.world.create_nests(all_colors, positions)
 
     def get_objects_in_region(self, top_left, bottom_right):
-        """Return list of positions and all included objects (ants, nests, foods, pheromones, etc) in a specific
-                   rectangular area
+        """ Get list of positions and all included objects (ants, nests, foods, pheromones, etc) in a specific
+            rectangular area
 
-        Keyword arguments:
-        top_left -- list of coordinates of top left point of the rectangle
-        bottom_right --  list of coordinates of bottom right point of the rectangle
+        :param top_left: (list) Coordinates of top left point of the rectangle
+        :param bottom_right: (list) Coordinates of bottom right point of the rectangle
+        :return:
 
         """
         pass
@@ -63,13 +62,13 @@ class GameState:
         self.world.update()
 
     def create_ants(self, nest_position, amount):
-        """Return new ant objects in the nest with the given positions
+        """Create new ant objects in the specific nest with the given positions
 
-       Keyword arguments:
-       position -- list of ant position
-       amount -- (int) number of ants that should be created
+        :param nest_position: (list) Coordinates of ant position
+        :param amount: (int) number of ants that should be created
+        :return:
 
-       """
+        """
         # TODO check if nest is there and create ants at that nest
         self.world.create_ants(nest_position, amount)
         pass
@@ -81,4 +80,3 @@ class GameState:
     def create_food(self, position_list, size_list):
         self.world.create_food(position_list, size_list)
         pass
-
