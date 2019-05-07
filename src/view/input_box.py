@@ -12,9 +12,9 @@ class InputBox(UIElement):
         self.text = text
         self.txt_surface = self.view.FONT.render(text,True,self.color)
         self.active = False
-        self.on("mouseclick", self.mouse_click, self.color2)
-        self.on("keyret", self.keyret,self.text)
-        self.on("keyback", self.keyback,self.text)
+        self.on("mouseclick", self.mouse_click, newcolor=self.color2)
+        self.on("keyret", self.keyret,newtext=self.text)
+        self.on("keyback", self.keyback,newtext=self.text)
 
     def mouse_click(self, newcolor):
         self.active = not self.active
@@ -51,13 +51,13 @@ class InputBox(UIElement):
                 if "keyback" in self.events and event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
                     # for fnct,args in self.events["keyback"]:
-                    #     fnct(args)
+                    #     fnct(**args)
 
                 elif "keyret" in self.events and event.key == pygame.K_RETURN:
                     self.text = ''
                     print(self.text+'1')
                     # for fnct,args in self.events["keyret"]:
-                    #     fnct(args)
+                    #     fnct(**args)
                 else:
                     self.text += event.unicode
 
