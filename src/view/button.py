@@ -11,8 +11,8 @@ class Button(UIElement):
         self.shape = shape
         self.width = width
         self.height = height
-        self.on("hover", self.change_color, self.color2)
-        self.on("leave", self.change_color, self.color1)
+        self.on("hover", self.change_color, new_color=self.color2)
+        self.on("leave", self.change_color, new_color=self.color1)
         self.on('click', lambda x: None)
 
     def change_color(self, new_color):
@@ -51,7 +51,7 @@ class Button(UIElement):
                 if "click" in self.events and event.type == pygame.MOUSEBUTTONDOWN:
                     print('click')
                     for fnct, args in self.events["click"]:
-                        fnct(args)
+                        fnct(**args)
             # else:
             #     if "leave" in self.events:
             #         for fnct, args in self.events["leave"]:
