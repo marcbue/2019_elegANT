@@ -1,6 +1,8 @@
 from .kd_tree_and_dict import KdTreeAndDict
 
 
+# Interface with controller
+# GameState calls world interface
 class GameState:
 
     """
@@ -60,13 +62,23 @@ class GameState:
         """Return the states of all the objects and their positions at each time iteration """
         self.world.update()
 
-    def create_ants(self, position, amount):
+    def create_ants(self, nest_position, amount):
         """Return new ant objects in the nest with the given positions
 
-        Keyword arguments:
-        position -- list of ant position
-        amount -- (int) number of ants that should be created
+       Keyword arguments:
+       position -- list of ant position
+       amount -- (int) number of ants that should be created
 
-        """
+       """
         # TODO check if nest is there and create ants at that nest
+        self.world.create_ants(nest_position, amount)
         pass
+
+    def create_nest(self, nest_position, color, size, health):
+        self.world.create_nests(nest_position, color, size, health)
+        pass
+
+    def create_food(self, position_list, size_list):
+        self.world.create_food(position_list, size_list)
+        pass
+
