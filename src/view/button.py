@@ -11,9 +11,7 @@ class Button(UIElement):
         self.shape = shape
         self.width = width
         self.height = height
-        self.on("hover", self.change_color, new_color=self.color2)
-        self.on("leave", self.change_color, new_color=self.color1)
-        self.on('click', lambda x: None)
+        self.on('click', lambda: pass)
 
     def change_color(self, new_color):
         self.color = new_color
