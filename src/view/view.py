@@ -4,7 +4,7 @@ from text import Text
 from button import Button
 from input_box import InputBox
 from nest import Nest
-
+from ant import Ant
 # import numpy as np
 
 # View
