@@ -2,7 +2,7 @@ from .game_object import GameObject
 
 
 class Nest(GameObject):
-    def __init__(self, position, color, size=10, health=100):
+    def __init__(self, position, color, size, health):
         super(Nest, self).__init__(position)
         # TODO: also needs id
         self.color = color

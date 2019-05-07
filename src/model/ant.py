@@ -2,10 +2,10 @@ from .game_object import GameObject
 
 
 class Ant(GameObject):
-    def __init__(self, player, position):
+    def __init__(self, color, position):
         super(Ant, self).__init__(position)
         # TODO: assign id
-        self.color = player.get_color()
+        self.color = color
         self.has_food = False
         self.energy = 100
 
