@@ -8,6 +8,24 @@ from .world import World
 
 
 class KdTreeAndDict(World):
+
+    """
+            A class used to implement the tree and dictionary in the game (alternative to gird)
+            It inherits from World class
+
+            ...
+
+            Attributes
+            ----------
+            all_objects: dict
+                a dictionary for all the objects in the game
+            kd_tree: cKDTree
+                a tcKDTree implementation for nearest neighbours
+            point_matrix: array
+                an ### Add this
+
+    """
+
     def __init__(self):
         self.all_objects = {}
         # TODO: check if None declaration
@@ -16,17 +34,35 @@ class KdTreeAndDict(World):
         self.point_matrix = None
 
     def get_k_nearest(self, position, k=1):
-        """
-        Uses Euclidean distance.
+        """ Get k nearest neighbour ants for specific position using kd_tree that uses Euclidean distance.
+
+        :param position: (list) Coordinates of the position to which the nearest neighbours are calculated.
+        :param k: (int) Number of nearest neighbours
+        :return point_matrix: (array) ### Add this
+        :return dists: (array of floats) Distances to the nearest neighbours
+
         """
         # TODO: can multithread if called with many params and -1
         dists, idx = self.kd_tree.query(np.array(position), k, p=2)
         return self.point_matrix[idx], dists
 
     def get_at_position(self, position):
+        """ Return all the objects (ants/food/nest) in specific position
+
+        :param position: (list) Coordinates of specific position
+        :return: (list) ALL objects in the given position
+
+        """
         return self.all_objects.get(position)
 
     def get_rectangle_region(self, top_left, bottom_right):
+        """
+
+        :param top_left: (list) Coordinates of top left point of the rectangle
+        :param bottom_right: (list) Coordinates of bottom right point of the rectangle
+        :return:
+
+        """
         top_left = np.array(top_left)
         bottom_right = np.array(bottom_right)
         longest_side = np.max(bottom_right[0] - top_left[0], top_left[1] - bottom_right[1])
