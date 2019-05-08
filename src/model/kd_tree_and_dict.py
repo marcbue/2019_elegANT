@@ -10,8 +10,10 @@ from .world import World
 class KdTreeAndDict(World):
     def __init__(self):
         self.all_objects = {}
-        self.kd_tree = cKDTree()
-        self.point_matrix = np.array()
+        # TODO: check if None declaration
+        # will not make trouble later
+        self.kd_tree = None
+        self.point_matrix = None
 
     def get_k_nearest(self, position, k=1):
         """
@@ -30,7 +32,13 @@ class KdTreeAndDict(World):
         longest_side = np.max(bottom_right[0] - top_left[0], top_left[1] - bottom_right[1])
         center = (np.array(top_left) - np.array(bottom_right)) / 2
         large_square = self.get_square_region(center, longest_side)
-        bool_idx = [self._is_in_rectange(position) for position in large_square]
+
+        x_min = top_left[0]
+        y_min = bottom_right[1]
+        x_max = bottom_right[0]
+        y_max = top_left[0]
+
+        bool_idx = [self._is_in_rectangle(position, x_min, x_max, y_min, y_max) for position in large_square]
         return large_square[bool_idx]
 
     def get_circular_region(self, center, radius):
