@@ -87,11 +87,11 @@ class KdTreeAndDict(World):
 
     def get_k_nearest_list(self, position_list, k_list):
         # TODO: can multithread if called with many params and -1
-        idx_list = self.kd_tree.query(np.array(position_list), k_list, p=2)
+        dists, idx_list = self.kd_tree.query(np.array(position_list), k_list, p=2)
         result = []
         for idx in idx_list:
             result.append(self.point_matrix[idx])
-        return result
+        return result, dists
 
     def get_rectangle_region_list(self, top_left_list, bottom_right_list):
         #
