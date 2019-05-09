@@ -6,6 +6,8 @@ from color_selector import ColorSelector
 from input_box import InputBox
 from nest import Nest
 from ant import Ant
+
+
 # import numpy as np
 
 # View
@@ -63,7 +65,7 @@ class View:
         # add element for start button and the text on it
         start_button = Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
         self.add_element(start_button)
-            
+
         starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
         starttext.set_text("START")
         self.add_element(starttext)
@@ -117,14 +119,3 @@ class View:
             else:
                 for element in self.elements.values():
                     element.event_handler(event)
-
-
-
-
-
-
-
-
-
-
-

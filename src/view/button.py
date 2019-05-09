@@ -1,6 +1,7 @@
 import pygame
 from ui_element import UIElement
 
+
 class Button(UIElement):
     def __init__(self, view, identifier, x, y, width, height, radius, color1, color2, shape='circle'):
         super(Button, self).__init__(view, identifier, x, y, width, height)
@@ -53,4 +54,3 @@ class Button(UIElement):
             #     if "leave" in self.events:
             #         for fnct, args in self.events["leave"]:
             #             fnct(args)
-

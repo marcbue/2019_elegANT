@@ -1,5 +1,5 @@
- class Slider(UIElement):
-     pass
+# class Slider(UIElement):
+#     pass
 #     def __init__(self, name, val, maxi, mini, pos):
 #         self.val = val  # start value
 #         self.maxi = maxi  # maximum at slider position right

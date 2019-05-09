@@ -1,6 +1,7 @@
 import pygame
 from ui_element import UIElement
 
+
 class InputBox(UIElement):
 
     def __init__(self, view, identifier, x, y, width, height, color1, color2, text=''):
@@ -10,22 +11,22 @@ class InputBox(UIElement):
         self.color2 = color2
         self.color = color1
         self.text = text
-        self.txt_surface = self.view.FONT.render(text,True,self.color)
+        self.txt_surface = self.view.FONT.render(text, True, self.color)
         self.active = False
         self.on("mouseclick", self.mouse_click, newcolor=self.color2)
-        self.on("keyret", self.keyret,newtext=self.text)
-        self.on("keyback", self.keyback,newtext=self.text)
+        self.on("keyret", self.keyret, newtext=self.text)
+        self.on("keyback", self.keyback, newtext=self.text)
 
     def mouse_click(self, newcolor):
         print(newcolor)
         self.active = not self.active
         self.color = newcolor
 
-    def keyret(self,newtext):
+    def keyret(self, newtext):
         print(newtext)
         self.text = ''
 
-    def keyback(self,newtext):
+    def keyback(self, newtext):
         print(newtext)
         self.text = newtext[:-1]
 
@@ -56,14 +57,14 @@ class InputBox(UIElement):
 
                 elif "keyret" in self.events and event.key == pygame.K_RETURN:
                     self.text = ''
-                    print(self.text+'1')
+                    print(self.text + '1')
                     # for fnct,args in self.events["keyret"]:
                     #     fnct(**args)
                 else:
                     self.text += event.unicode
 
-                self.txt_surface = self.view.FONT.render(self.text,True,self.color)
-                print(self.text+'2')
+                self.txt_surface = self.view.FONT.render(self.text, True, self.color)
+                print(self.text + '2')
 
     def update(self):
         pass

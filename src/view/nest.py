@@ -1,11 +1,11 @@
 import pygame
 from view_element import ViewElement
 
+
 class Nest(ViewElement):
 
-
     def __init__(self, view, identifier, x, y, radius, color):
-        super(Nest, self).__init__(view, identifier, x, y,width=radius*2,height=radius*2)
+        super(Nest, self).__init__(view, identifier, x, y, width=radius * 2, height=radius * 2)
         self.color = color
         self.radius = radius
         self.on('click', self.click_event)
@@ -25,4 +25,3 @@ class Nest(ViewElement):
 
     def click_event(self):
         pass
-
