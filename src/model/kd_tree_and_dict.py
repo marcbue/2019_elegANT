@@ -44,7 +44,12 @@ class KdTreeAndDict(World):
         """
         # TODO: can multithread if called with many params and -1
         dists, idx = self.kd_tree.query(np.array(position), k, p=2)
-        return self.point_matrix[idx], dists
+        dict_idxs = self.point_matrix[idx]
+        if k == 1:
+            game_object_list = self.all_objects.get(tuple(dict_idxs), [])
+        else:
+            game_object_list = [obj for idx in dict_idxs for obj in self.all_objects.get(tuple(idx))]
+        return game_object_list, dists
 
     def get_at_position(self, position):
         """ Return all the objects (ants/food/nest) in specific position
@@ -82,15 +87,26 @@ class KdTreeAndDict(World):
         positions = self.point_matrix[position_idx]
         result = []
         for position in positions:
-            result.extend(self.all_objects.get(position, []))
+            result.extend(self.all_objects.get(position))
         return result
 
-    def get_k_nearest_list(self, position_list, k_list):
+    def get_k_nearest_list(self, position_list, k):
         # TODO: can multithread if called with many params and -1
-        dists, idx_list = self.kd_tree.query(np.array(position_list), k_list, p=2)
+        if len(position_list) == 1:
+            return self.get_k_nearest(position_list, k)
+        dists, idx_list = self.kd_tree.query(np.array(position_list), k, p=2)
         result = []
-        for idx in idx_list:
-            result.append(self.point_matrix[idx])
+        for array in idx_list:
+            if len(array.shape) == 0:
+                #print("int index: ", array)
+                dict_ind = self.point_matrix[array]
+                result.append(self.all_objects[tuple(dict_ind)])
+            else:
+                dict_ind = self.point_matrix[array]
+                sub_result = [obj for row in dict_ind for obj in self.all_objects[tuple(row)]]
+                #print(sub_result)
+                result.append(sub_result)
+
         return result, dists
 
     def get_rectangle_region_list(self, top_left_list, bottom_right_list):
@@ -109,7 +125,11 @@ class KdTreeAndDict(World):
         return result
 
     def update(self):
-        pass
+        all_lists = list(self.all_objects.values())
+        for listy in all_lists:
+            for item in listy:
+                if type(item) == Ant:
+                    item.move() # TODO: switch to update() when implemented
 
     def create_nests(self, color_list, position_list, size, health):
         for position, color in zip(position_list, color_list):

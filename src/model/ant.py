@@ -80,3 +80,6 @@ class Ant(GameObject):
         if self.has_food:
             # Only then it is possible.
             pass
+
+    # TODO: This needs an update function that the world class can call for each ant. -- Unless move is going to
+    #  handle food detection, loading, unloading, etc...
