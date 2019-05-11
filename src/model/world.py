@@ -51,3 +51,7 @@ class World(ABC):
     @abstractmethod
     def create_food(self, position_list, size_list):
         raise NotImplementedError("Please use subclassing.")
+
+    @abstractmethod
+    def dump_content(self):
+        raise NotImplementedError("Please use subclassing.")

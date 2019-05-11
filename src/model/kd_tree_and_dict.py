@@ -70,17 +70,20 @@ class KdTreeAndDict(World):
         """
         top_left = np.array(top_left)
         bottom_right = np.array(bottom_right)
-        longest_side = np.max(bottom_right[0] - top_left[0], top_left[1] - bottom_right[1])
-        center = (np.array(top_left) - np.array(bottom_right)) / 2
-        large_square = self.get_square_region(center, longest_side)
+        longest_side = max(bottom_right[0] - top_left[0], top_left[1] - bottom_right[1])
+        center = (np.array(top_left) + np.array(bottom_right)) / 2
+        large_square_objects = self.get_square_region(center, longest_side)
 
         x_min = top_left[0]
         y_min = bottom_right[1]
         x_max = bottom_right[0]
-        y_max = top_left[0]
+        y_max = top_left[1]
 
-        bool_idx = [self._is_in_rectangle(position, x_min, x_max, y_min, y_max) for position in large_square]
-        return large_square[bool_idx]
+        result = []
+        for obj in large_square_objects:
+            if self._is_in_rectangle(obj.position, x_min, x_max, y_min, y_max):
+                result.append(obj)
+        return result
 
     def get_circular_region(self, center, radius):
         position_idx = self.kd_tree.query_ball_point(center, radius, p=2)
@@ -98,13 +101,11 @@ class KdTreeAndDict(World):
         result = []
         for array in idx_list:
             if len(array.shape) == 0:
-                #print("int index: ", array)
                 dict_ind = self.point_matrix[array]
                 result.append(self.all_objects[tuple(dict_ind)])
             else:
                 dict_ind = self.point_matrix[array]
                 sub_result = [obj for row in dict_ind for obj in self.all_objects[tuple(row)]]
-                #print(sub_result)
                 result.append(sub_result)
 
         return result, dists
@@ -149,6 +150,11 @@ class KdTreeAndDict(World):
             self.all_objects.setdefault(position, []).append(Food(position, size))
         self._update_tree()
 
+    def dump_content(self):
+        everything = list(self.all_objects.values())
+        flat_everything = [obj for listy in everything for obj in listy]
+        return flat_everything
+
     def _update_tree(self):
         keys = list(self.all_objects.keys())
         self.point_matrix = np.array(keys)
@@ -159,7 +165,7 @@ class KdTreeAndDict(World):
         positions = self.point_matrix[position_idx]
         result = []
         for position in positions:
-            result.extend(self.all_objects.get(position, []))
+            result.extend(self.all_objects.get(tuple(position)))
         return result
 
     def _is_in_rectangle(self, position, x_min, x_max, y_min, y_max):

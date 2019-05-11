@@ -1,11 +1,20 @@
 from src.model.kd_tree_and_dict import KdTreeAndDict
 from src.model.nest import Nest
 from src.model.ant import Ant
+from src.model.food import Food
 from src.model.game_object import GameObject
+from src.model.world import World
 
 import pytest
 import numpy as np
 from numpy import linalg
+
+def test__init__():
+    """Tests id creation of Kd_tre_and_dict works as expected."""
+    tree = KdTreeAndDict()
+    assert(issubclass(type(tree), World))
+    assert(type(tree.all_objects) == dict)
+    assert(len(tree.all_objects.values()) == 0)
 
 # TODO: also random set ups
 @pytest.fixture
@@ -27,20 +36,57 @@ def set_up_food_fixed(set_up_tree_nests_fixed):
     Please never remove positions and when adding, add to positions far away from existing ones.
     Other wise you might mess up other tests"""
     tree, nest_positions = set_up_tree_nests_fixed
+
     small_grid = [(-1, -1), (-1, 0), (0, -1), (0, 0), (0, 1), (1, 0), (1, 1), (-1, 1), (1, -1)]
     another_small_grid = [(8, 8), (8, 9), (9, 8), (9, 9), (9, 10), (10, 9), (10, 10), (8, 10), (10, 8)]
     yet_another_small_grid = [(-8, -8), (-8, -9), (-9, -8), (-9, -9),
                               (-9, -10), (-10, -9), (-10, -10), (-8, -10), (-10, -8)]
-    all_position_lists = [small_grid, another_small_grid, yet_another_small_grid]
-    positions = [position for sublist in all_position_lists for position in sublist]
-    sizes = [1]*len(positions)
-    tree.create_food(positions, sizes)
+    food_grid_info = [((-1, 1), (1, -1), (0, 0), 1), ((8, 10), (10, 8), (9, 9), 1),
+                      ((-10, -8), (-8, -10), (-9, -9), 1)]
 
-    all_positions = {"all positions": nest_positions.extend(positions),
+    stacked_food = [(-100, -100), (-100, -100), (-100, -100)]
+
+    all_food_position_lists = [small_grid, another_small_grid, yet_another_small_grid, stacked_food]
+    food_positions = [position for sublist in all_food_position_lists for position in sublist]
+    sizes = [1]*len(food_positions)
+    tree.create_food(food_positions, sizes)
+    all_positions_flat = nest_positions.copy()
+    all_positions_flat.extend(food_positions)
+
+    all_positions = {"all positions": all_positions_flat,
                      "nests": nest_positions,
-                     "nested food": all_position_lists,
-                     "flat food": positions}
+                     "nested food": all_food_position_lists,
+                     "flat food": food_positions,
+                     "food grid info": food_grid_info}
     return tree, all_positions
+
+
+# TODO update as fixtures are extended
+def test_dump_content(set_up_food_fixed):
+    tree, positions = set_up_food_fixed
+    all_objects = tree.dump_content()
+    all_positions = positions["all positions"]
+    all_nests = positions["nests"]
+    all_food = positions["flat food"]
+    for obj in all_objects:
+        assert (obj.position in all_positions)
+        if type(obj) == Food:
+            assert(obj.position in all_food)
+        elif type(obj) == Nest:
+            assert(obj.position in all_nests)
+
+    dumped_positions = [obj.position for obj in all_objects]
+    for position in all_positions:
+        assert(position in dumped_positions)
+
+
+def test_get_at_position(set_up_food_fixed, position=(-100, -100), compare_to_index=3):
+    tree, positions = set_up_food_fixed
+    obj_list = tree.get_at_position(position)
+    obj_positions = [obj.position for obj in obj_list]
+    for obj_position in obj_positions:
+        assert(obj_position == position)
+    assert(obj_positions == positions["nested food"][compare_to_index])
 
 
 def test_create_ants(set_up_tree_nests_fixed):
@@ -117,3 +163,55 @@ def test_get_k_nearest_list(set_up_food_fixed, position_list = ((-9, -9), (0, 0)
             compare_to_obj, compare_to_dists = tree.get_k_nearest(position_list[i], k+1)
             assert(obj_list == compare_to_obj)
             assert ((dists[i] == compare_to_dists).any())
+
+
+def test_get_square_region(set_up_food_fixed, food_grid_indices=range(3)):
+    tree, positions_dict = set_up_food_fixed
+    food_grids = []
+    for idx in food_grid_indices:
+        food_grids.append(positions_dict["nested food"][idx])
+    grid_info = positions_dict["food grid info"]
+
+    # See if all points in 2x2 grids are found by the function
+    for i, grid in enumerate(food_grids):
+        center = grid_info[i][2]
+        radius = grid_info[i][3]
+        objects = tree.get_square_region(center, radius)
+        points = [obj.position for obj in objects]
+        compare_to_points = food_grids[i]
+        for point in points:
+            assert(point in compare_to_points)
+        for point in compare_to_points:
+            assert(point in points)
+
+    # See if for a smaller radius only center point is found
+    for i, grid in enumerate(food_grids):
+        center = grid_info[i][2]
+        radius = grid_info[i][3]
+        objects = tree.get_square_region(center, radius-radius/1.1)
+        points = [obj.position for obj in objects]
+        assert(len(points)  == 1)
+        assert(points[0] ==  center)
+
+def test_get_rectangle_region(set_up_food_fixed, food_grid_indices=range(3)):
+    tree, positions_dict = set_up_food_fixed
+    food_grids = []
+    for idx in food_grid_indices:
+        food_grids.append(positions_dict["nested food"][idx])
+    grid_info = positions_dict["food grid info"]
+
+    for i, grid in enumerate(food_grids):
+        top_left_square = grid_info[i][0]
+        top_left_rectangle = (top_left_square[0], top_left_square[1]-0.5)
+        bottom_right = grid_info[i][1]
+        objects = tree.get_rectangle_region(top_left_rectangle, bottom_right)
+        positions = [obj.position for obj in objects]
+        for position in positions:
+            assert(position in grid)
+
+        for point in grid:
+            if point[1] > top_left_rectangle[1]:
+                assert(point not in positions)
+            else:
+                assert(point in positions)
+
