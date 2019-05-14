@@ -68,15 +68,21 @@ class Ant(GameObject):
         :param possible_positions: (list) All the possible neighboring positions the ant can move to
         :return:
         """
+        position = self.position
         if self.has_food:
             # Go to the nearest nest.
-            pass
+            # TO DO get nearest nest position
+            # assuming that nest_position is the nearest nest position
+            nest_position = None
+            return_movement = (nest_position - position) / np.linalg.norm(nest_position - position)
+            position += return_movement
+
         # 2. elif it smells, go to smell
         else:  # if no food, it will move randomly
             movement = np.random.randint(low=-1, high=2, size=2)
             self.momentum += .5 * self.momentum + movement
             self.momentum /= np.linalg.norm(self.momentum)
-            position = self.position + self.momentum
+            position = position + self.momentum
             return position
 
     def set_trace(self):
