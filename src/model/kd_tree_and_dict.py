@@ -58,7 +58,7 @@ class KdTreeAndDict(World):
         :return: (list) ALL objects in the given position
 
         """
-        return self.all_objects.get(position)
+        return self.all_objects.get(tuple(position))
 
     def get_rectangle_region(self, top_left, bottom_right):
         """
@@ -88,7 +88,7 @@ class KdTreeAndDict(World):
         positions = self.point_matrix[position_idx]
         result = []
         for position in positions:
-            result.extend(self.all_objects.get(position))
+            result.extend(self.all_objects.get(tuple(position)))
         return result
 
     def get_k_nearest_list(self, position_list, k):
@@ -119,7 +119,7 @@ class KdTreeAndDict(World):
             positions = self.point_matrix[position_idx]
             sub_result = []
             for position in positions:
-                sub_result.extend(self.all_objects.get(position, []))
+                sub_result.extend(self.all_objects.get(tuple(position)))
             result.append(sub_result)
         return result
 
@@ -133,20 +133,20 @@ class KdTreeAndDict(World):
 
     def create_nests(self, color_list, position_list, size, health):
         for position, color in zip(position_list, color_list):
-            self.all_objects.setdefault(position, []).append(Nest(position, color, size, health))
+            self.all_objects.setdefault(tuple(position), []).append(Nest(position, color, size, health))
         self._update_tree()
 
     def create_ants(self, nest, amount):
         position = nest.position
         color = nest.color
         for _ in range(amount):
-            self.all_objects.setdefault(position, []).append(Ant(color, position))
+            self.all_objects.setdefault(tuple(position), []).append(Ant(color, position))
         self._update_tree()
 
     def create_food(self, position_list, size_list):
         # TODO: compare to extend with food list
         for position, size in zip(position_list, size_list):
-            self.all_objects.setdefault(position, []).append(Food(position, size))
+            self.all_objects.setdefault(tuple(position), []).append(Food(position, size))
         self._update_tree()
 
     def dump_content(self):
