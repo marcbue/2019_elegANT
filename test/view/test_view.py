@@ -9,4 +9,3 @@ def test_view_name():
 def test_view_size():
     view = View()
     assert view.size == (329, 249)
-
