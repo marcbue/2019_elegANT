@@ -1,7 +1,7 @@
 import math
 
-from ui_element import UIElement
-from button import Button
+from .ui_element import UIElement
+from .button import Button
 
 
 class ColorSelector(UIElement):

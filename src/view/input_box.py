@@ -1,5 +1,5 @@
 import pygame
-from ui_element import UIElement
+from .ui_element import UIElement
 
 
 class InputBox(UIElement):
