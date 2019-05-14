@@ -2,7 +2,6 @@ from .game_object import GameObject
 
 
 class Nest(GameObject):
-
     """
             A class used to represent a nest object
             It inherits from GameObject class
@@ -50,7 +49,7 @@ class Nest(GameObject):
 
         """
         self.food += food_amount
-        return food
+        return self.food
 
     def create_ant(self):
         """ Create new ant to this nest after checking if the nest has enough food.

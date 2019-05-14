@@ -1,10 +1,9 @@
-from .game_object import GameObject
-from .nest import Nest
 import numpy as np
+
+from .game_object import GameObject
 
 
 class Ant(GameObject):
-
     """
             A class used to represent an ant object
             It inherits from GameObject class
@@ -45,7 +44,7 @@ class Ant(GameObject):
         """
         return self.position
 
-    def unload_food(self): # TO DO
+    def unload_food(self):  # TO DO
         """ Flip (has_food) variable to false when the ant reaches the nest and unload the food
 
         :return:

@@ -8,7 +8,6 @@ from .world import World
 
 
 class KdTreeAndDict(World):
-
     """
             A class used to implement the tree and dictionary in the game (alternative to gird)
             It inherits from World class
@@ -128,7 +127,7 @@ class KdTreeAndDict(World):
         for listy in all_lists:
             for item in listy:
                 if type(item) == Ant:
-                    item.move() # TODO: switch to update() when implemented
+                    item.move()  # TODO: switch to update() when implemented
         self._update_tree()
 
     def create_nests(self, color_list, position_list, size, health):
