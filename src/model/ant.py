@@ -35,6 +35,7 @@ class Ant(GameObject):
         self.color = color
         self.has_food = False
         self.energy = 100
+        self.momentum = np.array([0., 0.], dtype=np.float64)
 
     def get_position(self):
         """ Get the coordinates of the object ant position
@@ -72,9 +73,10 @@ class Ant(GameObject):
             pass
         # 2. elif it smells, go to smell
         else:  # if no food, it will move randomly
-            # this motion is without momentum
-            movement = np.random.uniform(low=-1, high=1, size=(1, 2)).astype(np.float32)
-            position = self.position + movement
+            movement = np.random.randint(low=-1, high=2, size=2)
+            self.momentum += .5 * self.momentum + movement
+            self.momentum /= np.linalg.norm(self.momentum)
+            position = self.position + self.momentum
             return position
 
     def set_trace(self):
