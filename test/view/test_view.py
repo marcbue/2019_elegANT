@@ -1,6 +1,7 @@
 from src.view.view import View
 
-def test_view_name(): 
+
+def test_view_name():
     view = View()
     assert view.view == "start_screen"
 
