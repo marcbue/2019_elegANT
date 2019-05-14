@@ -1,5 +1,10 @@
-# from src.view.view import View
+from src.view.view import View
+
+def test_view_name(): 
+    view = View()
+    assert view.view == "start_screen"
 
 
-def test_view_name():
-    assert 0 == 0
+def test_view_size():
+    view = View()
+    assert view.size == (329, 249)
