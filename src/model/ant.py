@@ -1,6 +1,7 @@
 import numpy as np
 
 from .game_object import GameObject
+from src.utils import randint
 
 
 class Ant(GameObject):
@@ -35,6 +36,7 @@ class Ant(GameObject):
         self.color = color
         self.has_food = False
         self.energy = 100
+        self.momentum = np.array([0., 0.], dtype=np.float64)
 
     def get_position(self):
         """ Get the coordinates of the object ant position
@@ -67,14 +69,22 @@ class Ant(GameObject):
         :param possible_positions: (list) All the possible neighboring positions the ant can move to
         :return:
         """
+        position = self.position
         if self.has_food:
             # Go to the nearest nest.
-            pass
+            # TO DO get nearest nest position
+            # assuming that nest_position is the nearest nest position
+            nest_position = None
+            return_movement = (nest_position - position) / np.linalg.norm(nest_position - position)
+            position += return_movement
+
         # 2. elif it smells, go to smell
         else:  # if no food, it will move randomly
-            # this motion is without momentum
-            movement = np.random.uniform(low=-1, high=1, size=(1, 2)).astype(np.float32)
-            position = self.position + movement
+
+            movement = randint(low=-1, high=2, size=2)
+            self.momentum += .5 * self.momentum + movement
+            self.momentum /= np.linalg.norm(self.momentum)
+            position = position + self.momentum
             return position
 
     def set_trace(self):

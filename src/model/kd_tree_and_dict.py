@@ -6,6 +6,8 @@ from .food import Food
 from .nest import Nest
 from .world import World
 
+from src.utils import array
+
 
 class KdTreeAndDict(World):
     """
@@ -96,12 +98,12 @@ class KdTreeAndDict(World):
             return self.get_k_nearest(position_list, k)
         dists, idx_list = self.kd_tree.query(position_list, k, p=2)
         result = []
-        for array in idx_list:
-            if len(array.shape) == 0:
-                dict_ind = self.point_matrix[array]
+        for idx in idx_list:
+            if len(idx.shape) == 0:
+                dict_ind = self.point_matrix[idx]
                 result.append(self.all_objects[tuple(dict_ind)])
             else:
-                dict_ind = self.point_matrix[array]
+                dict_ind = self.point_matrix[idx]
                 sub_result = [obj for row in dict_ind for obj in self.all_objects[tuple(row)]]
                 result.append(sub_result)
 
@@ -155,7 +157,7 @@ class KdTreeAndDict(World):
 
     def _update_tree(self):
         keys = list(self.all_objects.keys())
-        self.point_matrix = np.array(keys)
+        self.point_matrix = array(keys)
         self.kd_tree = cKDTree(self.point_matrix)
 
     def get_square_region(self, center, radius):
