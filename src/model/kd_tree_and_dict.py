@@ -6,6 +6,8 @@ from .food import Food
 from .nest import Nest
 from .world import World
 
+from src.utils import array
+
 
 class KdTreeAndDict(World):
     """
@@ -155,7 +157,7 @@ class KdTreeAndDict(World):
 
     def _update_tree(self):
         keys = list(self.all_objects.keys())
-        self.point_matrix = np.array(keys)
+        self.point_matrix = array(keys)
         self.kd_tree = cKDTree(self.point_matrix)
 
     def get_square_region(self, center, radius):

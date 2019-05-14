@@ -9,6 +9,7 @@ from src.model.kd_tree_and_dict import KdTreeAndDict
 from src.model.nest import Nest
 from src.model.world import World
 
+from src.utils import array, randint
 
 def array_in_list(position, position_list):
     """Helper function used for testing if a certain position (of type np.array) is in a list of positions"""
@@ -16,7 +17,7 @@ def array_in_list(position, position_list):
 
 
 def array_remove_from_list(position, position_list):
-    """Helper function used for testing if a certain position (of type np.array) is in a list of positions"""
+    """Helper function used for testing if a certain position (of type array) is in a list of positions"""
     return [x for x in position_list if not (x == position).all()]
 
 
@@ -34,7 +35,7 @@ def set_up_tree_nests_fixed():
     tree = KdTreeAndDict()
     # TOD0: Should trees assert that there are no two nests at one position?
     # Answer: I don't think so, such checks should be handled by the Controller (for our project at least)
-    positions = [np.array([5, 5]), np.array([-5, -5])]
+    positions = [array([5, 5]), array([-5, -5])]
     colors = ['red', 'green']
     tree.create_nests(colors, positions, size=1, health=100)
 
@@ -50,17 +51,17 @@ def set_up_food_fixed(set_up_tree_nests_fixed):
     Other wise you might mess up other tests"""
     tree, nest_positions = set_up_tree_nests_fixed
 
-    small_grid = [np.array([-1, -1]), np.array([-1, 0]), np.array([0, -1]), np.array([0, 0]), np.array([0, 1]),
-                  np.array([1, 0]), np.array([1, 1]), np.array([-1, 1]), np.array([1, -1])]
-    another_small_grid = [np.array([8, 8]), np.array([8, 9]), np.array([9, 8]), np.array([9, 9]), np.array([9, 10]),
-                          np.array([10, 9]), np.array([10, 10]), np.array([8, 10]), np.array([10, 8])]
-    yet_another_small_grid = [np.array([-8, -8]), np.array([-8, -9]), np.array([-9, -8]), np.array([-9, -9]),
-                              np.array([-9, -10]), np.array([-10, -9]), np.array([-10, -10]), np.array([-8, -10]),
-                              np.array([-10, -8])]
+    small_grid = [array([-1, -1]), array([-1, 0]), array([0, -1]), array([0, 0]), array([0, 1]),
+                  array([1, 0]), array([1, 1]), array([-1, 1]), array([1, -1])]
+    another_small_grid = [array([8, 8]), array([8, 9]), array([9, 8]), array([9, 9]), array([9, 10]),
+                          array([10, 9]), array([10, 10]), array([8, 10]), array([10, 8])]
+    yet_another_small_grid = [array([-8, -8]), array([-8, -9]), array([-9, -8]), array([-9, -9]),
+                              array([-9, -10]), array([-10, -9]), array([-10, -10]), array([-8, -10]),
+                              array([-10, -8])]
     food_grid_info = [((-1, 1), (1, -1), (0, 0), 1), ((8, 10), (10, 8), (9, 9), 1),
                       ((-10, -8), (-8, -10), (-9, -9), 1)]
 
-    stacked_food = [np.array([-100, -100]), np.array([-100, -100]), np.array([-100, -100])]
+    stacked_food = [array([-100, -100]), array([-100, -100]), array([-100, -100])]
 
     all_food_position_lists = [small_grid, another_small_grid, yet_another_small_grid, stacked_food]
     food_positions = [position for sublist in all_food_position_lists for position in sublist]
@@ -96,7 +97,7 @@ def test_dump_content(set_up_food_fixed):
         assert (array_in_list(position, dumped_positions))
 
 
-def test_get_at_position(set_up_food_fixed, position=np.array([-100, -100]), compare_to_index=3):
+def test_get_at_position(set_up_food_fixed, position=array([-100, -100]), compare_to_index=3):
     tree, positions = set_up_food_fixed
     obj_list = tree.get_at_position(position)
     obj_positions = [obj.position for obj in obj_list]
@@ -108,7 +109,7 @@ def test_get_at_position(set_up_food_fixed, position=np.array([-100, -100]), com
 def test_create_ants(set_up_tree_nests_fixed):
     """Tests whether right amount of ants with type ant are created at nest positions."""
     tree, positions = set_up_tree_nests_fixed
-    amount_ants = np.random.randint(1, 6)
+    amount_ants = randint(1, 6)
 
     for pos in positions:
         nest = tree.get_at_position(pos)[0]
@@ -130,7 +131,7 @@ def test_create_nests(set_up_tree_nests_fixed):
         assert isinstance(objects_at_pos[0], Nest)
 
 
-def test_get_k_nearest(set_up_food_fixed, center_position=np.array([0, 0]), almost_center_pos=np.array([0.1, 0.1]),
+def test_get_k_nearest(set_up_food_fixed, center_position=array([0, 0]), almost_center_pos=array([0.1, 0.1]),
                        nested_food_ind=0,
                        k_greater_1=4):
     """Tests for fixed data whether k-nearest objects are returned using the 'small_grid' in the 'set_up_food_fixed'
@@ -156,7 +157,7 @@ def test_get_k_nearest(set_up_food_fixed, center_position=np.array([0, 0]), almo
     for obj in nearest_objs:
         assert (issubclass(type(obj), GameObject))
         position = obj.position
-        dist_form_center = linalg.norm(np.array(position) - np.array(center_position))
+        dist_form_center = linalg.norm(array(position) - array(center_position))
         if dist_form_center > max_norm:
             max_norm = dist_form_center
         assert (array_in_list(position, actual_positions))
@@ -164,11 +165,11 @@ def test_get_k_nearest(set_up_food_fixed, center_position=np.array([0, 0]), almo
     assert (not array_in_list(center_position, actual_positions))
     assert (original_len - k_greater_1 == len(actual_positions))
     for far_away_position in actual_positions:
-        dist = linalg.norm(np.array(far_away_position) - np.array(center_position))
+        dist = linalg.norm(array(far_away_position) - array(center_position))
         assert (dist >= max_norm)
 
 
-def test_get_k_nearest_list(set_up_food_fixed, position_list=(np.array([-9, -9]), np.array([0, 0]), np.array([9, 9]))):
+def test_get_k_nearest_list(set_up_food_fixed, position_list=(array([-9, -9]), array([0, 0]), array([9, 9]))):
     """Tests the get_k_nearest_list() function and calls compares by comparing to multiple get_k_nearest() calls"""
     tree, positions_dict = set_up_food_fixed
     position_list = list(position_list)
@@ -219,7 +220,7 @@ def test_get_rectangle_region(set_up_food_fixed, food_grid_indices=range(3)):
 
     for i, grid in enumerate(food_grids):
         top_left_square = grid_info[i][0]
-        top_left_rectangle = np.array([top_left_square[0], top_left_square[1] - 0.5])
+        top_left_rectangle = array([top_left_square[0], top_left_square[1] - 0.5])
         bottom_right = grid_info[i][1]
         objects = tree.get_rectangle_region(top_left_rectangle, bottom_right)
         positions = [obj.position for obj in objects]
