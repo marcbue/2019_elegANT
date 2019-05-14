@@ -1,6 +1,7 @@
 import numpy as np
 
 from .game_object import GameObject
+from src.utils import uniform
 
 
 class Ant(GameObject):
@@ -73,7 +74,7 @@ class Ant(GameObject):
         # 2. elif it smells, go to smell
         else:  # if no food, it will move randomly
             # this motion is without momentum
-            movement = np.random.uniform(low=-1, high=1, size=(1, 2)).astype(np.float32)
+            movement = uniform(low=-1, high=1, size=(1, 2)).astype(np.float32)
             position = self.position + movement
             return position
 

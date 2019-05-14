@@ -1,11 +1,9 @@
 from .kd_tree_and_dict import KdTreeAndDict
-import numpy.random as rnd
-
+from src.utils import random
 
 # Interface with controller
 # GameState calls world interface
 class GameState:
-
     """
             A class used to communicate with the model
 
@@ -42,8 +40,7 @@ class GameState:
         all_colors = [player.color for player in player_list]
         positions = []
         for i in range(len(player_list)):
-            rnd.random(2)
-            positions.append(rnd.random(2)*250)
+            positions.append(random(2) * 250)
         self.world.create_nests(all_colors, positions)
 
     def get_objects_in_region(self, top_left, bottom_right):
@@ -77,5 +74,3 @@ class GameState:
 
     def create_food(self, position_list, size_list):
         self.world.create_food(position_list, size_list)
-
-
