@@ -23,34 +23,3 @@ class Button(UIElement):
             pygame.draw.rect(self.view.screen, self.color, (self.x, self.y, self.width, self.height))
         else:
             print('not valid')
-
-    def event_handler(self, event):
-        pos = self.view.mouse_pos
-
-        if self.shape == 'circle':
-            if self.x + self.radius > pos[0] > self.x - self.radius and self.y + self.radius > pos[1] > \
-                    self.y - self.radius:
-                # if "hover" in self.events:
-                #     for fnct, args in self.events["hover"]:
-                #         fnct(**args)
-                if "click" in self.events and event.type == pygame.MOUSEBUTTONDOWN:
-                    print('click_circle')
-                    for fnct, args in self.events["click"]:
-                        fnct(**args)
-        #     else:
-        #         if "leave" in self.events:
-        #             for fnct, args in self.events["leave"]:
-        #                 fnct(**args)
-        if self.shape == 'square':
-            if self.x + self.width > pos[0] > self.x and self.y + self.height > pos[1] > self.y:
-                # if "hover" in self.events:
-                #     for fnct, args in self.events["hover"]:
-                #         fnct(**args)
-                if "click" in self.events and event.type == pygame.MOUSEBUTTONDOWN:
-                    print('click')
-                    for fnct, args in self.events["click"]:
-                        fnct(**args)
-            # else:
-            #     if "leave" in self.events:
-            #         for fnct, args in self.events["leave"]:
-            #             fnct(args)

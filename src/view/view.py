@@ -21,7 +21,7 @@ class View:
         self.state = None
         self.size = width, height
         self.screen = pygame.display.set_mode(self.size)
-        self.color = self.screen.fill((247, 247, 247))
+        self.background_color = pygame.Color("white")
         self.mouse_pos = pygame.mouse.get_pos()
         self.mouse_event = pygame.mouse.get_pressed()
         self.elements = {}
@@ -32,7 +32,7 @@ class View:
             return
         # Destroy all UI elements that are no longer needed and clear screen
         self.elements = {}
-        self.screen.fill((247, 247, 247))
+        self.screen.fill(self.background_color)
         # Construct new UI elements for the requested state
         if state == View.STARTVIEW:
             self.state = View.STARTVIEW
@@ -71,7 +71,7 @@ class View:
         self.add_element(starttext)
 
         # add element for the input box name
-        self.add_element(InputBox(self, "textbox", 100, 200, 250, 100, (0, 0, 0), (100, 100, 100), ''))
+        self.add_element(InputBox(self, "textbox", 100, 200, 250, 100, (0, 0, 0), (255, 100, 100), ''))
 
         def add_element(self, ui_element):
             self.elements[ui_element.identifier] = ui_element
@@ -100,17 +100,13 @@ class View:
             print("Element does not exist")
 
     def draw(self, model_state=None):
+        self.screen.fill(self.background_color)
         for element in self.elements.values():
             element.draw()
         pygame.display.flip()
 
     def events(self):
         self.mouse_pos = pygame.mouse.get_pos()
-        self.mouse_event = pygame.mouse.get_pressed()
-        self.mouse_down = pygame.MOUSEBUTTONDOWN
-        self.key_keydown = pygame.KEYDOWN
-        self.key_return = pygame.K_RETURN
-        self.key_back = pygame.K_BACKSPACE
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

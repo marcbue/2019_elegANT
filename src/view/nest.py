@@ -1,27 +1,23 @@
 import pygame
-from view_element import ViewElement
+from ui_element import UIElement
 
 
-class Nest(ViewElement):
+class Nest(UIElement):
 
-    def __init__(self, view, identifier, x, y, radius, color):
+    def __init__(self, view, identifier, x, y, radius, color, shape='circle', active=False):
         super(Nest, self).__init__(view, identifier, x, y, width=radius * 2, height=radius * 2)
         self.color = color
+        self.active_color = pygame.Color("orange")
         self.radius = radius
-        self.on('click', self.click_event)
+        self.shape = shape
+        self.active = active
+        self.on('click', self.click)
 
     def draw(self):
+        if self.active:
+            pygame.draw.circle(self.view.screen, self.active_color, (self.x, self.y), self.radius + 10)
         pygame.draw.circle(self.view.screen, self.color, (self.x, self.y), self.radius)
 
-    def event_handler(self, event):
-        pos = self.view.mouse_pos
+    def click(self):
+        self.active = True
 
-        if self.x + self.radius > pos[0] > self.x - self.radius and self.y + self.radius > pos[1] > \
-                self.y - self.radius:
-
-            if "click" in self.events and event.type == pygame.MOUSEBUTTONDOWN:
-                for fnct, args in self.events["click"]:
-                    fnct(**args)
-
-    def click_event(self):
-        pass

@@ -31,7 +31,6 @@ class ColorSelector(UIElement):
         return self.color
 
     def _select_color(self, button_clicked):
-        print(button_clicked)
         self.color = button_clicked.color1
         for button in self.buttons:
             button.change_color(button.color2)
