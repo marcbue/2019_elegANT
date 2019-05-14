@@ -74,7 +74,7 @@ class Ant(GameObject):
             pass
         # 2. elif it smells, go to smell
         else:  # if no food, it will move randomly
-            
+
             movement = randint(low=-1, high=2, size=2)
             self.momentum += .5 * self.momentum + movement
             self.momentum /= np.linalg.norm(self.momentum)

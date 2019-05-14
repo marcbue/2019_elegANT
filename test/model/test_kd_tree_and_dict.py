@@ -1,4 +1,3 @@
-import numpy as np
 import pytest
 from numpy import linalg
 
@@ -10,6 +9,7 @@ from src.model.nest import Nest
 from src.model.world import World
 
 from src.utils import array, randint
+
 
 def array_in_list(position, position_list):
     """Helper function used for testing if a certain position (of type np.array) is in a list of positions"""

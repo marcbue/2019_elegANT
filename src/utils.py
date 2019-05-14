@@ -32,7 +32,10 @@ def uniform(*args, **kwargs):
     return np.random.uniform(*args, **kwargs).astype(dtype)
 
 def randint(*args, **kwargs):
-    return np.random.randint(*args, **kwargs).astype(dtype)
+    if kwargs.get('size', 1) == 1:
+        return np.random.randint(*args, **kwargs)
+    else:
+        return np.random.randint(*args, **kwargs).astype(dtype)
 
 def random(*args, **kwargs):
     return np.random.random(*args, **kwargs).astype(dtype)
