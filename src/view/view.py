@@ -83,7 +83,7 @@ class View:
         self.add_element(Nest(self, "nest", 650, 400, 30, (220, 0, 0)))  # red
         self.add_element(Ant(self, "ant", 660, 500, 10, (220, 0, 0)))  # peach
 
-        # add sliders to the game view
+        # TODO add sliders to the game view
         # self.add_element(
         # Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square'))  # orange
         # starttext = Text(self, "starttext", 225, 650, -1, -1, 50)

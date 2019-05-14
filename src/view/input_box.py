@@ -47,6 +47,7 @@ class InputBox(UIElement):
 
     def update(self):
         pass
+        # TODO
         # Resize the box if the text is too long.
         # width = max(200, self.txt_surface.get_width() + 10)
         # self.rect.w = width
