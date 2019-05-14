@@ -1,4 +1,6 @@
 from .game_object import GameObject
+from .nest import Nest
+import numpy as np
 
 
 class Ant(GameObject):
@@ -43,14 +45,15 @@ class Ant(GameObject):
         """
         return self.position
 
-    def unload_food(self):
+    def unload_food(self): # TO DO
         """ Flip (has_food) variable to false when the ant reaches the nest and unload the food
 
         :return:
         """
-        if self.position == nest.position():
-            self.has_food = False
-            nest.increase_food(1)
+        # if self.position == nest.position():
+        #     self.has_food = False
+        #     nest.increase_food(1)
+        pass
 
     def load_food(self):
         """ Flip (has_food) variable to true when the ant finds food
@@ -68,9 +71,11 @@ class Ant(GameObject):
         if self.has_food:
             # Go to the nearest nest.
             pass
-
+        else:  # if no food, it will move randomly
+            movement = np.random.uniform(low=-1, high=1, size=(1, 2)).astype(np.float32)
+            position = self.position + movement
+            return position
         # 2. elif it smells, go to smell
-        # 3. move randomly
 
     def set_trace(self):
         """ Add value for pheromones when the ant finds food.
