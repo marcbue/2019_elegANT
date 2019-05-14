@@ -1,7 +1,7 @@
 import numpy as np
 
 from .game_object import GameObject
-from src.utils import randint
+from src.utils import randint, array
 
 
 class Ant(GameObject):
@@ -36,7 +36,7 @@ class Ant(GameObject):
         self.color = color
         self.has_food = False
         self.energy = 100
-        self.momentum = np.array([0., 0.], dtype=np.float64)
+        self.momentum = array([0., 0.])
 
     def get_position(self):
         """ Get the coordinates of the object ant position
