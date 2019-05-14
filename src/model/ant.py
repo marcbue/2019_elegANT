@@ -72,6 +72,7 @@ class Ant(GameObject):
             # Go to the nearest nest.
             pass
         else:  # if no food, it will move randomly
+            # this motion is without momentum
             movement = np.random.uniform(low=-1, high=1, size=(1, 2)).astype(np.float32)
             position = self.position + movement
             return position
