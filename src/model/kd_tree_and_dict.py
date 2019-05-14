@@ -43,7 +43,7 @@ class KdTreeAndDict(World):
 
         """
         # TODO: can multithread if called with many params and -1
-        dists, idx = self.kd_tree.query(np.array(position), k, p=2)
+        dists, idx = self.kd_tree.query(position, k, p=2)
         dict_idxs = self.point_matrix[idx]
         if k == 1:
             game_object_list = self.all_objects.get(tuple(dict_idxs), [])
@@ -68,10 +68,8 @@ class KdTreeAndDict(World):
         :return:
 
         """
-        top_left = np.array(top_left)
-        bottom_right = np.array(bottom_right)
         longest_side = max(bottom_right[0] - top_left[0], top_left[1] - bottom_right[1])
-        center = (np.array(top_left) + np.array(bottom_right)) / 2
+        center = (top_left + bottom_right) / 2
         large_square_objects = self.get_square_region(center, longest_side)
 
         x_min = top_left[0]
@@ -97,7 +95,7 @@ class KdTreeAndDict(World):
         # TODO: can multithread if called with many params and -1
         if len(position_list) == 1:
             return self.get_k_nearest(position_list, k)
-        dists, idx_list = self.kd_tree.query(np.array(position_list), k, p=2)
+        dists, idx_list = self.kd_tree.query(position_list, k, p=2)
         result = []
         for array in idx_list:
             if len(array.shape) == 0:
@@ -131,6 +129,7 @@ class KdTreeAndDict(World):
             for item in listy:
                 if type(item) == Ant:
                     item.move() # TODO: switch to update() when implemented
+        self._update_tree()
 
     def create_nests(self, color_list, position_list, size, health):
         for position, color in zip(position_list, color_list):
