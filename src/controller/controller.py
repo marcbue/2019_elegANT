@@ -25,6 +25,7 @@ class Controller:
             if self.game_state is None:
                 self.view.draw()
                 self.view.events()
+                # TODO: Needed for event handling later
                 # event_argument_list = self.view.get_event()
                 # event = event_argument_list[0][0]
                 # args = event_argument_list[0][0]
