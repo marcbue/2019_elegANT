@@ -1,9 +1,11 @@
 from .kd_tree_and_dict import KdTreeAndDict
+import numpy.random as rnd
 
 
 # Interface with controller
 # GameState calls world interface
 class GameState:
+
     """
             A class used to communicate with the model
 
@@ -37,12 +39,11 @@ class GameState:
         """
         self.players = player_list
         self.world = KdTreeAndDict()
-        # TODO create initial objects on world
         all_colors = [player.color for player in player_list]
-        # TODO: other positions
         positions = []
         for i in range(len(player_list)):
-            positions.append((i * 10, i * 10))
+            rnd.random(2)
+            positions.append(rnd.random(2)*250)
         self.world.create_nests(all_colors, positions)
 
     def get_objects_in_region(self, top_left, bottom_right):
@@ -54,7 +55,7 @@ class GameState:
         :return:
 
         """
-        pass
+        self.world.get_rectangle_region(top_left, bottom_right)
 
     def update(self):
         """Return the states of all the objects and their positions at each time iteration """
@@ -70,12 +71,11 @@ class GameState:
         """
         # TODO check if nest is there and create ants at that nest
         self.world.create_ants(nest_position, amount)
-        pass
 
     def create_nest(self, nest_position, color, size, health):
         self.world.create_nests(nest_position, color, size, health)
-        pass
 
     def create_food(self, position_list, size_list):
         self.world.create_food(position_list, size_list)
-        pass
+
+
