@@ -139,6 +139,7 @@ class KdTreeAndDict(World):
 
     def create_ants(self, nest, amount):
         color = nest.color
+        position = nest.position
         for _ in range(amount):
             self.all_objects.setdefault(tuple(position), []).append(Ant(color, nest))
         self._update_tree()
