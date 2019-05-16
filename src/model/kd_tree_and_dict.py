@@ -109,9 +109,6 @@ class KdTreeAndDict(World):
 
         return result, dists
 
-    def get_rectangle_region_list(self, top_left_list, bottom_right_list):
-        #
-        pass
 
     def get_circular_region_list(self, center_list, radius_list):
         position_idx_list = self.kd_tree.query_ball_point(center_list, radius_list, p=2)
@@ -129,7 +126,10 @@ class KdTreeAndDict(World):
         for listy in all_lists:
             for item in listy:
                 if type(item) == Ant:
-                    item.move()  # TODO: switch to update() when implemented
+                    old_position = item.position
+                    new_position = item.move()  # TODO: switch to update() when implemented
+                    self.all_objects[old_position].remove(item)
+                    self.all_objects.setdefault(tuple(new_position), []).append(item)
         self._update_tree()
 
     def create_nests(self, color_list, position_list, size, health):
@@ -138,10 +138,9 @@ class KdTreeAndDict(World):
         self._update_tree()
 
     def create_ants(self, nest, amount):
-        position = nest.position
         color = nest.color
         for _ in range(amount):
-            self.all_objects.setdefault(tuple(position), []).append(Ant(color, position))
+            self.all_objects.setdefault(tuple(position), []).append(Ant(color, nest))
         self._update_tree()
 
     def create_food(self, position_list, size_list):
@@ -170,3 +169,14 @@ class KdTreeAndDict(World):
 
     def _is_in_rectangle(self, position, x_min, x_max, y_min, y_max):
         return x_min <= position[0] <= x_max and y_min <= position[1] <= y_max
+
+    def get_ants(self):
+        everything = self.dump_content()
+        ants = [obj for obj in everything if type(obj) is Ant]
+        return ants
+
+    def get_nests(self):
+        everything = self.dump_content()
+        nests = [obj for obj in everything if type(obj) is Nest]
+        return nests
+

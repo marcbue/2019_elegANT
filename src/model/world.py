@@ -28,11 +28,6 @@ class World(ABC):
         raise NotImplementedError("Please use subclassing.")
 
     @abstractmethod
-    def get_rectangle_region_list(self, top_left_list, bottom_right_list):
-        #
-        raise NotImplementedError("Please use subclassing.")
-
-    @abstractmethod
     def get_circular_region_list(self, center_list, radius_list):
         raise NotImplementedError("Please use subclassing.")
 
@@ -55,3 +50,12 @@ class World(ABC):
     @abstractmethod
     def dump_content(self):
         raise NotImplementedError("Please use subclassing.")
+
+    @abstractmethod
+    def get_ants(self):
+        raise NotImplementedError("Please use subclassing.")
+
+    @abstractmethod
+    def get_nests(self):
+        raise NotImplementedError("Please use subclassing.")
+
