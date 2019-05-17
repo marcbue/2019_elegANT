@@ -97,7 +97,6 @@ def set_up_ants_fixed(set_up_food_fixed):
     return tree, positions
 
 
-
 # TODO update as fixtures are extended
 def test_dump_content(set_up_food_fixed):
     tree, positions = set_up_food_fixed
@@ -272,11 +271,11 @@ def test_get_circular_region(set_up_food_fixed, food_grid_indices=range(3)):
 
         corners = [center + array([i, j]) for j in [+radius, -radius] for i in [+radius, -radius]]
         for corner in corners:
-            assert(not array_in_list(corner, positions))
+            assert (not array_in_list(corner, positions))
 
         for point in grid:
             if not array_in_list(point, corners):
-                assert(array_in_list(point, positions))
+                assert (array_in_list(point, positions))
 
 
 def test_get_circular_region_list(set_up_food_fixed, food_grid_indices=range(3)):
@@ -293,8 +292,8 @@ def test_get_circular_region_list(set_up_food_fixed, food_grid_indices=range(3))
         radii.append(grid[3])
 
     unique_radii = set(radii)
-    radii = array(radii) #because later elementwise == is used
-    centers = array(centers) #because later boolean index is used
+    radii = array(radii)  # because later elementwise == is used
+    centers = array(centers)  # because later boolean index is used
     for radius in unique_radii:
         matching_centers = centers[radii == radius]
         result = tree.get_circular_region_list(matching_centers, radius)
@@ -302,10 +301,9 @@ def test_get_circular_region_list(set_up_food_fixed, food_grid_indices=range(3))
         for i, circular_region in enumerate(result):
             compare_to_region = tree.get_circular_region(centers[i], radii[i])
             for obj in circular_region:
-                assert(obj in compare_to_region)
+                assert (obj in compare_to_region)
             for obj in compare_to_region:
-                assert(obj in circular_region)
-
+                assert (obj in circular_region)
 
 
 def test_get_ants(set_up_ants_fixed):
@@ -313,15 +311,15 @@ def test_get_ants(set_up_ants_fixed):
     ants = tree.get_ants()
     compare_to_ants = positions["flat ants"]
     for ant in ants:
-        assert(array_in_list(ant.position, compare_to_ants))
+        assert (array_in_list(ant.position, compare_to_ants))
     for ant in compare_to_ants:
-        assert(array_in_list(ant, [ant.position for ant in ants]))
+        assert (array_in_list(ant, [ant.position for ant in ants]))
 
 
 def test_get_nests(set_up_tree_nests_fixed):
     tree, positions = set_up_tree_nests_fixed
     nests = tree.get_nests()
     for nest in nests:
-        assert(array_in_list(nest.position, positions))
+        assert (array_in_list(nest.position, positions))
     for nest in positions:
-        assert(array_in_list(nest, [nest.position for nest in nests]))
+        assert (array_in_list(nest, [nest.position for nest in nests]))
