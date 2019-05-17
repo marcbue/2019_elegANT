@@ -1,11 +1,11 @@
 import sys
 import pygame
-from text import Text
-from button import Button
-from color_selector import ColorSelector
-from input_box import InputBox
-from nest import Nest
-from ant import Ant
+from .text import Text
+from .button import Button
+from .color_selector import ColorSelector
+from .input_box import InputBox
+from .nest import Nest
+from .ant import Ant
 
 
 # import numpy as np
