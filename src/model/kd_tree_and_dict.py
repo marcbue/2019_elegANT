@@ -110,8 +110,8 @@ class KdTreeAndDict(World):
         return result, dists
 
 
-    def get_circular_region_list(self, center_list, radius_list):
-        position_idx_list = self.kd_tree.query_ball_point(center_list, radius_list, p=2)
+    def get_circular_region_list(self, center_list, radius):
+        position_idx_list = self.kd_tree.query_ball_point(center_list, radius, p=2)
         result = []
         for position_idx in position_idx_list:
             positions = self.point_matrix[position_idx]

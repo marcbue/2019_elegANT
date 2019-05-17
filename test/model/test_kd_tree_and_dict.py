@@ -35,8 +35,8 @@ def set_up_tree_nests_fixed():
     tree = KdTreeAndDict()
     # TOD0: Should trees assert that there are no two nests at one position?
     # Answer: I don't think so, such checks should be handled by the Controller (for our project at least)
-    positions = [array([5, 5]), array([-5, -5])]
-    colors = ['red', 'green']
+    positions = [array([5, 5]), array([-5, -5]), array([1000, 1000])]
+    colors = ['red', 'green', 'blue']
     tree.create_nests(colors, positions, size=1, health=100)
 
     return tree, positions
@@ -76,6 +76,26 @@ def set_up_food_fixed(set_up_tree_nests_fixed):
                      "flat food": food_positions,
                      "food grid info": food_grid_info}
     return tree, all_positions
+
+
+@pytest.fixture
+def set_up_ants_fixed(set_up_food_fixed):
+    tree, positions = set_up_food_fixed
+    nest_positions = positions["nests"]
+    nests = [tree.get_at_position(position)[0] for position in nest_positions]
+    ant_positions = []
+    for i, nest in enumerate(nests):
+        tree.create_ants(nest, i)
+        these_ants = []
+        for j in range(i):
+            these_ants.append(nest.position)
+        ant_positions.append(these_ants)
+    flat_ants = [ant for ant_list in ant_positions for ant in ant_list]
+    positions["nested ants"] = ant_positions
+    positions["flat ants"] = flat_ants
+    positions["all positions"].extend(flat_ants)
+    return tree, positions
+
 
 
 # TODO update as fixtures are extended
@@ -232,3 +252,76 @@ def test_get_rectangle_region(set_up_food_fixed, food_grid_indices=range(3)):
                 assert (not array_in_list(point, positions))
             else:
                 assert (array_in_list(point, positions))
+
+
+def test_get_circular_region(set_up_food_fixed, food_grid_indices=range(3)):
+    tree, positions_dict = set_up_food_fixed
+    food_grids = []
+    for idx in food_grid_indices:
+        food_grids.append(positions_dict["nested food"][idx])
+    grid_info = positions_dict["food grid info"]
+
+    # corners should not be in the result
+    for i, grid in enumerate(food_grids):
+        center = grid_info[i][2]
+        radius = grid_info[i][3]
+        objects = tree.get_circular_region(center, radius)
+        positions = [obj.position for obj in objects]
+        for position in positions:
+            assert (array_in_list(position, grid))
+
+        corners = [center + array([i, j]) for j in [+radius, -radius] for i in [+radius, -radius]]
+        for corner in corners:
+            assert(not array_in_list(corner, positions))
+
+        for point in grid:
+            if not array_in_list(point, corners):
+                assert(array_in_list(point, positions))
+
+
+def test_get_circular_region_list(set_up_food_fixed, food_grid_indices=range(3)):
+    tree, positions_dict = set_up_food_fixed
+    food_grids = []
+    for idx in food_grid_indices:
+        food_grids.append(positions_dict["nested food"][idx])
+    grid_info = positions_dict["food grid info"]
+
+    radii = []
+    centers = []
+    for grid in grid_info:
+        centers.append(grid[2])
+        radii.append(grid[3])
+
+    unique_radii = set(radii)
+    radii = array(radii) #because later elementwise == is used
+    centers = array(centers) #because later boolean index is used
+    for radius in unique_radii:
+        matching_centers = centers[radii == radius]
+        result = tree.get_circular_region_list(matching_centers, radius)
+
+        for i, circular_region in enumerate(result):
+            compare_to_region = tree.get_circular_region(centers[i], radii[i])
+            for obj in circular_region:
+                assert(obj in compare_to_region)
+            for obj in compare_to_region:
+                assert(obj in circular_region)
+
+
+
+def test_get_ants(set_up_ants_fixed):
+    tree, positions = set_up_ants_fixed
+    ants = tree.get_ants()
+    compare_to_ants = positions["flat ants"]
+    for ant in ants:
+        assert(array_in_list(ant.position, compare_to_ants))
+    for ant in compare_to_ants:
+        assert(array_in_list(ant, [ant.position for ant in ants]))
+
+
+def test_get_nests(set_up_tree_nests_fixed):
+    tree, positions = set_up_tree_nests_fixed
+    nests = tree.get_nests()
+    for nest in nests:
+        assert(array_in_list(nest.position, positions))
+    for nest in positions:
+        assert(array_in_list(nest, [nest.position for nest in nests]))
