@@ -18,7 +18,7 @@ class UIElement(ViewElement):
                     for fnct, args in self.events["click"]:
                         fnct(**args)
             
-            if self.hovered == False:
+            if self.hovered is False:
                 self.hovered = True
                 if "enter" in self.events:
                     for fnct, args in self.events["enter"]:
@@ -28,7 +28,7 @@ class UIElement(ViewElement):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.active = False
                 
-            if self.hovered == True:
+            if self.hovered is True:
                 self.hovered = False
                 if "leave" in self.events:
                     for fnct, args in self.events["leave"]:
