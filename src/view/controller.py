@@ -9,11 +9,10 @@ class Controller:
         start_button = self.view.get_element_by_id("start_button")
         start_button.on("click", self.view.change_view_state, state=View.GAMEVIEW)
 
-
-def game_loop(self):
-    while True:
-        self.view.events()
-        self.view.draw()
+    def game_loop(self):
+        while True:
+            self.view.events()
+            self.view.draw()
 
 
 if __name__ == "__main__":

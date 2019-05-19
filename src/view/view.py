@@ -70,8 +70,12 @@ class View:
         starttext.set_text("START")
         self.add_element(starttext)
 
+        inputname = Text(self, "inputname", 220, 250, -1, -1, 30)
+        inputname.set_text("Please enter your name")
+        self.add_element(inputname)
+
         # add element for the input box name
-        self.add_element(InputBox(self, "textbox", 100, 200, 250, 100, (0, 0, 0), (255, 100, 100), ''))
+        self.add_element(InputBox(self, "textbox", 100, 300, 250, 50, (0, 0, 0), (255, 100, 100), ''))
 
         def add_element(self, ui_element):
             self.elements[ui_element.identifier] = ui_element
