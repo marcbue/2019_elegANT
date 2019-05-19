@@ -9,18 +9,24 @@ from ant import Ant
 
 
 # import numpy as np
+import ctypes
 
 # View
 class View:
+
+
     STARTVIEW = 'start-view'
     GAMEVIEW = 'game-view'
 
-    def __init__(self, width, height):
+    def __init__(self):
         pygame.init()
-
+        display_info = pygame.display.Info()
+        width = display_info.current_w
+        height = display_info.current_h
         self.state = None
-        self.size = width, height
-        self.screen = pygame.display.set_mode(self.size)
+        self.width = width
+        self.height = height
+        self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
         self.background_color = pygame.Color("white")
         self.mouse_pos = pygame.mouse.get_pos()
         self.mouse_event = pygame.mouse.get_pressed()
@@ -43,9 +49,8 @@ class View:
 
     def _start_view(self):
         self.elements = {}
-
         # add elements for the main text
-        text = Text(self, "headline", 250, 100, -1, -1, 115)
+        text = Text(self, "headline", 0+int(0.15*self.width), 0+int(0.10*self.height), -1, -1, 115)
         text.set_text("ElegANT")
         self.add_element(text)
 
@@ -63,10 +68,10 @@ class View:
         self.add_element(ColorSelector(self, "colour_selector", 850, 350, 150, player_colors))
 
         # add element for start button and the text on it
-        start_button = Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
+        start_button = Button(self, "start_button", 0+int(0.15*self.width), 0+int(0.80*self.height), 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
         self.add_element(start_button)
 
-        starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
+        starttext = Text(self, "starttext", 0+int(0.22*self.width), 0+int(0.82*self.height), -1, -1, 50)
         starttext.set_text("START")
         self.add_element(starttext)
 
