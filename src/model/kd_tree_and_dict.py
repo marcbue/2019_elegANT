@@ -37,7 +37,7 @@ class KdTreeAndDict(World):
     def get_k_nearest(self, position, k=1):
         """ Get k nearest neighbour ants for specific position using kd_tree that uses Euclidean distance.
 
-        :param position: (list) Coordinates of the position to which the nearest neighbours are calculated.
+        :param position: (list) Coordinates of the position of interest
         :param k: (int) Number of nearest neighbours
         :return point_matrix: (array) ### Add this
         :return dists: (array of floats) Distances to the nearest neighbours
@@ -62,11 +62,11 @@ class KdTreeAndDict(World):
         return self.all_objects.get(tuple(position))
 
     def get_rectangle_region(self, top_left, bottom_right):
-        """
+        """ Return all the objects in the given rectangular region
 
         :param top_left: (list) Coordinates of top left point of the rectangle
         :param bottom_right: (list) Coordinates of bottom right point of the rectangle
-        :return:
+        :return result: (list) All objects in the specified rectangular region
 
         """
         longest_side = max(bottom_right[0] - top_left[0], top_left[1] - bottom_right[1])
@@ -85,6 +85,13 @@ class KdTreeAndDict(World):
         return result
 
     def get_circular_region(self, center, radius):
+        """ Return all the objects in the given circular region
+
+        :param center: (list) Coordinates of center of the circle
+        :param radius: (int) Radius of the circle
+        :return result: (list) All objects in the specified circular region
+
+        """
         position_idx = self.kd_tree.query_ball_point(center, radius, p=2)
         positions = self.point_matrix[position_idx]
         result = []
@@ -93,6 +100,15 @@ class KdTreeAndDict(World):
         return result
 
     def get_k_nearest_list(self, position_list, k):
+        """ Get k nearest neighbour ants for list of positions using kd_tree that uses Euclidean distance.
+
+        :param position_list: (list) Coordinates of the positions of interests
+        :param k: (int) Number of nearest neighbours
+        :return result: (list) all nearest neighbours objects
+        :return dists: (array of floats) Distances to the nearest neighbours
+
+        """
+
         # TODO: can multithread if called with many params and -1
         if len(position_list) == 1:
             return self.get_k_nearest(position_list, k)
@@ -109,9 +125,16 @@ class KdTreeAndDict(World):
 
         return result, dists
 
+    def get_circular_region_list(self, center_list, radius_list):
+        """ Return all the objects in each of the circles of interest
 
-    def get_circular_region_list(self, center_list, radius):
-        position_idx_list = self.kd_tree.query_ball_point(center_list, radius, p=2)
+        :param center_list: (list) Coordinates of the centers of circles of interest
+        :param radius_list: (list) Radii of the circles of interest
+        :return: (list) All objects in each of the specified circular region
+
+        """
+
+        position_idx_list = self.kd_tree.query_ball_point(center_list, radius_list, p=2)
         result = []
         for position_idx in position_idx_list:
             positions = self.point_matrix[position_idx]
@@ -122,6 +145,7 @@ class KdTreeAndDict(World):
         return result
 
     def update(self):
+        """ Update the positions of all ants after their movement in one iteration and remove the previous positions"""
         all_lists = list(self.all_objects.values())
         for listy in all_lists:
             for item in listy:
@@ -133,11 +157,27 @@ class KdTreeAndDict(World):
         self._update_tree()
 
     def create_nests(self, color_list, position_list, size, health):
+        """ Create new nest objects with specific colors/positions/size/health and update the tree
+
+        :param color_list: (list) colors of the nests to be created
+        :param position_list: (list) coordinates of the nests to be created
+        :param size: (list) sizes of the nests to be created
+        :param health: (list) health(s) of the nests to be created
+
+        """
+
         for position, color in zip(position_list, color_list):
             self.all_objects.setdefault(tuple(position), []).append(Nest(position, color, size, health))
         self._update_tree()
 
     def create_ants(self, nest, amount):
+        """ Create new ant objects in a specific nest with the given amount and update the tree
+
+        :param nest: nest object where new ants should be created
+        :param amount: (int) number of ants that should be created
+
+        """
+
         color = nest.color
         position = nest.position
         for _ in range(amount):
@@ -145,6 +185,13 @@ class KdTreeAndDict(World):
         self._update_tree()
 
     def create_food(self, position_list, size_list):
+        """ Create new food objects with specific positions/size and update the tree
+
+        :param position_list: (list) coordinates of the food to be created
+        :param size_list: (list) size of the food to be created
+
+        """
+
         # TODO: compare to extend with food list
         for position, size in zip(position_list, size_list):
             self.all_objects.setdefault(tuple(position), []).append(Food(position, size))
@@ -156,11 +203,20 @@ class KdTreeAndDict(World):
         return flat_everything
 
     def _update_tree(self):
+        """Update the tree"""
         keys = list(self.all_objects.keys())
         self.point_matrix = array(keys)
         self.kd_tree = cKDTree(self.point_matrix)
 
     def get_square_region(self, center, radius):
+        """ Return all the objects in the given square region
+
+        :param center: (list) Coordinates of center of the square
+        :param radius: (int) Radius of the square
+        :return result: (list) All objects in the specified circular region
+
+        """
+
         position_idx = self.kd_tree.query_ball_point(center, radius, p=np.inf)
         positions = self.point_matrix[position_idx]
         result = []
@@ -169,14 +225,35 @@ class KdTreeAndDict(World):
         return result
 
     def _is_in_rectangle(self, position, x_min, x_max, y_min, y_max):
+        """ Decide whether specific object is in the rectangular area of interest
+
+        :param position: (list) coordinates of object
+        :param x_min: (int) minimum x coordinate in the rectangle of interest
+        :param x_max: (int) maximum x coordinate in the rectangle of interest
+        :param y_min: (int) minimum y coordinate in the rectangle of interest
+        :param y_max: (int) maximum y coordinate in the rectangle of interest
+        :return: (boolean) TRUE if an ibject is indeed in the specified rectangular area.
+
+        """
+
         return x_min <= position[0] <= x_max and y_min <= position[1] <= y_max
 
     def get_ants(self):
+        """ Get all the ant objects
+
+        :return: (list) all the ant objects
+
+        """
+
         everything = self.dump_content()
         ants = [obj for obj in everything if type(obj) is Ant]
         return ants
 
     def get_nests(self):
+        """ Get all the nest objects
+
+        :return: (list) all the nest objects
+        """
         everything = self.dump_content()
         nests = [obj for obj in everything if type(obj) is Nest]
         return nests
