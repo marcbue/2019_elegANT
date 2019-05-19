@@ -1,7 +1,7 @@
 import numpy as np
 
 from .game_object import GameObject
-from src.utils import randint
+from src.utils import randint, array
 
 
 class Ant(GameObject):
@@ -24,19 +24,21 @@ class Ant(GameObject):
 
     """
 
-    def __init__(self, color, position):
+    def __init__(self, color, home_nest):
         """Initialize ant object color and position
 
         :param color: (str) Color of the ant
-        :param position: (list) Coordinates of ant position
+        :param home_nest: (Nest) Coordinates of ant position
 
         """
+        position = home_nest.position
         super(Ant, self).__init__(position)
         # TODO: assign id
         self.color = color
         self.has_food = False
         self.energy = 100
-        self.momentum = np.array([0., 0.], dtype=np.float64)
+        self.momentum = array([0., 0.])
+        self.home = home_nest
 
     def get_position(self):
         """ Get the coordinates of the object ant position

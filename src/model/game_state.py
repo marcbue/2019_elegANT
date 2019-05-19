@@ -1,4 +1,5 @@
 from .kd_tree_and_dict import KdTreeAndDict
+from .nest import Nest
 from src.utils import random
 
 # Interface with controller
@@ -61,13 +62,16 @@ class GameState:
     def create_ants(self, nest_position, amount):
         """Create new ant objects in the specific nest with the given positions
 
-        :param nest_position: (list) Coordinates of ant position
+        :param nest_position: (ndarray) Coordinates of ant position
         :param amount: (int) number of ants that should be created
         :return:
 
         """
-        # TODO check if nest is there and create ants at that nest
-        self.world.create_ants(nest_position, amount)
+        objects_at_pos = self.world.get_at_position(nest_position)
+        for obj in objects_at_pos:
+            if type(obj) is Nest:
+                nest = obj
+        self.world.create_ants(nest, amount)
 
     def create_nest(self, nest_position, color, size, health):
         self.world.create_nests(nest_position, color, size, health)
