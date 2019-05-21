@@ -1,3 +1,4 @@
+import sys
 from src.model.player import Player
 from src.model.game_state import GameState
 from src.view.view import View
@@ -11,11 +12,13 @@ class Controller:
         self.game_state = None
 
         self.event_list_start_view = {
-            'start_button': self.start_button_pressed
+            'start_button': self.start_button_pressed,
+            'quit_button': self.quit_button_pressed
         }
 
         self.event_list_game_view = {
-            'build_scout': self.create_ant
+            'build_scout': self.create_ant,
+            'quit_button': self.quit_button_pressed
         }
         self.game_loop()
 
@@ -32,14 +35,23 @@ class Controller:
         game_state = GameState(player_list)
         return game_state
 
-    def create_ant(self, nest_position, ant_amount):
+    def quit_button_pressed(self):
+        """
+
+        :return: empty
+        """
+        sys.exit()
+
+    def create_ant(self):
         """
         Event-handler for creating ants using the create ants button
         :param nest_position: Position of nest that should create ants
         :param ant_amount: Amount of ants created with one event
         :return: empty
         """
-        self.game_state.create_ants(nest_position, ant_amount)
+        print(self.game_state.get_nests())
+        nest = self.game_state.get_nests()[0]
+        self.game_state.create_ants(nest, amount=1)
 
     def game_loop(self):
         """
@@ -66,27 +78,24 @@ class Controller:
                         if args[i] is not None:
                             self.game_state = self.event_list_start_view[event[i]](*args[i])
 
-            if self.game_state is not None:
+            else:
                 self.view.draw()
-                self.view.events()
                 self.view.update(self.game_state.get_objects_in_region(self.view.pos[0], self.view.pos[1]))
                 
-                # TODO Handling of the events in Gameview
-                # # Get the list of events from view
-                # # event_argument_list = self.view.get_event()
-                # event_argument_list = {}
-                # if i == 10:
-                #     event_argument_list = {'create_ant_button': ([10, 100], 1)}
-                #
-                # # Getting events and arguments as two lists
-                # event = list(event_argument_list.keys())
-                # args = list(event_argument_list.values())
-                #
-                # # Initializing player and game_state class
-                # for i in range(len(event)):
-                #     if event[i] in self.event_list_game_view.keys():
-                #         if args[i] is not None:
-                #             self.game_state = self.event_list_game_view[event[i]](*args[i])
+                # Get the list of events from view
+                # event_argument_list = self.view.get_event()
+                event_argument_list = self.view.events()
+                if event_argument_list:
+                    print(event_argument_list)
+
+                # Getting events and arguments as two lists
+                event = list(event_argument_list.keys())
+                args = list(event_argument_list.values())
+
+                for i in range(len(event)):
+                    print(event[i])
+                    if event[i] in self.event_list_game_view.keys():
+                        self.event_list_game_view[event[i]](*args[i])
 
                 self.game_state.update()
 
