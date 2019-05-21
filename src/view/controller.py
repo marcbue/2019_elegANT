@@ -1,4 +1,4 @@
-from view import View
+from .view import View
 
 
 class Controller:
@@ -8,7 +8,6 @@ class Controller:
 
         start_button = self.view.get_element_by_id("start_button")
         start_button.on("click", self.view.change_view_state, state=View.GAMEVIEW)
-
 
     def game_loop(self):
         while True:

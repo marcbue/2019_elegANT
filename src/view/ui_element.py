@@ -1,4 +1,4 @@
-from view_element import ViewElement
+from .view_element import ViewElement
 import pygame
 
 
@@ -7,27 +7,32 @@ class UIElement(ViewElement):
     def __init__(self, view, identifier, x, y, width, height, active=False):
         super(UIElement, self).__init__(view, identifier, x, y, width, height)
         self.active = active
+        self.hovered = False
 
     def event_handler(self, event):
         pos = self.view.mouse_pos
 
         if self.mouse_on_object(pos):
             if event.type == pygame.MOUSEBUTTONDOWN:
-
-                if "click" in self.events and event.type == pygame.MOUSEBUTTONDOWN:
+                if "click" in self.events:
                     for fnct, args in self.events["click"]:
                         fnct(**args)
-
-                if "leave" in self.events:
-                    for fnct, args in self.events["leave"]:
+            
+            if self.hovered is False:
+                self.hovered = True
+                if "enter" in self.events:
+                    for fnct, args in self.events["enter"]:
                         fnct(**args)
-
-                if "hover" in self.events:
-                    for fnct, args in self.events["hover"]:
-                        fnct(**args)
+            
         else:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.active = False
+                
+            if self.hovered is True:
+                self.hovered = False
+                if "leave" in self.events:
+                    for fnct, args in self.events["leave"]:
+                        fnct(**args)
 
         if self.active and event.type == pygame.KEYDOWN:
             if "keyback" in self.events and event.key == pygame.K_BACKSPACE:

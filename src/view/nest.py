@@ -1,6 +1,6 @@
 import pygame
-from ui_element import UIElement
 from dialog_box_nest import DialogBoxNest
+from .ui_element import UIElement
 
 
 class Nest(UIElement):
