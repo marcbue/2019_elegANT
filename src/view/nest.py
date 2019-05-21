@@ -1,5 +1,6 @@
 import pygame
 from ui_element import UIElement
+from dialog_box_nest import DialogBoxNest
 
 
 class Nest(UIElement):
@@ -20,4 +21,6 @@ class Nest(UIElement):
 
     def click(self):
         self.active = True
+        self.view.add_element(DialogBoxNest(self.view, f"view_box_id_{self.identifier}",
+                                            {"kek": 10, "lel": 5}, active=True))
 
