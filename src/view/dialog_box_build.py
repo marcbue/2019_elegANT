@@ -1,5 +1,5 @@
-from button import Button
-from dialog_box import DialogBox
+from .button import Button
+from .dialog_box import DialogBox
 
 
 # Keep in mind: DialogBox inherits from ViewElement

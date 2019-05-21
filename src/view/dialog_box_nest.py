@@ -1,5 +1,5 @@
-from dialog_box import DialogBox
-from slider import Slider
+from .dialog_box import DialogBox
+from .slider import Slider
 import pygame
 
 

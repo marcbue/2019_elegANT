@@ -1,5 +1,5 @@
 import pygame
-from dialog_box_nest import DialogBoxNest
+from .dialog_box_nest import DialogBoxNest
 from .ui_element import UIElement
 
 

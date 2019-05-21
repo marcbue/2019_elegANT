@@ -1,4 +1,4 @@
-from dialog_box import DialogBox
+from .dialog_box import DialogBox
 import pygame
 
 

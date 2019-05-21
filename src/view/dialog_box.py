@@ -1,4 +1,4 @@
-from ui_element import UIElement
+from .ui_element import UIElement
 import pygame
 
 

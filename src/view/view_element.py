@@ -4,8 +4,8 @@ class ViewElement:
         self.view = view
         self.x = x
         self.y = y
-        self.w = width
-        self.h = height
+        self.width = width
+        self.height = height
         self.events = {}
 
     def draw(self):

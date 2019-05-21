@@ -111,6 +111,9 @@ class View:
     def add_element(self, ui_element):
         self.elements[ui_element.identifier] = ui_element
 
+    def remove_element(self, ui_element_identifier):
+        self.elements.pop(ui_element_identifier)
+
     def get_element_by_id(self, identifier):
         if identifier in self.elements:
             return self.elements[identifier]
@@ -119,7 +122,8 @@ class View:
 
     def draw(self, model_state=None):
         self.screen.fill(self.background_color)
-        for element in self.elements.values():
+        iteration_copy = self.elements.copy()
+        for element in iteration_copy.values():
             element.draw()
         pygame.display.flip()
 
@@ -135,7 +139,8 @@ class View:
                 pygame.quit()
                 sys.exit()
             else:
-                for element in self.elements.values():
+                iteration_copy = self.elements.copy()
+                for element in iteration_copy.values():
                     element.event_handler(event)
 
         if self.event_dict:
