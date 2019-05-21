@@ -25,6 +25,7 @@ class View:
         self.mouse_pos = pygame.mouse.get_pos()
         self.mouse_event = pygame.mouse.get_pressed()
         self.elements = {}
+        self.event_dict = {}
         self.FONT = pygame.font.Font(None, 32)
 
     def change_view_state(self, state):
@@ -60,10 +61,17 @@ class View:
             (0, 200, 0),
             (255, 165, 0)
         ]
-        self.add_element(ColorSelector(self, "colour_selector", 850, 350, 150, player_colors))
+        self.add_element(ColorSelector(self, "color_selector", 850, 350, 150, player_colors))
 
         # add element for start button and the text on it
         start_button = Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
+        
+        # Add start game event
+        start_button.on("click", lambda: self.event_dict.update({"start_button":
+                            (self.get_element_by_id("color_selector").get_selection(),
+                            self.get_element_by_id("textbox").text)
+                        }))
+        
         self.add_element(start_button)
 
         starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
@@ -76,9 +84,6 @@ class View:
 
         # add element for the input box name
         self.add_element(InputBox(self, "textbox", 100, 300, 250, 50, (0, 0, 0), (255, 100, 100), ''))
-
-        def add_element(self, ui_element):
-            self.elements[ui_element.identifier] = ui_element
 
     def _game_view(self):
         self.elements = {}
@@ -111,7 +116,8 @@ class View:
 
     def events(self):
         self.mouse_pos = pygame.mouse.get_pos()
-
+        self.event_dict = {}
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -119,3 +125,6 @@ class View:
             else:
                 for element in self.elements.values():
                     element.event_handler(event)
+        
+        return self.event_dict
+        
