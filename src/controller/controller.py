@@ -43,6 +43,8 @@ class Controller:
                 # Get the list of events from view
                 # event_argument_list = self.view.get_event()
                 event_argument_list = self.view.events()
+                if event_argument_list:
+                    print(event_argument_list)
 
                 # Getting events and arguments as two lists
                 event = list(event_argument_list.keys())
@@ -51,7 +53,6 @@ class Controller:
                 # Initializing player and game_state class
                 for i in range(len(event)):
                     if event[i] in self.event_list_start_view.keys():
-                        print(str('Event: ' + str(event[i]) + ' Arguments: ' + str(args[i])))
                         if args[i] is not None:
                             self.game_state = self.event_list_start_view[event[i]](*args[i])
 
