@@ -13,12 +13,12 @@ class Controller:
 
         self.event_list_start_view = {
             'start_button': self.start_button_pressed,
-            'quit_button': self.quit_button_pressed
+            'quit_game': self.quit_button_pressed
         }
 
         self.event_list_game_view = {
             'build_scout': self.create_ant,
-            'quit_button': self.quit_button_pressed
+            'quit_game': self.quit_button_pressed
         }
         self.game_loop()
 
