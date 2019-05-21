@@ -54,7 +54,7 @@ class DialogBoxBuild(DialogBox):
         for i, type in enumerate(self.ant_types):  # creating button for each ant type
             x = self.x + int(i*self.width/3)
             button = Button(self.view, f"b{i}", x, y, width/3, height, shape="square")
-            self.view.screen.blit(f"{type}", x + 0.5 * int(self.width / 3), y + int(self.view[1] * .15_`))
+            self.view.screen.blit(f"{type}", x + 0.5 * int(self.width / 3), y + int(self.view[1] * .15))
             # something here to draw sprites on button
             button.on("click", self.select_type, button_clicked=button)
             self.buttons.append(button)
