@@ -47,8 +47,8 @@ class GameState:
         """ Get list of positions and all included objects (ants, nests, foods, pheromones, etc) in a specific
             rectangular area
 
-        :param top_left: (list) Coordinates of top left point of the rectangle
-        :param bottom_right: (list) Coordinates of bottom right point of the rectangle
+        :param top_left: (ndarray) Coordinates of top left point of the rectangle
+        :param bottom_right: (ndarray) Coordinates of bottom right point of the rectangle
         :return:
 
         """
