@@ -81,7 +81,8 @@ class Ant(GameObject):
             if type(obj) == Food:
                 return self.move_to(obj.position)
             # 2. elif it smells, go to smell
-        else: # if no food, it will move randomly
+        else:
+            # if no food, it will move randomly
             return self.move_randomly()
 
     def move_randomly(self):
