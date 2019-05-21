@@ -69,7 +69,8 @@ class Controller:
             if self.game_state is not None:
                 self.view.draw()
                 self.view.events()
-
+                self.view.update(self.game_state.get_objects_in_region(self.view.pos[0], self.view.pos[1]))
+                
                 # TODO Handling of the events in Gameview
                 # # Get the list of events from view
                 # # event_argument_list = self.view.get_event()
@@ -86,6 +87,8 @@ class Controller:
                 #     if event[i] in self.event_list_game_view.keys():
                 #         if args[i] is not None:
                 #             self.game_state = self.event_list_game_view[event[i]](*args[i])
+
+                self.game_state.update()
 
 
 if __name__ == "__main__":

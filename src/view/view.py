@@ -6,6 +6,7 @@ from .color_selector import ColorSelector
 from .input_box import InputBox
 from .nest import Nest
 from .ant import Ant
+from src.utils import array
 
 
 # import numpy as np
@@ -27,6 +28,7 @@ class View:
         self.elements = {}
         self.event_dict = {}
         self.FONT = pygame.font.Font(None, 32)
+        self.pos = [array([0, 0]), array([250, 250])]
 
     def change_view_state(self, state):
         if self.state == state:
@@ -120,6 +122,9 @@ class View:
         for element in self.elements.values():
             element.draw()
         pygame.display.flip()
+
+    def update(self, game_state):
+        pass
 
     def events(self):
         self.mouse_pos = pygame.mouse.get_pos()
