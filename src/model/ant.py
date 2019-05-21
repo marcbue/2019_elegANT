@@ -88,15 +88,14 @@ class Ant(GameObject):
         # 2. elif it smells, go to smell
 
         else:  # if no food, it will move randomly
-            while True:  # do this until finding a possible position
-                movement = randint(low=-1, high=2, size=2)  # random move
-                momentum = self.momentum
-                momentum += 0.5 * momentum + movement
-                momentum /= np.linalg.norm(momentum)
-                position = position + momentum
-                self.momentum = momentum
-                self.position = position
-                return position
+            movement = randint(low=-1, high=2, size=2)  # random move
+            momentum = self.momentum
+            momentum += 0.5 * momentum + movement
+            momentum /= np.linalg.norm(momentum)
+            position = position + momentum
+            self.momentum = momentum
+            self.position = position
+            return position
 
     def set_trace(self):
         """ Add value for pheromones when the ant finds food.
