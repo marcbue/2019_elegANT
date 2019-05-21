@@ -1,11 +1,11 @@
-import sys
 import pygame
-from text import Text
-from button import Button
-from color_selector import ColorSelector
-from input_box import InputBox
-from nest import Nest
-from ant import Ant
+from .text import Text
+from .button import Button
+from .color_selector import ColorSelector
+from .input_box import InputBox
+from .nest import Nest
+from .ant import Ant
+from src.utils import array
 
 # import numpy as np
 import platform
@@ -16,7 +16,7 @@ class View:
     STARTVIEW = 'start-view'
     GAMEVIEW = 'game-view'
 
-    def __init__(self):
+    def __init__(self, width, height):
         pygame.init()
         display_info = pygame.display.Info()
 
@@ -41,7 +41,9 @@ class View:
         self.mouse_pos = pygame.mouse.get_pos()
         self.mouse_event = pygame.mouse.get_pressed()
         self.elements = {}
+        self.event_dict = {}
         self.FONT = pygame.font.Font(None, 32)
+        self.pos = [array([0, 0]), array([250, 250])]
 
     def change_view_state(self, state):
         if self.state == state:
@@ -60,7 +62,8 @@ class View:
     def _start_view(self):
         self.elements = {}
         # add elements for the main text
-        text = Text(self, "headline", 0 + int(0.15 * self.width), 0 + int(0.10 * self.height), -1, -1, int(0.06*self.width))
+        text = Text(self, "headline", 0 + int(0.15 * self.width), 0 + int(0.10 * self.height), -1, -1,
+                    int(0.06 * self.width))
         text.set_text("ElegANT")
         self.add_element(text)
 
@@ -75,22 +78,31 @@ class View:
             (0, 200, 0),
             (255, 165, 0)
         ]
-        self.add_element(ColorSelector(self, "colour_selector", 850, 350, 150, player_colors))
+        self.add_element(ColorSelector(self, "color_selector", 850, 350, 150, player_colors))
 
         # add element for start button and the text on it
-        start_button = Button(self, "start_button", 0 + int(0.05 * self.width), 0 + int(0.80 * self.height), int(0.15 * self.width), int(0.075 * self.height),
-                              -1, (100, 100, 100), (150, 150, 150), 'square')
+        start_button = Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
+
+        # Add start game event
+        start_button.on("click", lambda: self.event_dict.update({"start_button":
+                                                                     (self.get_element_by_id(
+                                                                         "color_selector").get_selection(),
+                                                                      self.get_element_by_id("textbox").text)}))
+
         self.add_element(start_button)
 
-        starttext = Text(self, "starttext", 0 + int(0.125 * self.width), 0 + int(0.835 * self.height), -1, -1, int(0.025*self.width))
+        starttext = Text(self, "starttext", 0 + int(0.125 * self.width), 0 + int(0.835 * self.height), -1, -1,
+                         int(0.025 * self.width))
         starttext.set_text("START")
         self.add_element(starttext)
 
-        quit_button = Button(self, "quit_button", 0 + int(0.9825 * self.width), 0 + int(0.0080 * self.height),  int(0.015 * self.width), int(0.015 * self.width),
+        quit_button = Button(self, "quit_button", 0 + int(0.9825 * self.width), 0 + int(0.0080 * self.height),
+                             int(0.015 * self.width), int(0.015 * self.width),
                              -1, (250, 0, 0), (150, 150, 150), 'square')
         self.add_element(quit_button)
 
-        quittext = Text(self, "quittext", 0 + int(0.99 * self.width), 0 + int(0.02 * self.height), -1, -1, int(0.010*self.width))
+        quittext = Text(self, "quittext", 0 + int(0.99 * self.width), 0 + int(0.02 * self.height), -1, -1,
+                        int(0.010 * self.width))
         quittext.set_text("X")
         self.add_element(quittext)
 
@@ -100,9 +112,6 @@ class View:
 
         # add element for the input box name
         self.add_element(InputBox(self, "textbox", 100, 300, 250, 50, (0, 0, 0), (255, 100, 100), ''))
-
-        def add_element(self, ui_element):
-            self.elements[ui_element.identifier] = ui_element
 
     def _game_view(self):
         self.elements = {}
@@ -129,6 +138,14 @@ class View:
         # starttext.set_text("START")
         # self.add_element(starttext)
 
+        build_scout_button = Button(self, "build_scout", 100, 600, 100, 100, -1, (100, 100, 100),
+                                    (150, 150, 150), 'square')
+
+        # Add start game event
+        build_scout_button.on("click", lambda: self.event_dict.update({"build_scout": ()}))
+
+        self.add_element(build_scout_button)
+
     def add_element(self, ui_element):
         self.elements[ui_element.identifier] = ui_element
 
@@ -144,13 +161,18 @@ class View:
             element.draw()
         pygame.display.flip()
 
+    def update(self, game_state):
+        pass
+
     def events(self):
         self.mouse_pos = pygame.mouse.get_pos()
+        self.event_dict = {}
 
         for event in pygame.event.get():
-            # if event.type == pygame.QUIT:
-            #     pygame.quit()
-            #     sys.exit()
-            # else:
             for element in self.elements.values():
                 element.event_handler(event)
+
+        if self.event_dict:
+            print(self.event_dict)
+
+        return self.event_dict

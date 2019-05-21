@@ -1,4 +1,4 @@
-from src.model.model import Player
+from src.model.player import Player
 
 name = "franz"
 color = "red"
@@ -12,25 +12,25 @@ def test_model_creation():
 def test_name_setter():
     player = Player(name, color)
     new_name = "herbert"
-    player.set_name(new_name)
+    player.name = new_name
     assert player.name == new_name
 
 
 def test_name_getter():
     player = Player(name, color)
-    assert player.get_name() == name
+    assert player.name == name
 
 
 def test_color_setter():
     player = Player(name, color)
     new_color = "rosa"
-    player.set_color(new_color)
+    player.color = new_color
     assert player.color == new_color
 
 
 def test_color_getter():
     player = Player(name, color)
-    assert player.get_color() == color
+    assert player.color == color
 
 
 def test_data_storage():

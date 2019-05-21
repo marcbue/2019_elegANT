@@ -1,7 +1,7 @@
 import math
 
-from ui_element import UIElement
-from button import Button
+from .ui_element import UIElement
+from .button import Button
 
 
 class ColorSelector(UIElement):
@@ -14,7 +14,7 @@ class ColorSelector(UIElement):
             rgb_dark = tuple(int(c * (1 / 2.5)) for c in rgb)
             x = int(radius * math.cos(i * ((2 * math.pi) / colors_n))) + self.x
             y = int(radius * math.sin(i * ((2 * math.pi) / colors_n))) + self.y
-            button = Button(self.view, f"c{i}", x, y, -1, -1, 25, rgb, rgb_dark, "circle")
+            button = Button(self.view, "c{}".format(i), x, y, -1, -1, 25, rgb, rgb_dark, "circle")
             button.on("click", self._select_color, button_clicked=button)
             self.buttons.append(button)
         self._select_color(button)

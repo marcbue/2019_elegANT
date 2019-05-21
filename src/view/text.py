@@ -1,5 +1,5 @@
 import pygame
-from view_element import ViewElement
+from .view_element import ViewElement
 
 
 class Text(ViewElement):

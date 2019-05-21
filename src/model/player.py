@@ -7,18 +7,6 @@ class Player:
         self.name = name
         self.color = color
 
-    def set_name(self, name):
-        self.name = name
-
-    def get_name(self):
-        return self.name
-
-    def set_color(self, color):
-        self.color = color
-
-    def get_color(self):
-        return self.color
-
     def store_data(self):
         """stores the data of a player in a pickle file"""
         pickle.dump(self, open(str(self.name) + ".p", "wb"))

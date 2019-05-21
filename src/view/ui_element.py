@@ -1,4 +1,4 @@
-from view_element import ViewElement
+from .view_element import ViewElement
 import pygame
 
 
