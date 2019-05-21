@@ -1,8 +1,10 @@
+from abc import abstractmethod
+
 class GameObject:
 
     def __init__(self, position):
         self.position = position
 
-    # TODO: make abstract
-    def update(self):
+    @abstractmethod
+    def update(self, *args):
         return self.position

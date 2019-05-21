@@ -66,6 +66,9 @@ class Ant(GameObject):
         """
         self.has_food = True
 
+    def update(self, *args):
+        self.move(self, *args)
+
     def move(self, possible_positions):
         """ Move the ant to a new position at each time iteration. It moves it randomly in the first milestone.
 

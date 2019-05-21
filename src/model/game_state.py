@@ -1,5 +1,4 @@
 from .kd_tree_and_dict import KdTreeAndDict
-from .nest import Nest
 from src.utils import random
 
 # Interface with controller
