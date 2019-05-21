@@ -42,14 +42,14 @@ class GameState:
         positions = []
         for i in range(len(player_list)):
             positions.append(random(2) * 250)
-        self.world.create_nests(all_colors, positions)
+        self.world.create_nests(all_colors, positions, health=100, size=10)
 
     def get_objects_in_region(self, top_left, bottom_right):
         """ Get list of positions and all included objects (ants, nests, foods, pheromones, etc) in a specific
             rectangular area
 
-        :param top_left: (list) Coordinates of top left point of the rectangle
-        :param bottom_right: (list) Coordinates of bottom right point of the rectangle
+        :param top_left: (ndarray) Coordinates of top left point of the rectangle
+        :param bottom_right: (ndarray) Coordinates of bottom right point of the rectangle
         :return:
 
         """
