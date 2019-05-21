@@ -100,6 +100,8 @@ class View:
                              int(0.015 * self.width), int(0.015 * self.width),
                              -1, (250, 0, 0), (150, 150, 150), 'square')
         self.add_element(quit_button)
+        
+        quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
 
         quittext = Text(self, "quittext", 0 + int(0.99 * self.width), 0 + int(0.02 * self.height), -1, -1,
                         int(0.010 * self.width))
@@ -124,6 +126,10 @@ class View:
         quit_button = Button(self, "quit_button", 0 + int(0.9825 * self.width), 0 + int(0.0080 * self.height),
                              int(0.015 * self.width), int(0.015 * self.width),
                              -1, (250, 0, 0), (150, 150, 150), 'square')
+        
+        
+        quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
+        
         self.add_element(quit_button)
 
         quittext = Text(self, "quittext", 0 + int(0.99 * self.width), 0 + int(0.02 * self.height), -1, -1,
