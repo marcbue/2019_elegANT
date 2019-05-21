@@ -2,10 +2,10 @@ from src.view.view import View
 
 
 def test_view_name():
-    view = View()
-    assert view.view == "start_screen"
+    view = View(1300, 800)
+    assert not view.state
 
 
 def test_view_size():
-    view = View()
-    assert view.size == (329, 249)
+    view = View(1300, 800)
+    assert view.size == (1300, 800)

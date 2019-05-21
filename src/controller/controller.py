@@ -20,22 +20,32 @@ class Controller:
         self.game_loop()
 
     def start_button_pressed(self, color, player_name):
+        """
+        Event-handler for the start button to change Viewstate from Startview to Gameview
+        :param color: Color chosen by player
+        :param player_name: Name chosen by player
+        :return: returns a game_state object for initialization of the game
+        """
         self.view.change_view_state(View.GAMEVIEW)
         player = Player(color, player_name)
         player_list = [player]
         game_state = GameState(player_list)
-       # print(player_name,color)
         return game_state
 
     def create_ant(self, nest_position, ant_amount):
-        '''
-        Function to create ant and nest for the first time if no nest assigned.
-           Else assign the new ant to the available nest???
-        '''
+        """
+        Event-handler for creating ants using the create ants button
+        :param nest_position: Position of nest that should create ants
+        :param ant_amount: Amount of ants created with one event
+        :return: empty
+        """
         self.game_state.create_ants(nest_position, ant_amount)
 
     def game_loop(self):
-        i = 0
+        """
+        Main game loop
+        :return: empty
+        """
         while True:
             if self.game_state is None:
                 self.view.draw()
@@ -57,10 +67,10 @@ class Controller:
                             self.game_state = self.event_list_start_view[event[i]](*args[i])
 
             if self.game_state is not None:
-                i += 1
                 self.view.draw()
                 self.view.events()
 
+                # TODO Handling of the events in Gameview
                 # # Get the list of events from view
                 # # event_argument_list = self.view.get_event()
                 # event_argument_list = {}

@@ -65,13 +65,12 @@ class View:
 
         # add element for start button and the text on it
         start_button = Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
-        
+
         # Add start game event
         start_button.on("click", lambda: self.event_dict.update({"start_button":
-                            (self.get_element_by_id("color_selector").get_selection(),
-                            self.get_element_by_id("textbox").text)
-                        }))
-        
+                        (self.get_element_by_id("color_selector").get_selection(),
+                            self.get_element_by_id("textbox").text)}))
+
         self.add_element(start_button)
 
         starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
@@ -98,12 +97,13 @@ class View:
         # starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
         # starttext.set_text("START")
         # self.add_element(starttext)
-        
-        build_scout_button = Button(self, "build_scout", 100, 600, 100, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
-        
+
+        build_scout_button = Button(self, "build_scout", 100, 600, 100, 100, -1, (100, 100, 100),
+                                    (150, 150, 150), 'square')
+
         # Add start game event
-        build_scout_button.on("click", lambda: self.event_dict.update({"build_scout": (123)}))
-        
+        build_scout_button.on("click", lambda: self.event_dict.update({"build_scout": ()}))
+
         self.add_element(build_scout_button)
 
     def add_element(self, ui_element):
@@ -124,7 +124,7 @@ class View:
     def events(self):
         self.mouse_pos = pygame.mouse.get_pos()
         self.event_dict = {}
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -132,9 +132,9 @@ class View:
             else:
                 for element in self.elements.values():
                     element.event_handler(event)
-        
+
         if self.event_dict:
             print(self.event_dict)
-            
+
         return self.event_dict
-        
+
