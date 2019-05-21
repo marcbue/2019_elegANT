@@ -7,15 +7,12 @@ from input_box import InputBox
 from nest import Nest
 from ant import Ant
 
-
 # import numpy as np
-from ctypes import windll
 import platform
+
 
 # View
 class View:
-
-
     STARTVIEW = 'start-view'
     GAMEVIEW = 'game-view'
 
@@ -23,20 +20,22 @@ class View:
         pygame.init()
         display_info = pygame.display.Info()
 
-        #Currently not used
+        # Currently not used
         width = display_info.current_w
         height = display_info.current_h
         self.width = width
         self.height = height
         self.state = None
 
-        #Only works for windows --> need to check operating system
+        # Only works for windows --> need to check operating system
         if platform.system() == 'Windows':
+            from ctypes import windll
             windll.user32.SetProcessDPIAware()
             true_res = (windll.user32.GetSystemMetrics(0), windll.user32.GetSystemMetrics(1))
             self.screen = pygame.display.set_mode(true_res, pygame.FULLSCREEN)
 
         else:
+            print(platform.system())
             self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
         self.background_color = pygame.Color("white")
         self.mouse_pos = pygame.mouse.get_pos()
@@ -61,7 +60,7 @@ class View:
     def _start_view(self):
         self.elements = {}
         # add elements for the main text
-        text = Text(self, "headline", 0+int(0.15*self.width), 0+int(0.10*self.height), -1, -1, 115)
+        text = Text(self, "headline", 0 + int(0.15 * self.width), 0 + int(0.10 * self.height), -1, -1, int(0.06*self.width))
         text.set_text("ElegANT")
         self.add_element(text)
 
@@ -79,18 +78,19 @@ class View:
         self.add_element(ColorSelector(self, "colour_selector", 850, 350, 150, player_colors))
 
         # add element for start button and the text on it
-        start_button = Button(self, "start_button", 0+int(0.15*self.width), 0+int(0.80*self.height), 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
+        start_button = Button(self, "start_button", 0 + int(0.05 * self.width), 0 + int(0.80 * self.height), int(0.15 * self.width), int(0.075 * self.height),
+                              -1, (100, 100, 100), (150, 150, 150), 'square')
         self.add_element(start_button)
 
-        starttext = Text(self, "starttext", 0+int(0.22*self.width), 0+int(0.82*self.height), -1, -1, 50)
+        starttext = Text(self, "starttext", 0 + int(0.125 * self.width), 0 + int(0.835 * self.height), -1, -1, int(0.025*self.width))
         starttext.set_text("START")
         self.add_element(starttext)
 
-        quit_button = Button(self, "quit_button", 0 + int(0.93 * self.width), 0 + int(0.03 * self.height), 75, 75,
-                              -1, (100, 100, 100), (150, 150, 150), 'square')
+        quit_button = Button(self, "quit_button", 0 + int(0.9825 * self.width), 0 + int(0.0080 * self.height),  int(0.015 * self.width), int(0.015 * self.width),
+                             -1, (250, 0, 0), (150, 150, 150), 'square')
         self.add_element(quit_button)
 
-        quittext = Text(self, "quittext", 0 + int(0.95 * self.width), 0 + int(0.06 * self.height), -1, -1, 50)
+        quittext = Text(self, "quittext", 0 + int(0.99 * self.width), 0 + int(0.02 * self.height), -1, -1, int(0.010*self.width))
         quittext.set_text("X")
         self.add_element(quittext)
 
@@ -110,6 +110,17 @@ class View:
         # add a nest and an ant
         self.add_element(Nest(self, "nest", 650, 400, 30, (220, 0, 0)))  # red
         self.add_element(Ant(self, "ant", 660, 500, 10, (220, 0, 0)))  # peach
+
+        # add quit button
+        quit_button = Button(self, "quit_button", 0 + int(0.9825 * self.width), 0 + int(0.0080 * self.height),
+                             int(0.015 * self.width), int(0.015 * self.width),
+                             -1, (250, 0, 0), (150, 150, 150), 'square')
+        self.add_element(quit_button)
+
+        quittext = Text(self, "quittext", 0 + int(0.99 * self.width), 0 + int(0.02 * self.height), -1, -1,
+                        int(0.010 * self.width))
+        quittext.set_text("X")
+        self.add_element(quittext)
 
         # TODO add sliders to the game view
         # self.add_element(

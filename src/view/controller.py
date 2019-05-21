@@ -16,6 +16,8 @@ class Controller:
         while True:
             self.view.events()
             self.view.draw()
+            quit_button = self.view.get_element_by_id("quit_button")
+            quit_button.on("click", lambda: sys.exit())
 
 
 if __name__ == "__main__":
