@@ -81,3 +81,9 @@ class Nest(GameObject):
 
         """
         return len(self.ant_ids)
+
+    def update(self, *args):
+        if self.health <= 0:
+            return None
+        else:
+            return self.position
