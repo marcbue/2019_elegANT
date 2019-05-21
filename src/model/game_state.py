@@ -1,5 +1,4 @@
 from .kd_tree_and_dict import KdTreeAndDict
-from .nest import Nest
 from src.utils import random
 
 # Interface with controller
@@ -59,18 +58,14 @@ class GameState:
         """Return the states of all the objects and their positions at each time iteration """
         self.world.update()
 
-    def create_ants(self, nest_position, amount):
+    def create_ants(self, nest, amount):
         """Create new ant objects in the specific nest with the given positions
 
-        :param nest_position: (ndarray) Coordinates of ant position
+        :param nest: nest
         :param amount: (int) number of ants that should be created
         :return:
 
         """
-        objects_at_pos = self.world.get_at_position(nest_position)
-        for obj in objects_at_pos:
-            if type(obj) is Nest:
-                nest = obj
         self.world.create_ants(nest, amount)
 
     def create_nest(self, nest_position, color, size, health):
@@ -78,3 +73,9 @@ class GameState:
 
     def create_food(self, position_list, size_list):
         self.world.create_food(position_list, size_list)
+
+    def get_nests(self):
+        return self.world.get_nests()
+
+    def get_ants(self):
+        return self.world.get_ants()
