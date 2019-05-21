@@ -149,15 +149,15 @@ class KdTreeAndDict(World):
         all_lists = list(self.all_objects.values())
         for listy in all_lists:
             for item in listy:
-                old_position = item.position
+                old_position = tuple(item.position)
 
                 if type(item) == Ant:
                     # TODO: pick radius (or implement it in ant class)
                     noticeable_objects = self.get_circular_region(item.position, radius=10)
                     # TODO: needs noticeable objects
-                    new_position = item.update(noticeable_objects)
+                    new_position = tuple(item.update(noticeable_objects))
                 else:
-                    new_position = item.update()
+                    new_position = tuple(item.update())
 
                 # Remove old positions.
                 self.all_objects[old_position].remove(item)
