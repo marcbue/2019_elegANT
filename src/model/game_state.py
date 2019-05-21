@@ -41,7 +41,7 @@ class GameState:
         positions = []
         for i in range(len(player_list)):
             positions.append(random(2) * 250)
-        self.world.create_nests(all_colors, positions, health=100, size=10)
+        return self.world.create_nests(all_colors, positions, health=100, size=10)
 
     def get_objects_in_region(self, top_left, bottom_right):
         """ Get list of positions and all included objects (ants, nests, foods, pheromones, etc) in a specific
@@ -52,7 +52,7 @@ class GameState:
         :return:
 
         """
-        self.world.get_rectangle_region(top_left, bottom_right)
+        return self.world.get_rectangle_region(top_left, bottom_right)
 
     def update(self):
         """Return the states of all the objects and their positions at each time iteration """
@@ -66,13 +66,13 @@ class GameState:
         :return:
 
         """
-        self.world.create_ants(nest, amount)
+        return self.world.create_ants(nest, amount)
 
     def create_nest(self, nest_position, color, size, health):
-        self.world.create_nests(nest_position, color, size, health)
+        return self.world.create_nests(nest_position, color, size, health)
 
     def create_food(self, position_list, size_list):
-        self.world.create_food(position_list, size_list)
+        return self.world.create_food(position_list, size_list)
 
     def get_nests(self):
         return self.world.get_nests()
