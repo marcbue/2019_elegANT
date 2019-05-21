@@ -29,11 +29,15 @@ class Controller:
         :param player_name: Name chosen by player
         :return: returns a game_state object for initialization of the game
         """
-        self.view.change_view_state(View.GAMEVIEW)
-        player = Player(color, player_name)
-        player_list = [player]
-        game_state = GameState(player_list)
-        return game_state
+        if player_name:
+            self.view.change_view_state(View.GAMEVIEW)
+            player = Player(color, player_name)
+            player_list = [player]
+            game_state = GameState(player_list)
+            return game_state
+        else:
+            # TODO Get view to show pop up with message
+            print('Player name not entered')
 
     def quit_button_pressed(self):
         """
@@ -81,7 +85,7 @@ class Controller:
             else:
                 self.view.draw()
                 self.view.update(self.game_state.get_objects_in_region(self.view.pos[0], self.view.pos[1]))
-                
+
                 # Get the list of events from view
                 # event_argument_list = self.view.get_event()
                 event_argument_list = self.view.events()
