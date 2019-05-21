@@ -9,7 +9,8 @@ from ant import Ant
 
 
 # import numpy as np
-import ctypes
+from ctypes import windll
+import platform
 
 # View
 class View:
@@ -21,12 +22,22 @@ class View:
     def __init__(self):
         pygame.init()
         display_info = pygame.display.Info()
+
+        #Currently not used
         width = display_info.current_w
         height = display_info.current_h
-        self.state = None
         self.width = width
         self.height = height
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+        self.state = None
+
+        #Only works for windows --> need to check operating system
+        if platform.system() == 'Windows':
+            windll.user32.SetProcessDPIAware()
+            true_res = (windll.user32.GetSystemMetrics(0), windll.user32.GetSystemMetrics(1))
+            self.screen = pygame.display.set_mode(true_res, pygame.FULLSCREEN)
+
+        else:
+            self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
         self.background_color = pygame.Color("white")
         self.mouse_pos = pygame.mouse.get_pos()
         self.mouse_event = pygame.mouse.get_pressed()
@@ -75,6 +86,14 @@ class View:
         starttext.set_text("START")
         self.add_element(starttext)
 
+        quit_button = Button(self, "quit_button", 0 + int(0.93 * self.width), 0 + int(0.03 * self.height), 75, 75,
+                              -1, (100, 100, 100), (150, 150, 150), 'square')
+        self.add_element(quit_button)
+
+        quittext = Text(self, "quittext", 0 + int(0.95 * self.width), 0 + int(0.06 * self.height), -1, -1, 50)
+        quittext.set_text("X")
+        self.add_element(quittext)
+
         inputname = Text(self, "inputname", 220, 250, -1, -1, 30)
         inputname.set_text("Please enter your name")
         self.add_element(inputname)
@@ -118,9 +137,9 @@ class View:
         self.mouse_pos = pygame.mouse.get_pos()
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            else:
-                for element in self.elements.values():
-                    element.event_handler(event)
+            # if event.type == pygame.QUIT:
+            #     pygame.quit()
+            #     sys.exit()
+            # else:
+            for element in self.elements.values():
+                element.event_handler(event)
