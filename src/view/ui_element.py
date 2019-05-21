@@ -6,6 +6,14 @@ class UIElement(ViewElement):
 
     def __init__(self, view, identifier, x, y, width, height, active=False):
         super(UIElement, self).__init__(view, identifier, x, y, width, height)
+
+        display_info = pygame.display.Info()
+        res_width = display_info.current_w
+        res_height = display_info.current_h
+        self.x = 0+int(x/100*res_width)
+        self.y = 0+int(y/100*res_height)
+        self.w = int(width/100*res_width)
+        self.h = int(height/100*res_height)
         self.active = active
         self.hovered = False
 

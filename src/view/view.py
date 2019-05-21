@@ -21,10 +21,10 @@ class View:
         display_info = pygame.display.Info()
 
         # Currently not used
-        width = display_info.current_w
-        height = display_info.current_h
-        self.width = width
-        self.height = height
+        res_width = display_info.current_w
+        res_height = display_info.current_h
+        self.res_width = res_width
+        self.res_height = res_height
         self.state = None
 
         # Only works for windows --> need to check operating system
@@ -36,7 +36,8 @@ class View:
 
         else:
             print(platform.system())
-            self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+            self.screen = pygame.display.set_mode((self.res_width, self.res_height), pygame.FULLSCREEN)
+
         self.background_color = pygame.Color("white")
         self.mouse_pos = pygame.mouse.get_pos()
         self.mouse_event = pygame.mouse.get_pressed()
@@ -62,8 +63,7 @@ class View:
     def _start_view(self):
         self.elements = {}
         # add elements for the main text
-        text = Text(self, "headline", 0 + int(0.15 * self.width), 0 + int(0.10 * self.height), -1, -1,
-                    int(0.06 * self.width))
+        text = Text(self, "headline", 15, 10, -1, -1, 150)
         text.set_text("ElegANT")
         self.add_element(text)
 
@@ -78,9 +78,10 @@ class View:
             (0, 200, 0),
             (255, 165, 0)
         ]
+        # TODO make position variable
         self.add_element(ColorSelector(self, "color_selector", 850, 350, 150, player_colors))
 
-        # add element for start button and the text on it
+        # TODO add element for start button and the text on it
         start_button = Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
 
         # Add start game event
@@ -91,28 +92,25 @@ class View:
 
         self.add_element(start_button)
 
-        starttext = Text(self, "starttext", 0 + int(0.125 * self.width), 0 + int(0.835 * self.height), -1, -1,
-                         int(0.025 * self.width))
+        starttext = Text(self, "starttext", 12.5, 8.35, -1, -1,50)
         starttext.set_text("START")
         self.add_element(starttext)
 
-        quit_button = Button(self, "quit_button", 0 + int(0.9825 * self.width), 0 + int(0.0080 * self.height),
-                             int(0.015 * self.width), int(0.015 * self.width),
-                             -1, (250, 0, 0), (150, 150, 150), 'square')
+        quit_button = Button(self, "quit_button", 98.25, 0.8, 1.5, 1.5, -1, (250, 0, 0), (150, 150, 150), 'square')
         self.add_element(quit_button)
         
         quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
 
-        quittext = Text(self, "quittext", 0 + int(0.99 * self.width), 0 + int(0.02 * self.height), -1, -1,
-                        int(0.010 * self.width))
+        quittext = Text(self, "quittext", 99, 2, -1, -1, 1)
         quittext.set_text("X")
         self.add_element(quittext)
 
+        # TODO these still need to be made percentages
         inputname = Text(self, "inputname", 220, 250, -1, -1, 30)
         inputname.set_text("Please enter your name")
         self.add_element(inputname)
 
-        # add element for the input box name
+        # TODO add element for the input box name
         self.add_element(InputBox(self, "textbox", 100, 300, 250, 50, (0, 0, 0), (255, 100, 100), ''))
 
     def _game_view(self):

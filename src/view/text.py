@@ -1,8 +1,8 @@
 import pygame
-from .view_element import ViewElement
+from .ui_element import UIElement
 
 
-class Text(ViewElement):
+class Text(UIElement):
     def __init__(self, view, identifier, x, y, width, height, fontsize):
         pygame.init()
         super(Text, self).__init__(view, identifier, x, y, width, height)
