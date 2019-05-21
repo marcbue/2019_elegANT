@@ -98,6 +98,13 @@ class View:
         # starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
         # starttext.set_text("START")
         # self.add_element(starttext)
+        
+        build_scout_button = Button(self, "build_scout", 100, 600, 100, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
+        
+        # Add start game event
+        build_scout_button.on("click", lambda: self.event_dict.update({"build_scout": (123)}))
+        
+        self.add_element(build_scout_button)
 
     def add_element(self, ui_element):
         self.elements[ui_element.identifier] = ui_element
@@ -126,5 +133,8 @@ class View:
                 for element in self.elements.values():
                     element.event_handler(event)
         
+        if self.event_dict:
+            print(self.event_dict)
+            
         return self.event_dict
         
