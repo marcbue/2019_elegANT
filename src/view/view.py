@@ -108,7 +108,8 @@ class View:
         self.add_element(DialogBoxNest(self,
                                        f"view_box_id_scout_box",
                                        {"kek": 10, "lel": 5, "sheesh": 7},
-                                       active=False))
+                                       active=False,
+                                       name="Scout Stats"))
 
         change_scout_stats.on("click", lambda: self.get_element_by_id("view_box_id_scout_box").toggle())
 
