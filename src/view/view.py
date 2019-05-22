@@ -21,6 +21,8 @@ class View:
         display_info = pygame.display.Info()
 
         # Currently not used
+        self.width = width
+        self.height = height
         res_width = display_info.current_w
         res_height = display_info.current_h
         self.res_width = res_width
@@ -82,7 +84,7 @@ class View:
         self.add_element(ColorSelector(self, "color_selector", 850, 350, 150, player_colors))
 
         # TODO add element for start button and the text on it
-        start_button = Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
+        start_button = Button(self, "start_button", 5, 85, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
 
         # Add start game event
         start_button.on("click", lambda: self.event_dict.update({"start_button":
@@ -92,7 +94,7 @@ class View:
 
         self.add_element(start_button)
 
-        starttext = Text(self, "starttext", 12.5, 8.35, -1, -1,50)
+        starttext = Text(self, "starttext", 11.5, 89, -1, -1,50)
         starttext.set_text("START")
         self.add_element(starttext)
 
