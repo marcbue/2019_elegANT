@@ -1,8 +1,8 @@
 import pygame
-from .ui_element import UIElement
+from .view_element import ViewElement
 
 
-class Ant(UIElement):
+class Ant(ViewElement):
     def __init__(self, view, identifier, x, y, radius, color, shape='circle'):
         super(Ant, self).__init__(view, identifier, x, y, width=radius * 2, height=radius * 2)
         self.color = color

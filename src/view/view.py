@@ -7,6 +7,7 @@ from .input_box import InputBox
 from .nest import Nest
 from .ant import Ant
 from src.utils import array
+from .dialog_box_nest import DialogBoxNest
 
 
 # import numpy as np
@@ -66,7 +67,8 @@ class View:
         self.add_element(ColorSelector(self, "color_selector", 850, 350, 150, player_colors))
 
         # add element for start button and the text on it
-        start_button = Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square')
+        start_button = Button(self, "start_button", 100, 600, 250, 100, -1,
+                              (100, 100, 100), (150, 150, 150), shape='square')
 
         # Add start game event
         start_button.on("click", lambda: self.event_dict.update({"start_button":
@@ -99,6 +101,15 @@ class View:
         # starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
         # starttext.set_text("START")
         # self.add_element(starttext)
+
+        change_scout_stats = Button(self, "change_scout_stats", 0, 0, 100, 100, -1, (100, 100, 100),
+                                    (150, 150, 150), 'square', has_image=True, image_path="src/view/ant.png")
+
+        change_scout_stats.on("click", lambda: self.add_element(DialogBoxNest(self,
+                                                                              f"view_box_id_scout_box",
+                                                                              {"kek": 10, "lel": 5}, active=True)))
+
+        self.add_element(change_scout_stats)
 
         build_scout_button = Button(self, "build_scout", 100, 600, 100, 100, -1, (100, 100, 100),
                                     (150, 150, 150), 'square')
