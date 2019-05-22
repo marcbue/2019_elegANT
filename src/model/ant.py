@@ -1,6 +1,6 @@
 import numpy as np
-from copy import copy
 
+from .food import Food
 from .game_object import GameObject
 from src.utils import randint, array
 
@@ -67,39 +67,38 @@ class Ant(GameObject):
         self.has_food = True
 
     def update(self, *args):
-        self.move(self, *args)
+        return self.move(args[0])
 
-    def move(self, possible_positions):
+    def move(self, visible_objects):
         """ Move the ant to a new position at each time iteration. It moves it randomly in the first milestone.
 
-        :param possible_positions: (list) All the possible neighboring positions the ant can move to
+        :param visible_objects: (list) All the possible neighboring positions the ant can move to
         :return:
         """
-        position = copy(self.position)
         if self.has_food:
-            # Go to the nearest nest.
-            # TO DO get nearest nest position
-            # assuming that nest_position is the nearest nest position
-            nest_position = self.home.position
-            return_movement = (nest_position - position) / np.linalg.norm(nest_position - position)
-            position += return_movement
-            if position in possible_positions:
-                return position
-            else:
-                pass  # what to do?
+            return self.move_to(self.home.position)
+        for obj in visible_objects:
+            if type(obj) == Food:
+                return self.move_to(obj.position)
+            # 2. elif it smells, go to smell
+        else:
+            # if no food, it will move randomly
+            return self.move_randomly()
 
-        # 2. elif it smells, go to smell
+    def move_randomly(self):
+        movement = randint(low=-1, high=2, size=2)  # random move
+        self.momentum += 0.5 * self.momentum + movement
+        self.momentum /= np.linalg.norm(self.momentum)
+        self.position = self.position + self.momentum
+        return self.position
 
-        else:  # if no food, it will move randomly
-            while True:  # do this until finding a possible position
-                movement = randint(low=-1, high=2, size=2)  # random move
-                momentum = copy(self.momentum)
-                momentum += 0.5 * momentum + movement
-                momentum /= np.linalg.norm(momentum)
-                position = position + momentum
-                if position in possible_positions:
-                    self.momentum = momentum
-                    return position
+    def move_to(self, obj_position):
+        # Go to the nearest nest.
+        # TO DO get nearest nest position
+        # assuming that nest_position is the nearest nest position
+        return_movement = (obj_position - self.position) / np.linalg.norm(obj_position - self.position)
+        self.position += return_movement
+        return self.position
 
     def set_trace(self):
         """ Add value for pheromones when the ant finds food.
