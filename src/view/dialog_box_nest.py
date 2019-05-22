@@ -12,10 +12,9 @@ class DialogBoxNest(DialogBox):
         self.identifier = identifier
         self.sliders = []
         self.set_sliders()
-        self.on('click', self.click)
 
-    def click(self):
-        self.active = True
+    def toggle(self):
+        self.active = not self.active
 
     def set_sliders(self):
         for i, (key, value) in enumerate(self.properties.items()):
@@ -30,4 +29,3 @@ class DialogBoxNest(DialogBox):
         else:
             for slider in self.sliders:
                 self.view.remove_element(slider.identifier)
-            self.view.remove_element(self.identifier)

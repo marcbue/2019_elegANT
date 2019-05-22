@@ -105,9 +105,12 @@ class View:
         change_scout_stats = Button(self, "change_scout_stats", 0, 0, 100, 100, -1, (100, 100, 100),
                                     (150, 150, 150), 'square', has_image=True, image_path="src/view/ant.png")
 
-        change_scout_stats.on("click", lambda: self.add_element(DialogBoxNest(self,
-                                                                              f"view_box_id_scout_box",
-                                                                              {"kek": 10, "lel": 5}, active=True)))
+        self.add_element(DialogBoxNest(self,
+                                       f"view_box_id_scout_box",
+                                       {"kek": 10, "lel": 5, "sheesh": 7},
+                                       active=False))
+
+        change_scout_stats.on("click", lambda: self.get_element_by_id("view_box_id_scout_box").toggle())
 
         self.add_element(change_scout_stats)
 
@@ -123,7 +126,7 @@ class View:
         self.elements[ui_element.identifier] = ui_element
 
     def remove_element(self, ui_element_identifier):
-        self.elements.pop(ui_element_identifier)
+        self.elements.pop(ui_element_identifier, None)
 
     def get_element_by_id(self, identifier):
         if identifier in self.elements:
