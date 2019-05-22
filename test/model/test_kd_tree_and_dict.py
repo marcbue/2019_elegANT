@@ -35,7 +35,7 @@ def set_up_tree_nests_fixed():
     """Sets up nests at fixed position. Use this if you do not want two nests to be created at one position."""
     tree = KdTreeAndDict()
     positions = [array([5, 5]), array([-5, -5]), array([1000, 1000])]
-    colors = ['red', 'green', 'blue', 'brown']
+    colors = ['red', 'green', 'blue']
     tree.create_nests(colors, positions, size=1, health=100)
 
     return tree, positions
@@ -347,3 +347,17 @@ def test_update_inanimate_objects(set_up_tree_nests_fixed):
             assert tuple(obj.position) in positions
 
 # TODO: check for ants to move in update (equal to method in ants)
+
+def test_uuid_to_exist(set_up_tree_nests_fixed, set_up_food_fixed, set_up_ants_fixed):
+    nests, _ = set_up_tree_nests_fixed
+    food, _ = set_up_food_fixed
+    ants, _ = set_up_ants_fixed
+
+    for obj in nests:
+        assert obj.id is not None
+
+    for obj in food:
+        assert obj.id is not None
+    
+    for ant in ants:
+        assert ant.id is not None
