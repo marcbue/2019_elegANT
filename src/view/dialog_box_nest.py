@@ -25,7 +25,7 @@ class DialogBoxNest(DialogBox):
     def set_sliders(self):
         for i, (key, value) in enumerate(self.properties.items()):
             self.sliders.append(Slider(self.view, f"slider_{key}", value, self.x + self.width * 0.1,
-                                       self.y + 100 * (i + 1), self.width * 0.80, 20, name=key))
+                                       self.y + int(self.height * 0.1 * (i + 1)), self.width * 0.80, 20, name=key))
 
     def draw(self):
         if self.active:
