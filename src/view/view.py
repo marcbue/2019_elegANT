@@ -5,6 +5,7 @@ from .color_selector import ColorSelector
 from .input_box import InputBox
 from .nest import Nest
 from .ant import Ant
+from .world import World
 from src.utils import array
 
 # import numpy as np
@@ -21,29 +22,31 @@ class View:
         display_info = pygame.display.Info()
 
         # Currently not used
-        width = display_info.current_w
-        height = display_info.current_h
+        #width = display_info.current_w
+        #height = display_info.current_h
         self.width = width
         self.height = height
         self.state = None
 
         # Only works for windows --> need to check operating system
+        
         if platform.system() == 'Windows':
             from ctypes import windll
             windll.user32.SetProcessDPIAware()
             true_res = (windll.user32.GetSystemMetrics(0), windll.user32.GetSystemMetrics(1))
             self.screen = pygame.display.set_mode(true_res, pygame.FULLSCREEN)
 
-        else:
-            print(platform.system())
-            self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+        #else:
+        #    print(platform.system())
+        #    self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((self.width, self.height))
         self.background_color = pygame.Color("white")
         self.mouse_pos = pygame.mouse.get_pos()
         self.mouse_event = pygame.mouse.get_pressed()
         self.elements = {}
         self.event_dict = {}
         self.FONT = pygame.font.Font(None, 32)
-        self.pos = [array([0, 0]), array([250, 250])]
+        self.pos = [array([0, 0]), array([25000, 25000])]
 
     def change_view_state(self, state):
         if self.state == state:
@@ -115,6 +118,9 @@ class View:
 
     def _game_view(self):
         self.elements = {}
+        
+        # add move map
+        self.add_element(World(self, "world", 0, 0, 250, 250))
 
         # add a nest and an ant
         self.add_element(Nest(self, "nest", 650, 400, 30, (220, 0, 0)))  # red
@@ -162,7 +168,8 @@ class View:
         pygame.display.flip()
 
     def update(self, game_state):
-        pass
+        if game_state:
+            print()
 
     def events(self):
         self.mouse_pos = pygame.mouse.get_pos()
@@ -171,8 +178,5 @@ class View:
         for event in pygame.event.get():
             for element in self.elements.values():
                 element.event_handler(event)
-
-        if self.event_dict:
-            print(self.event_dict)
 
         return self.event_dict
