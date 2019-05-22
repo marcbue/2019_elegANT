@@ -231,7 +231,6 @@ class KdTreeAndDict(World):
         flatten = lambda l: [item for sublist in l for item in sublist]
         return len(flatten(list(self.all_objects.values())))
 
-
     def _update_tree(self):
         """Update the tree"""
         keys = list(self.all_objects.keys())
