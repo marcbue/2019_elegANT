@@ -216,6 +216,22 @@ class KdTreeAndDict(World):
         flat_everything = [obj for listy in everything for obj in listy]
         return flat_everything
 
+    def __iter__(self):
+        """
+        For iterating over the tree.
+        :return: iterator of all objects currently saved in tree
+        """
+        flatten = lambda l: [item for sublist in l for item in sublist]
+        return iter(flatten(list(self.all_objects.values())))
+
+    def __len__(self):
+        """
+        :return: number of objects that are in the tree
+        """
+        flatten = lambda l: [item for sublist in l for item in sublist]
+        return len(flatten(list(self.all_objects.values())))
+
+
     def _update_tree(self):
         """Update the tree"""
         keys = list(self.all_objects.keys())
