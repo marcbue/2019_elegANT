@@ -9,6 +9,7 @@ class DialogBoxNest(DialogBox):
                                             width=view.size[0] * 0.25, height=view.size[1])
         self.properties = properties
         self.active = active
+        self.show_sliders = active
         self.identifier = identifier
         self.sliders = []
         self.set_sliders()
@@ -16,6 +17,10 @@ class DialogBoxNest(DialogBox):
 
     def toggle(self):
         self.active = not self.active
+        self.show_sliders = self.active
+        if self.show_sliders is True:
+            for slider in self.sliders:
+                self.view.add_element(slider)
 
     def set_sliders(self):
         for i, (key, value) in enumerate(self.properties.items()):
@@ -27,8 +32,8 @@ class DialogBoxNest(DialogBox):
             pygame.draw.rect(self.view.screen, pygame.Color("black"), self.rect, 2)
             txt_surface = self.view.FONT.render(self.name, True, pygame.Color("black"))
             self.view.screen.blit(txt_surface, (self.rect.x + 10, self.rect.y + 10))
-            for slider in self.sliders:
-                self.view.add_element(slider)
         else:
-            for slider in self.sliders:
-                self.view.remove_element(slider.identifier)
+            if self.show_sliders is True:
+                for slider in self.sliders:
+                    self.view.remove_element(slider.identifier)
+                self.show_sliders = False

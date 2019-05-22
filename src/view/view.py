@@ -102,7 +102,7 @@ class View:
         # starttext.set_text("START")
         # self.add_element(starttext)
 
-        change_scout_stats = Button(self, "change_scout_stats", 0, 0, 100, 100, -1, (100, 100, 100),
+        change_scout_stats = Button(self, "change_scout_stats", 0, 0, 100, 100, -1, pygame.Color("white"),
                                     (150, 150, 150), 'square', has_image=True, image_path="src/view/ant.png")
 
         self.add_element(DialogBoxNest(self,
