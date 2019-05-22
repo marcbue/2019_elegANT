@@ -32,18 +32,15 @@ def test__init__():
 # TODO: also random set ups
 @pytest.fixture
 def set_up_tree_nests_fixed():
+    """Sets up nests at fixed position. Use this if you do not want two nests to be created at one position."""
     tree = KdTreeAndDict()
-    # TOD0: Should trees assert that there are no two nests at one position?
-    # Answer: I don't think so, such checks should be handled by the Controller (for our project at least)
     positions = [array([5, 5]), array([-5, -5]), array([1000, 1000])]
-    colors = ['red', 'green', 'blue']
+    colors = ['red', 'green', 'blue', 'brown']
     tree.create_nests(colors, positions, size=1, health=100)
 
     return tree, positions
 
 
-# TODO also test for multiple things at a single location: In that case k nearest will give more then k GameObjects.
-#  Decinde on who handles that case (Caller or world-function)?
 @pytest.fixture
 def set_up_food_fixed(set_up_tree_nests_fixed):
     """Sets up food.
@@ -126,7 +123,8 @@ def test_get_at_position(set_up_food_fixed, position=array([-100, -100]), compar
 
 
 def test_create_ants(set_up_tree_nests_fixed):
-    """Tests whether right amount of ants with type ant are created at nest positions."""
+    """Tests whether right amount of ants with type ant are created at nest positions.
+    set_up_tree_nests_fixed should not build two nests at one position."""
     tree, positions = set_up_tree_nests_fixed
     amount_ants = randint(1, 6)
 
@@ -141,7 +139,8 @@ def test_create_ants(set_up_tree_nests_fixed):
 
 
 def test_create_nests(set_up_tree_nests_fixed):
-    """Test whether only one nest with type nest is created at the positions."""
+    """Test whether only one nest with type nest is created at the positions.
+    set_up_tree_nests_fixed should not build two nests at one position."""
     tree, positions = set_up_tree_nests_fixed
 
     for pos in positions:
@@ -323,3 +322,28 @@ def test_get_nests(set_up_tree_nests_fixed):
         assert (array_in_list(nest.position, positions))
     for nest in positions:
         assert (array_in_list(nest, [nest.position for nest in nests]))
+
+def test_len(set_up_tree_nests_fixed):
+    tree, positions = set_up_tree_nests_fixed
+    assert len(tree) == len(positions)
+
+def test_iter(set_up_tree_nests_fixed):
+    """Example of iterating over tree."""
+    tree, pos = set_up_tree_nests_fixed
+    pos = [tuple(p) for p in pos]
+    for obj in tree:
+        assert tuple(obj.position) in pos
+
+    # All objects should be found.
+    assert(len(tree) == len(pos))
+
+def test_update_inanimate_objects(set_up_tree_nests_fixed):
+    tree, positions = set_up_tree_nests_fixed
+    positions = [tuple(p) for p in positions]
+    for _ in range(10):
+        tree.update()
+        for obj in tree:
+            # Nothing should change.
+            assert tuple(obj.position) in positions
+
+# TODO: check for ants to move in update (equal to method in ants)
