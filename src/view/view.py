@@ -115,14 +115,6 @@ class View:
 
         self.add_element(change_scout_stats)
 
-        build_scout_button = Button(self, "build_scout", 100, 600, 100, 100, -1, (100, 100, 100),
-                                    (150, 150, 150), 'square')
-
-        # Add start game event
-        build_scout_button.on("click", lambda: self.event_dict.update({"build_scout": ()}))
-
-        self.add_element(build_scout_button)
-
     def add_element(self, ui_element):
         self.elements[ui_element.identifier] = ui_element
 
