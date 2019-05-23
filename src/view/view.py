@@ -41,12 +41,12 @@ class View:
         #    self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.background_color = pygame.Color("white")
-        self.mouse_pos = pygame.mouse.get_pos()
-        self.mouse_event = pygame.mouse.get_pressed()
+        self.mouse_pos = None
+        
         self.elements = {}
         self.event_dict = {}
         self.FONT = pygame.font.Font(None, 32)
-        self.pos = [array([0, 0]), array([25000, 25000])]
+        self.pos = [array([-500, 500]), array([500, -500])]
 
     def change_view_state(self, state):
         if self.state == state:
@@ -123,8 +123,8 @@ class View:
         self.add_element(World(self, "world", 0, 0, 250, 250))
 
         # add a nest and an ant
-        self.add_element(Nest(self, "nest", 650, 400, 30, (220, 0, 0)))  # red
-        self.add_element(Ant(self, "ant", 660, 500, 10, (220, 0, 0)))  # peach
+        #self.add_element(Nest(self, "nest", 650, 400, 30, (220, 0, 0)))  # red
+        #self.add_element(Ant(self, "ant", 660, 500, 10, (220, 0, 0)))  # peach
 
         # add quit button
         quit_button = Button(self, "quit_button", 0 + int(0.9825 * self.width), 0 + int(0.0080 * self.height),
@@ -168,8 +168,9 @@ class View:
         pygame.display.flip()
 
     def update(self, game_state):
-        if game_state:
-            print()
+        #if game_state:
+        #    self.elements["world"].update(game_state)
+        self.elements["world"].update(game_state)
 
     def events(self):
         self.mouse_pos = pygame.mouse.get_pos()
