@@ -2,10 +2,10 @@ class ViewElement:
     def __init__(self, view, identifier, x, y, width, height):
         self.identifier = identifier
         self.view = view
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+        self.x = int(x)
+        self.y = int(y)
+        self.width = int(width)
+        self.height = int(height)
         self.events = {}
 
     def draw(self):

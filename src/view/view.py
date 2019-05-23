@@ -103,11 +103,17 @@ class View:
         # self.add_element(starttext)
 
         change_scout_stats = Button(self, "change_scout_stats", 0, 0, 100, 100, -1, pygame.Color("white"),
-                                    (150, 150, 150), 'square', has_image=True, image_path="src/view/ant.png")
+                                    (150, 150, 150), 'square', has_image=True,
+                                    image_path="src/view/images/scout_stat_button.png")
 
         self.add_element(DialogBoxNest(self,
                                        f"view_box_id_scout_box",
-                                       {"kek": 10, "lel": 5, "sheesh": 7},
+                                       slider_data=[
+                                           {"name": "explorativeness", "min_value": 0,
+                                            "max_value": 100, "default_value": 50, "identifier": "0000"},
+                                           {"name": "aggressiveness", "min_value": 0,
+                                            "max_value": 100, "default_value": 50, "identifier": "0001"}
+                                        ],
                                        active=False,
                                        name="Scout Stats"))
 

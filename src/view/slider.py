@@ -3,12 +3,12 @@ import pygame
 
 
 class Slider(UIElement):
-    def __init__(self, view, identifier, value, x, y, width, height, max_value=10, min_value=0,
+    def __init__(self, view, identifier, x, y, width, height, max_value=100, min_value=0, default_value=50,
                  shape="square", name="val:"):
         super(Slider, self).__init__(view, identifier, x, y, width, height)
-        self.rect = pygame.Rect(x, y, width, height)
+        self.rect = pygame.Rect(int(x), int(y), int(width), int(height))
         self.identifier = identifier
-        self.value = value
+        self.value = default_value
         self.max_value = max_value
         self.min_value = min_value
         self.shape = shape
@@ -29,8 +29,10 @@ class Slider(UIElement):
         pygame.draw.circle(self.view.screen, pygame.Color("black"),
                            (int(self.x + self.width * relative_value), self.y + self.height // 2), 10)
 
-        txt_value = self.view.FONT.render(f"{self.value:.0f}", True, pygame.Color("black"))
-        self.view.screen.blit(txt_value, (self.rect.x + 5, self.rect.y + self.height))
+        #
+        # displaying value (not wanted as feature)
+        # txt_value = self.view.FONT.render(f"{self.value:.0f}", True, pygame.Color("black"))
+        # self.view.screen.blit(txt_value, (self.rect.x + 5, self.rect.y + self.height))
 
         txt_name = self.view.FONT.render(f"{self.name}", True, pygame.Color("black"))
         self.view.screen.blit(txt_name, (self.rect.x + 5, self.rect.y - 20))
