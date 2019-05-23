@@ -65,7 +65,7 @@ class View:
     def _start_view(self):
         self.elements = {}
         # add elements for the main text
-        text = Text(self, "headline", 15, 10, -1, -1, 150)
+        text = Text(self, "headline", 17.5, 10, -1, -1, 125)
         text.set_text("ElegANT")
         self.add_element(text)
 
@@ -98,21 +98,21 @@ class View:
         starttext.set_text("START")
         self.add_element(starttext)
 
-        quit_button = Button(self, "quit_button", 98.25, 0.8, 1.5, 1.5, -1, (250, 0, 0), (150, 150, 150), 'square')
+        quit_button = Button(self, "quit_button", 98.25, 0.8, 25, 25, -1, (250, 0, 0), (150, 150, 150), 'square')
         self.add_element(quit_button)
         
         quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
 
-        quittext = Text(self, "quittext", 99, 2, -1, -1, 1)
+        quittext = Text(self, "quittext", 99, 1.75, -1, -1, 20)
         quittext.set_text("X")
         self.add_element(quittext)
 
         # TODO these still need to be made percentages
-        inputname = Text(self, "inputname", 220, 250, -1, -1, 30)
+        inputname = Text(self, "inputname", 13, 25, -1, -1, 30)
         inputname.set_text("Please enter your name")
         self.add_element(inputname)
 
-        # TODO add element for the input box name
+        # TODO make position invariant
         self.add_element(InputBox(self, "textbox", 100, 300, 250, 50, (0, 0, 0), (255, 100, 100), ''))
 
     def _game_view(self):
@@ -123,17 +123,12 @@ class View:
         self.add_element(Ant(self, "ant", 660, 500, 10, (220, 0, 0)))  # peach
 
         # add quit button
-        quit_button = Button(self, "quit_button", 0 + int(0.9825 * self.width), 0 + int(0.0080 * self.height),
-                             int(0.015 * self.width), int(0.015 * self.width),
-                             -1, (250, 0, 0), (150, 150, 150), 'square')
-        
-        
-        quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
-        
+        quit_button = Button(self, "quit_button", 98.25, 0.8, 25, 25, -1, (250, 0, 0), (150, 150, 150), 'square')
         self.add_element(quit_button)
 
-        quittext = Text(self, "quittext", 0 + int(0.99 * self.width), 0 + int(0.02 * self.height), -1, -1,
-                        int(0.010 * self.width))
+        quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
+
+        quittext = Text(self, "quittext", 99, 1.75, -1, -1, 20)
         quittext.set_text("X")
         self.add_element(quittext)
 
