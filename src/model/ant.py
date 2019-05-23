@@ -86,8 +86,11 @@ class Ant(GameObject):
             return self.move_randomly()
 
     def move_randomly(self):
-        movement = randint(low=-1, high=2, size=2)  # random move
-        self.momentum += 0.5 * self.momentum + movement
+        while True: # to avoid standing still and devide by zero
+            movement = randint(low=-1, high=2, size=2)  # random move
+            self.momentum += 0.5 * self.momentum + movement
+            if not np.all(self.momentum == array([0, 0])):
+                break
         self.momentum /= np.linalg.norm(self.momentum)
         self.position = self.position + self.momentum
         return self.position
