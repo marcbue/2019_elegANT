@@ -12,7 +12,7 @@ class Nest(GameObject):
             ----------
             position: list
                 a list of all coordinates of nest position
-            color: string
+            color: (R,G,B) tuple
                 a string for the nest color
             size: int
                 a number for the radius of the nest
@@ -29,7 +29,7 @@ class Nest(GameObject):
         """
 
         :param position: (list) coordinates of the nest
-        :param color: (str) color of the nest
+        :param color: ((R,G,B) tuple) color of the nest
         :param size: (int) radius of the nest
         :param health: (int) health if the nest
         """
