@@ -112,8 +112,7 @@ class View:
                                            {"name": "explorativeness", "min_value": 0,
                                             "max_value": 100, "default_value": 50, "identifier": "0000"},
                                            {"name": "aggressiveness", "min_value": 0,
-                                            "max_value": 100, "default_value": 50, "identifier": "0001"}
-                                        ],
+                                            "max_value": 100, "default_value": 50, "identifier": "0001"}],
                                        active=False,
                                        name="Scout Stats"))
 
