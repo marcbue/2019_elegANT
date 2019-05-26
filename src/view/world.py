@@ -5,8 +5,9 @@ from .view_element import ViewElement
 from .nest import Nest
 from .ant import Ant
 
-from src.model.game_object import GameObject
-from src.model.kd_tree_and_dict import KdTreeAndDict
+# TODO check if these imports are necessary
+# from src.model.game_object import GameObject
+# from src.model.kd_tree_and_dict import KdTreeAndDict
 from src.model.nest import Nest as Model_Nest
 from src.model.ant import Ant as Model_Ant
 from src.model.world import World
@@ -19,7 +20,7 @@ class World(ViewElement):
         self.i = 0
 
     def event_handler(self, event):
-        pos = self.view.mouse_pos
+        # TODO check if needed: pos = self.view.mouse_pos
         pressed_key = pygame.key.get_pressed()
 
         # Detect if arrow key is still pressed

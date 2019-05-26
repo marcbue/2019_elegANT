@@ -29,10 +29,10 @@ class Slider(UIElement):
         pygame.draw.circle(self.view.screen, pygame.Color("black"),
                            (int(self.x + self.width * relative_value), self.y + self.height // 2), 10)
 
-
         # TODO do we want to display value? (not wanted as feature)
         # txt_value = self.view.FONT.render(f"{self.value:.0f}", True, pygame.Color("black"))
         # self.view.screen.blit(txt_value, (self.rect.x + 5, self.rect.y + self.height))
 
         txt_name = self.view.FONT.render(f"{self.name}", True, pygame.Color("black"))
         self.view.screen.blit(txt_name, (self.rect.x + 5, self.rect.y - 20))
+
