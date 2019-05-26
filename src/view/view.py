@@ -102,6 +102,14 @@ class View:
         # starttext.set_text("START")
         # self.add_element(starttext)
 
+        build_scout_button = Button(self, "build_scout", 100, 600, 100, 100, -1, (100, 100, 100),
+                                    (150, 150, 150), 'square')
+
+        # Add start game event
+        build_scout_button.on("click", lambda: self.event_dict.update({"build_scout": ()}))
+
+        self.add_element(build_scout_button)
+
         change_scout_stats = Button(self, "change_scout_stats", 0, 0, 100, 100, -1, pygame.Color("white"),
                                     (150, 150, 150), 'square', has_image=True,
                                     image_path="src/view/images/scout_stat_button.png")
