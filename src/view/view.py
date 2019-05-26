@@ -20,7 +20,6 @@ class View:
 
     def __init__(self, width, height):
         pygame.init()
-
         self.state = None
         self.size = width, height
         self.screen = pygame.display.set_mode(self.size)
@@ -54,7 +53,7 @@ class View:
         text.set_text("ElegANT")
         self.add_element(text)
 
-        # Add elemt for choosing players color
+        # Add element for choosing players color
         player_colors = [
             (220, 0, 0),
             (255, 160, 125),
@@ -73,8 +72,9 @@ class View:
 
         # Add start game event
         start_button.on("click", lambda: self.event_dict.update({"start_button":
-                        (self.get_element_by_id("color_selector").get_selection(),
-                            self.get_element_by_id("textbox").text)}))
+                                                                     (self.get_element_by_id(
+                                                                         "color_selector").get_selection(),
+                                                                      self.get_element_by_id("textbox").text)}))
 
         self.add_element(start_button)
 
@@ -128,44 +128,49 @@ class View:
 
         self.add_element(change_scout_stats)
 
-    def add_element(self, ui_element):
-        self.elements[ui_element.identifier] = ui_element
 
-    def remove_element(self, ui_element_identifier):
-        self.elements.pop(ui_element_identifier, None)
+def add_element(self, ui_element):
+    self.elements[ui_element.identifier] = ui_element
 
-    def get_element_by_id(self, identifier):
-        if identifier in self.elements:
-            return self.elements[identifier]
+
+def remove_element(self, ui_element_identifier):
+    self.elements.pop(ui_element_identifier, None)
+
+
+def get_element_by_id(self, identifier):
+    if identifier in self.elements:
+        return self.elements[identifier]
+    else:
+        print("Element does not exist")
+
+
+def draw(self, model_state=None):
+    self.screen.fill(self.background_color)
+    iteration_copy = self.elements.copy()
+    for element in iteration_copy.values():
+        element.draw()
+    pygame.display.flip()
+
+
+def update(self, game_state):
+    if game_state:
+        self.elements["world"].update(game_state)
+
+
+def events(self):
+    self.mouse_pos = pygame.mouse.get_pos()
+    self.event_dict = {}
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
         else:
-            print("Element does not exist")
+            iteration_copy = self.elements.copy()
+            for element in iteration_copy.values():
+                element.event_handler(event)
 
-    def draw(self, model_state=None):
-        self.screen.fill(self.background_color)
-        iteration_copy = self.elements.copy()
-        for element in iteration_copy.values():
-            element.draw()
-        pygame.display.flip()
+    if self.event_dict:
+        print(self.event_dict)
 
-    def update(self, game_state):
-        if game_state:
-            self.elements["world"].update(game_state)
-
-    def events(self):
-        self.mouse_pos = pygame.mouse.get_pos()
-        self.event_dict = {}
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            else:
-                iteration_copy = self.elements.copy()
-                for element in iteration_copy.values():
-                    element.event_handler(event)
-
-        if self.event_dict:
-            print(self.event_dict)
-
-        return self.event_dict
-
+    return self.event_dict
