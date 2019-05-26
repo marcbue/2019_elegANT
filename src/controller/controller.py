@@ -1,4 +1,5 @@
 import sys
+import time
 from src.model.player import Player
 from src.model.game_state import GameState
 from src.view.view import View
@@ -62,7 +63,12 @@ class Controller:
         Main game loop
         :return: empty
         """
+        # Currently Frame rate set to 30
+        max_frames = 30
         while True:
+
+            current_time = time.time()
+
             if self.game_state is None:
                 self.view.draw()
 
@@ -102,6 +108,12 @@ class Controller:
                         self.event_list_game_view[event[i]](*args[i])
 
                 self.game_state.update()
+
+            # For frame rate adjustment
+            exit_time = time.time()
+            time_elapsed = exit_time - current_time
+            frames_per_sec = 1. / max_frames
+            time.sleep(max(frames_per_sec - time_elapsed, 0))
 
 
 if __name__ == "__main__":
