@@ -11,7 +11,7 @@ class Text(UIElement):
         self.y = self.y
         self.width = self.w
         self.height = self.h
-        self.fontsize = self.width*self.height
+        self.fontsize = self.width * self.height
 
     def set_text(self, text):
         self.text = text

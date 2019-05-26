@@ -11,7 +11,7 @@ class ColorSelector(UIElement):
         self.y = y
         self.width = width
         self.height = height
-        self.radius = int((self.height**2 + self.width**2)/ 2*self.height)
+        self.radius = int((self.height ** 2 + self.width ** 2) / 2 * self.height)
         print(self.radius)
         self.color = None
         self.buttons = []

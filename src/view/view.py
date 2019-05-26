@@ -86,9 +86,9 @@ class View:
 
         # Add start game event
         start_button.on("click", lambda: self.event_dict.update({"start_button":
-                                                                     (self.get_element_by_id(
-                                                                         "color_selector").get_selection(),
-                                                                      self.get_element_by_id("textbox").text)}))
+                                                                (self.get_element_by_id(
+                                                                    "color_selector").get_selection(),
+                                                                 self.get_element_by_id("textbox").text)}))
 
         self.add_element(start_button)
 
@@ -105,7 +105,6 @@ class View:
         quittext.set_text("X")
         self.add_element(quittext)
 
-
         inputname = Text(self, "inputname", 13, 27, 0.5, 0.4)
         inputname.set_text("Please enter your name")
         self.add_element(inputname)
@@ -115,7 +114,6 @@ class View:
         buttontext = Text(self, "buttontext", 60, 27, 0.5, 0.4)
         buttontext.set_text("Please choose color of ant")
         self.add_element(buttontext)
-
 
     def _game_view(self):
         self.elements = {}

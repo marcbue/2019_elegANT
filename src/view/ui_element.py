@@ -14,15 +14,13 @@ class UIElement(ViewElement):
         res_width = display_info.current_w
         res_height = display_info.current_h
 
-        self.x = 0+int(x/100*res_width)
-        self.y = 0+int(y/100*res_height)
-        self.w = int(width/100*res_width)
-        self.h = int(height/100*res_height)
+        self.x = 0 + int(x / 100 * res_width)
+        self.y = 0 + int(y / 100 * res_height)
+        self.w = int(width / 100 * res_width)
+        self.h = int(height / 100 * res_height)
 
         self.active = active
         self.hovered = False
-
-
 
     def event_handler(self, event):
         pos = self.view.mouse_pos
