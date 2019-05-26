@@ -3,12 +3,17 @@ from .ui_element import UIElement
 
 
 class InputBox(UIElement):
-
     def __init__(self, view, identifier, x, y, width, height, color1, color2, text='', shape='square'):
-        super(InputBox, self).__init__(view, identifier, x, y, width, height)
+        UIElement.__init__(self, view, identifier, x, y, width, height)
+
+        self.x = self.x1
+        self.y = self.y1
+        self.width = self.w1
+        self.height = self.h1
+
+        print(self.x, self.y, self.width, self.height)
+
         self.rect = pygame.Rect(x, y, width, height)
-        self.width = width
-        self.height = height
         self.color1 = color1
         self.color2 = color2
         self.color = color1

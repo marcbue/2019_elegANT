@@ -37,7 +37,6 @@ class View:
             self.screen = pygame.display.set_mode(true_res, pygame.FULLSCREEN)
 
         else:
-            print(platform.system())
             self.screen = pygame.display.set_mode((self.res_width, self.res_height), pygame.FULLSCREEN)
 
         self.background_color = pygame.Color("white")
@@ -113,7 +112,7 @@ class View:
         self.add_element(inputname)
 
         # TODO make position invariant
-        self.add_element(InputBox(self, "textbox", 100, 300, 250, 50, (0, 0, 0), (255, 100, 100), ''))
+        self.add_element(InputBox(self, "textbox", 11.5, 89, 25, 50, (0, 0, 0), (255, 100, 100), ''))
 
     def _game_view(self):
         self.elements = {}
