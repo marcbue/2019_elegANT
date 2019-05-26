@@ -5,21 +5,20 @@ from .button import Button
 
 
 class ColorSelector(UIElement):
-    def __init__(self, view, identifier, x, y, radius, colors):
-        super(ColorSelector, self).__init__(view, identifier, x, y,radius*2,radius*2)
-        # self.x = self.x
-        # self.y = self.y
-        # self.width = self.w
-        # self.height = self.h
-        # self.radius = int((self.height/2)+((self.width**2)/(8*self.height)))
-        print(x,y,radius)
+    def __init__(self, view, identifier, x, y, width, height, colors):
+        UIElement.__init__(self, view, identifier, x, y, width, height)
+        self.x = self.x
+        self.y = self.y
+        self.width = self.w
+        self.height = self.h
+        self.radius = int((self.height/2)+((self.width**2)/(8*self.height)))
         self.color = None
         self.buttons = []
         colors_n = len(colors)
         for i, rgb in enumerate(colors):
             rgb_dark = tuple(int(c * (1 / 2.5)) for c in rgb)
-            x = int(radius * math.cos(i * ((2 * math.pi) / colors_n))) + self.x
-            y = int(radius * math.sin(i * ((2 * math.pi) / colors_n))) + self.y
+            x = int(self.radius * math.cos(i * ((2 * math.pi) / colors_n))) + self.x
+            y = int(self.radius * math.sin(i * ((2 * math.pi) / colors_n))) + self.y
             button = Button(self.view, "c{}".format(i), x, y, -1, -1, 25, rgb, rgb_dark, "circle")
             button.on("click", self._select_color, button_clicked=button)
             self.buttons.append(button)

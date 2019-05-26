@@ -43,8 +43,8 @@ class InputBox(UIElement):
         else:
             self.color = self.color1
 
-        width = max(250, self.txt_surface.get_width() + 10)
-        self.rect.w = width
+        width = max(self.width, self.txt_surface.get_width() + 0.10 * self.width)
+        self.rect.width = width
 
         self.view.screen.fill(self.view.background_color, self.rect)
         self.view.screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))

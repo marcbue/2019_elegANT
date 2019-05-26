@@ -80,10 +80,10 @@ class View:
             (255, 165, 0)
         ]
         # TODO make position variable
-        self.add_element(ColorSelector(self, "color_selector", 840, 350, 150, player_colors))
+        self.add_element(ColorSelector(self, "color_selector", 40, 50, 15, 15, player_colors))
 
         # TODO add element for start button and the text on it
-        start_button = Button(self, "start_button", 5, 85, 25, 10, -1, (100, 100, 100), (150, 150, 150), 'square')
+        start_button = Button(self, "start_button", 5, 85, 12.5, 10, -1, (100, 100, 100), (150, 150, 150), 'square')
 
         # Add start game event
         start_button.on("click", lambda: self.event_dict.update({"start_button":
@@ -97,12 +97,12 @@ class View:
         starttext.set_text("START")
         self.add_element(starttext)
 
-        quit_button = Button(self, "quit_button", 98.25, 0.8, 2, 2, -1, (250, 0, 0), (150, 150, 150), 'square')
+        quit_button = Button(self, "quit_button", 98.25, 0.8, 1.5, 2.5, -1, (250, 0, 0), (150, 150, 150), 'square')
         self.add_element(quit_button)
         
         quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
 
-        quittext = Text(self, "quittext", 100, 220, -1, -1, 20)
+        quittext = Text(self, "quittext", 99, 2, -1, -1, 20)
         quittext.set_text("X")
         self.add_element(quittext)
 
@@ -112,7 +112,7 @@ class View:
         self.add_element(inputname)
 
         # TODO make position invariant
-        self.add_element(InputBox(self, "textbox", 5, 30, 25, 5, (0, 0, 0), (255, 100, 100), ''))
+        self.add_element(InputBox(self, "textbox", 5, 30, 12.5, 5, (0, 0, 0), (255, 100, 100), ''))
 
     def _game_view(self):
         self.elements = {}
