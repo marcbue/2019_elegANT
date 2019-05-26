@@ -6,6 +6,7 @@ from .color_selector import ColorSelector
 from .input_box import InputBox
 from .nest import Nest
 from .ant import Ant
+from .world import World
 from src.utils import array
 from .dialog_box_nest import DialogBoxNest
 
@@ -29,7 +30,7 @@ class View:
         self.elements = {}
         self.event_dict = {}
         self.FONT = pygame.font.Font(None, 32)
-        self.pos = [array([0, 0]), array([250, 250])]
+        self.pos = [array([-500, 500]), array([500, -500])]
 
     def change_view_state(self, state):
         if self.state == state:
@@ -91,9 +92,8 @@ class View:
     def _game_view(self):
         self.elements = {}
 
-        # add a nest and an ant
-        self.add_element(Nest(self, "nest", 650, 400, 30, (220, 0, 0)))  # red
-        self.add_element(Ant(self, "ant", 660, 500, 10, (220, 0, 0)))  # peach
+        # Create world which contains all game objects
+        self.add_element(World(self, "world", 0, 0, 250, 250))
 
         # TODO add sliders to the game view
         # self.add_element(
@@ -140,7 +140,8 @@ class View:
         pygame.display.flip()
 
     def update(self, game_state):
-        pass
+        if game_state:
+            self.elements["world"].update(game_state)
 
     def events(self):
         self.mouse_pos = pygame.mouse.get_pos()
