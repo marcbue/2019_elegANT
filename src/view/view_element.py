@@ -12,7 +12,7 @@ class ViewElement:
         pass
 
     def event_handler(self, event):
-        print('event not handled')
+        pass
 
     def on(self, event, fnct, **kwargs):
         if event not in self.events:
