@@ -149,10 +149,24 @@ class KdTreeAndDict(World):
         all_lists = list(self.all_objects.values())
         for listy in all_lists:
             for item in listy:
+                old_position = tuple(item.position)
+
                 if type(item) == Ant:
-                    old_position = item.position
-                    new_position = item.move()  # TODO: switch to update() when implemented
-                    self.all_objects[old_position].remove(item)
+                    # TODO: pick radius (or implement it in ant class)
+                    noticeable_objects = self.get_circular_region(item.position, radius=10)
+                    # TODO: needs noticeable objects
+                    new_position = tuple(item.update(noticeable_objects))
+                else:
+                    new_position = tuple(item.update())
+
+                # Remove old positions.
+                self.all_objects[old_position].remove(item)
+                if self.all_objects[old_position] is []:
+                    self.all_objects.pop(old_position)
+
+                # Save new positions if object did not die.
+                # TODO: deaths of objects
+                if new_position is not None:
                     self.all_objects.setdefault(tuple(new_position), []).append(item)
         self._update_tree()
 
@@ -201,6 +215,21 @@ class KdTreeAndDict(World):
         everything = list(self.all_objects.values())
         flat_everything = [obj for listy in everything for obj in listy]
         return flat_everything
+
+    def __iter__(self):
+        """
+        For iterating over the tree.
+        :return: iterator of all objects currently saved in tree
+        """
+        flatten = lambda l: [item for sublist in l for item in sublist]
+        return iter(flatten(list(self.all_objects.values())))
+
+    def __len__(self):
+        """
+        :return: number of objects that are in the tree
+        """
+        flatten = lambda l: [item for sublist in l for item in sublist]
+        return len(flatten(list(self.all_objects.values())))
 
     def _update_tree(self):
         """Update the tree"""
