@@ -64,7 +64,7 @@ class View:
     def _start_view(self):
         self.elements = {}
         # add elements for the main text
-        text = Text(self, "headline", 17.5, 10, -1, -1, 125)
+        text = Text(self, "headline", 17.5, 10, 0.8, 0.9)
         text.set_text("ElegANT")
         self.add_element(text)
 
@@ -79,10 +79,9 @@ class View:
             (0, 200, 0),
             (255, 165, 0)
         ]
-        # TODO make position variable
-        self.add_element(ColorSelector(self, "color_selector", 40, 50, 15, 15, player_colors))
 
-        # TODO add element for start button and the text on it
+        self.add_element(ColorSelector(self, "color_selector", 60, 50, 5, 1, player_colors))
+
         start_button = Button(self, "start_button", 5, 85, 12.5, 10, -1, (100, 100, 100), (150, 150, 150), 'square')
 
         # Add start game event
@@ -93,7 +92,7 @@ class View:
 
         self.add_element(start_button)
 
-        starttext = Text(self, "starttext", 11.5, 89, -1, -1,50)
+        starttext = Text(self, "starttext", 11.5, 90, 0.5, 0.6)
         starttext.set_text("START")
         self.add_element(starttext)
 
@@ -102,17 +101,21 @@ class View:
         
         quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
 
-        quittext = Text(self, "quittext", 99, 2, -1, -1, 20)
+        quittext = Text(self, "quittext", 99, 2, 0.3, 0.4)
         quittext.set_text("X")
         self.add_element(quittext)
 
-        # TODO these still need to be made percentages
-        inputname = Text(self, "inputname", 13, 25, -1, -1, 30)
+
+        inputname = Text(self, "inputname", 13, 27, 0.5, 0.4)
         inputname.set_text("Please enter your name")
         self.add_element(inputname)
 
-        # TODO make position invariant
-        self.add_element(InputBox(self, "textbox", 5, 30, 12.5, 5, (0, 0, 0), (255, 100, 100), ''))
+        self.add_element(InputBox(self, "textbox", 5, 32, 12.5, 5, (0, 0, 0), (255, 100, 100), ''))
+
+        buttontext = Text(self, "buttontext", 60, 27, 0.5, 0.4)
+        buttontext.set_text("Please choose color of ant")
+        self.add_element(buttontext)
+
 
     def _game_view(self):
         self.elements = {}

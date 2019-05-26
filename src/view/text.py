@@ -3,19 +3,20 @@ from .ui_element import UIElement
 
 
 class Text(UIElement):
-    def __init__(self, view, identifier, x, y, width, height, fontsize):
+    def __init__(self, view, identifier, x, y, width, height):
         pygame.init()
         super(Text, self).__init__(view, identifier, x, y, width, height)
-        self.fontsize = fontsize
+
         self.x = self.x
         self.y = self.y
         self.width = self.w
         self.height = self.h
+        self.fontsize = self.width*self.height
 
     def set_text(self, text):
         self.text = text
-        largeText = pygame.font.SysFont('centuryschoolbook', self.fontsize)
-        self.TextSurf = largeText.render(self.text, True, (56, 56, 56))
+        largeText = pygame.font.Font('Garamond_Regular.ttf', self.fontsize)
+        self.TextSurf = largeText.render(self.text, True, (0, 0, 0))
         self.TextRect = self.TextSurf.get_rect()
         self.TextRect.center = (self.x, self.y)
 

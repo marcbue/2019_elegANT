@@ -15,12 +15,6 @@ class Button(UIElement):
         self.width = self.w
         self.height = self.h
 
-        # self.x = x
-        # self.y = y
-        # self.width = width
-        # self.height = height
-
-
     def change_color(self, new_color):
         self.color = new_color
 
