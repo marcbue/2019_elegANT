@@ -10,8 +10,15 @@ class Button(UIElement):
         self.color = color1
         self.radius = radius
         self.shape = shape
-        self.width = width
-        self.height = height
+        self.x = self.x
+        self.y = self.y
+        self.width = self.w
+        self.height = self.h
+        # self.x = x
+        # self.y = y
+        # self.width = width
+        # self.height = height
+
 
     def change_color(self, new_color):
         self.color = new_color

@@ -14,15 +14,10 @@ class UIElement(ViewElement):
         res_width = display_info.current_w
         res_height = display_info.current_h
 
-        self.x1 = 0+int(x/100*res_width)
-        self.y1 = 0+int(y/100*res_height)
-        self.w1 = int(width/100*res_width)
-        self.h1 = int(height/100*res_height)
-
-        # self.x = x
-        # self.y = y
-        # self.width = width
-        # self.height = height
+        self.x = 0+int(x/100*res_width)
+        self.y = 0+int(y/100*res_height)
+        self.w = int(width/100*res_width)
+        self.h = int(height/100*res_height)
 
         self.active = active
         self.hovered = False
@@ -69,9 +64,9 @@ class UIElement(ViewElement):
 
     def mouse_on_object(self, pos):
         if self.shape == 'circle':
-            return self.x1 + self.radius > pos[0] > self.x1 - self.radius \
-                and self.y1 + self.radius > pos[1] > self.y1 - self.radius
+            return self.x + self.radius > pos[0] > self.x - self.radius \
+                and self.y + self.radius > pos[1] > self.y - self.radius
         elif self.shape == 'square':
-            return self.x1 + self.width > pos[0] > self.x1 and self.y1 + self.height > pos[1] > self.y1
+            return self.x + self.width > pos[0] > self.x and self.y + self.height > pos[1] > self.y
 
 

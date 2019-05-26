@@ -6,7 +6,13 @@ from .button import Button
 
 class ColorSelector(UIElement):
     def __init__(self, view, identifier, x, y, radius, colors):
-        super(ColorSelector, self).__init__(view, identifier, x, y, radius * 2, radius * 2)
+        super(ColorSelector, self).__init__(view, identifier, x, y,radius*2,radius*2)
+        # self.x = self.x
+        # self.y = self.y
+        # self.width = self.w
+        # self.height = self.h
+        # self.radius = int((self.height/2)+((self.width**2)/(8*self.height)))
+        print(x,y,radius)
         self.color = None
         self.buttons = []
         colors_n = len(colors)
