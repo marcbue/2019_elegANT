@@ -10,7 +10,6 @@ from .ant import Ant
 # from src.model.kd_tree_and_dict import KdTreeAndDict
 from src.model.nest import Nest as Model_Nest
 from src.model.ant import Ant as Model_Ant
-from src.model.world import World
 
 
 class World(ViewElement):
