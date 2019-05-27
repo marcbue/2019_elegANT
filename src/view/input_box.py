@@ -6,8 +6,8 @@ class InputBox(UIElement):
     def __init__(self, view, identifier, x, y, width, height, color1, color2, text='', shape='square'):
         UIElement.__init__(self, view, identifier, x, y, width, height)
 
-        self.x = self.x
-        self.y = self.y
+        self.x = self.xc
+        self.y = self.yc
         self.width = self.w
         self.height = self.h
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)

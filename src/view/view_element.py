@@ -3,17 +3,17 @@ class ViewElement:
     def __init__(self, view, identifier, x, y, width, height):
         self.identifier = identifier
         self.view = view
-        self.x = x
-        self.y = y
-        self.w = width
-        self.h = height
+        self.x = int(x)
+        self.y = int(y)
+        self.width = int(width)
+        self.height = int(height)
         self.events = {}
 
     def draw(self):
         pass
 
     def event_handler(self, event):
-        print('event not handled')
+        pass
 
     def on(self, event, fnct, **kwargs):
         if event not in self.events:

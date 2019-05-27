@@ -7,8 +7,8 @@ class Text(UIElement):
         pygame.init()
         super(Text, self).__init__(view, identifier, x, y, width, height)
 
-        self.x = self.x
-        self.y = self.y
+        self.x = self.xc
+        self.y = self.yc
         self.width = self.w
         self.height = self.h
         self.fontsize = self.width * self.height

@@ -1,15 +1,19 @@
+import sys
 import pygame
 from .text import Text
 from .button import Button
 from .color_selector import ColorSelector
 from .input_box import InputBox
-from .nest import Nest
-from .ant import Ant
+# TODO check if these imports are necessary
+# from .nest import Nest
+# from .ant import Ant
+from .world import World
 from src.utils import array
+from .dialog_box_nest import DialogBoxNest
+
 
 # import numpy as np
 import platform
-
 
 # View
 class View:
@@ -45,7 +49,7 @@ class View:
         self.elements = {}
         self.event_dict = {}
         self.FONT = pygame.font.Font(None, 32)
-        self.pos = [array([0, 0]), array([250, 250])]
+        self.pos = [array([-500, 500]), array([500, -500])]
 
     def change_view_state(self, state):
         if self.state == state:
@@ -63,12 +67,13 @@ class View:
 
     def _start_view(self):
         self.elements = {}
+
         # add elements for the main text
         text = Text(self, "headline", 17.5, 10, 0.8, 0.9)
         text.set_text("ElegANT")
         self.add_element(text)
 
-        # Add elemt for choosing players color
+        # Add element for choosing players color
         player_colors = [
             (220, 0, 0),
             (255, 160, 125),
@@ -118,28 +123,20 @@ class View:
     def _game_view(self):
         self.elements = {}
 
-        # add a nest and an ant
-        self.add_element(Nest(self, "nest", 650, 400, 30, (220, 0, 0)))  # red
-        self.add_element(Ant(self, "ant", 660, 500, 10, (220, 0, 0)))  # peach
-
         # add quit button
-        quit_button = Button(self, "quit_button", 10, 98, 20, 20, -1, (250, 0, 0), (150, 150, 150), 'square')
+        quit_button = Button(self, "quit_button", 98.25, 0.8, 1.5, 2.5, -1, (250, 0, 0), (150, 150, 150), 'square')
         self.add_element(quit_button)
 
         quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
 
-        quittext = Text(self, "quittext", 99, 1.75, -1, -1, 20)
+        quittext = Text(self, "quittext", 99, 2, 0.3, 0.4)
         quittext.set_text("X")
         self.add_element(quittext)
 
-        # TODO add sliders to the game view
-        # self.add_element(
-        # Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square'))  # orange
-        # starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
-        # starttext.set_text("START")
-        # self.add_element(starttext)
+        # Create world which contains all game objects
+        self.add_element(World(self, "world", 0, 0, 250, 250))
 
-        build_scout_button = Button(self, "build_scout", 100, 600, 100, 100, -1, (100, 100, 100),
+        build_scout_button = Button(self, "build_scout", 5, 85, 10, 10, -1, (100, 100, 100),
                                     (150, 150, 150), 'square')
 
         # Add start game event
@@ -147,8 +144,29 @@ class View:
 
         self.add_element(build_scout_button)
 
+        change_scout_stats = Button(self, "change_scout_stats", 0, 0, 10, 10, -1, pygame.Color("white"),
+                                    (150, 150, 150), 'square', has_image=True,
+                                    image_path="src/view/images/scout_stat_button.png")
+
+        self.add_element(DialogBoxNest(self,
+                                       f"view_box_id_scout_box",
+                                       slider_data=[
+                                           {"name": "explorativeness", "min_value": 0,
+                                            "max_value": 100, "default_value": 50, "identifier": "0000"},
+                                           {"name": "aggressiveness", "min_value": 0,
+                                            "max_value": 100, "default_value": 50, "identifier": "0001"}],
+                                       active=False,
+                                       name="Scout Stats"))
+
+        change_scout_stats.on("click", lambda: self.get_element_by_id("view_box_id_scout_box").toggle())
+
+        self.add_element(change_scout_stats)
+
     def add_element(self, ui_element):
         self.elements[ui_element.identifier] = ui_element
+
+    def remove_element(self, ui_element_identifier):
+        self.elements.pop(ui_element_identifier, None)
 
     def get_element_by_id(self, identifier):
         if identifier in self.elements:
@@ -158,20 +176,27 @@ class View:
 
     def draw(self, model_state=None):
         self.screen.fill(self.background_color)
-        for element in self.elements.values():
+        iteration_copy = self.elements.copy()
+        for element in iteration_copy.values():
             element.draw()
         pygame.display.flip()
 
     def update(self, game_state):
-        pass
-
+        if game_state:
+            self.elements["world"].update(game_state)
+    
     def events(self):
         self.mouse_pos = pygame.mouse.get_pos()
         self.event_dict = {}
 
         for event in pygame.event.get():
-            for element in self.elements.values():
-                element.event_handler(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            else:
+                iteration_copy = self.elements.copy()
+                for element in iteration_copy.values():
+                    element.event_handler(event)
 
         if self.event_dict:
             print(self.event_dict)

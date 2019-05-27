@@ -12,7 +12,6 @@ class ColorSelector(UIElement):
         self.width = width
         self.height = height
         self.radius = int((self.height ** 2 + self.width ** 2) / 2 * self.height)
-        print(self.radius)
         self.color = None
         self.buttons = []
         colors_n = len(colors)
