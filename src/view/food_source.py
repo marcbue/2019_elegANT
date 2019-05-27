@@ -5,7 +5,7 @@ from math import sqrt
 
 class FoodSource(ViewElement):
     def __init__(self, view, identifier, x, y, width, height, radius=0, color=pygame.Color("black"),
-                 value=100, max_value=100, shape='square', has_image='False', image_path=''):
+                 value=100, max_value=100, shape='square', has_image=False, image_path=''):
         super(FoodSource, self).__init__(view, identifier, x, y, width, height)
         self.color = color
         self.radius = radius
