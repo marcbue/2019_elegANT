@@ -2,6 +2,7 @@ import sys
 import pygame
 from .text import Text
 from .button import Button
+from .button_build_scout import BuildScoutButton
 from .color_selector import ColorSelector
 from .input_box import InputBox
 # TODO check if these imports are necessary
@@ -10,7 +11,6 @@ from .input_box import InputBox
 from .world import World
 from src.utils import array
 from .dialog_box_nest import DialogBoxNest
-
 
 # import numpy as np
 
@@ -103,11 +103,13 @@ class View:
         # starttext.set_text("START")
         # self.add_element(starttext)
 
-        build_scout_button = Button(self, "build_scout", 100, 600, 100, 100, -1, (100, 100, 100),
-                                    (150, 150, 150), 'square')
+        build_scout_button = BuildScoutButton(self, "build_scout", 100, 600, 100, 100, -1, (255, 20, 147),
+                                              (255, 105, 180), 'square')
 
         # Add start game event
-        build_scout_button.on("click", lambda: self.event_dict.update({"build_scout": ()}))
+        build_scout_button.on("click", lambda: self.event_dict.update({
+            "build_scout": (build_scout_button,)
+        }))
 
         self.add_element(build_scout_button)
 
@@ -169,3 +171,7 @@ class View:
             print(self.event_dict)
 
         return self.event_dict
+
+    def increment_ant_count(self):
+        button = self.get_element_by_id("build_scout")
+        button.counter += 1
