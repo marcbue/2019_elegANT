@@ -1,8 +1,9 @@
 import pygame
-from .ui_element import UIElement
+from .ui_element import ViewElement
+from math import sqrt
 
 
-class FoodSource(UIElement):
+class FoodSource(ViewElement):
     def __init__(self, view, identifier, x, y, width, height, radius=0, color=pygame.Color("black"),
                  value=100, max_value=100, shape='square', has_image='False', image_path=''):
         super(FoodSource, self).__init__(view, identifier, x, y, width, height)
@@ -15,8 +16,8 @@ class FoodSource(UIElement):
         self.max_value = max_value
 
     def draw(self):
-        relative_width = self.width * self.value / self.max_value
-        relative_height = self.height * self.value / self.max_value
+        relative_width = self.width * sqrt(self.value / self.max_value)
+        relative_height = self.height * sqrt(self.value / self.max_value)
 
         if self.shape == 'circle':
             relative_radius = self.width * self.value / self.max_value
