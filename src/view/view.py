@@ -151,9 +151,9 @@ class View:
         self.add_element(DialogBoxNest(self,
                                        f"view_box_id_scout_box",
                                        slider_data=[
-                                           {"name": "explorativeness", "min_value": 0,
+                                           {"name": "Explorativeness", "min_value": 0,
                                             "max_value": 100, "default_value": 50, "identifier": "0000"},
-                                           {"name": "aggressiveness", "min_value": 0,
+                                           {"name": "Aggressiveness", "min_value": 0,
                                             "max_value": 100, "default_value": 50, "identifier": "0001"}],
                                        active=False,
                                        name="Scout Stats"))
