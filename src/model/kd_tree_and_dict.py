@@ -170,18 +170,18 @@ class KdTreeAndDict(World):
                     self.all_objects.setdefault(tuple(new_position), []).append(item)
         self._update_tree()
 
-    def create_nests(self, color_list, position_list, size, health):
-        """ Create new nest objects with specific colors/positions/size/health and update the tree
+    def create_nests(self, player_list, position_list, size, health):
+        """ Create new nest objects with specific owners/positions/size/health and update the tree
 
-        :param color_list: (list) colors of the nests to be created
+        :param player_list: (list) owning players of the nests to be created
         :param position_list: (list) coordinates of the nests to be created
         :param size: (list) sizes of the nests to be created
         :param health: (list) health(s) of the nests to be created
 
         """
 
-        for position, color in zip(position_list, color_list):
-            self.all_objects.setdefault(tuple(position), []).append(Nest(position, color, size, health))
+        for position, player in zip(position_list, player_list):
+            self.all_objects.setdefault(tuple(position), []).append(Nest(position, player, size, health))
         self._update_tree()
 
     def create_ants(self, nest, amount):
@@ -192,10 +192,10 @@ class KdTreeAndDict(World):
 
         """
 
-        color = nest.color
+        player = nest.owner
         position = nest.position
         for _ in range(amount):
-            self.all_objects.setdefault(tuple(position), []).append(Ant(color, nest))
+            self.all_objects.setdefault(tuple(position), []).append(Ant(player, nest))
         self._update_tree()
 
     def create_food(self, position_list, size_list):

@@ -68,8 +68,8 @@ class GameState:
         """
         return self.world.create_ants(nest, amount)
 
-    def create_nest(self, nest_position, color, size, health):
-        return self.world.create_nests(nest_position, color, size, health)
+    def create_nest(self, nest_position, player, size, health):
+        return self.world.create_nests(nest_position, player, size, health)
 
     def create_food(self, position_list, size_list):
         return self.world.create_food(position_list, size_list)

@@ -1,39 +1,47 @@
 from src.model.player import Player
-
-name = "franz"
-color = "red"
+import pytest
 
 
-def test_model_creation():
+@pytest.fixture
+def set_up_player():
+    name = "franz"
+    color = "red"
+    return name, color
+
+
+@pytest.fixture
+def change_player():
+    name = "herbert"
+    color = "rosa"
+    return name, color
+
+
+def test_init__(set_up_player):
+    name, color = set_up_player
     player = Player(name, color)
     assert player.name == name and player.color == color
 
 
-def test_name_setter():
+def test_name_setter_and_getter(set_up_player, change_player):
+    name, color = set_up_player
     player = Player(name, color)
-    new_name = "herbert"
+    assert player.name == name
+    new_name, new_color = change_player
     player.name = new_name
     assert player.name == new_name
 
 
-def test_name_getter():
+def test_color_setter_and_getter(set_up_player, change_player):
+    name, color = set_up_player
     player = Player(name, color)
-    assert player.name == name
-
-
-def test_color_setter():
-    player = Player(name, color)
-    new_color = "rosa"
+    assert player.color == color
+    new_name, new_color = change_player
     player.color = new_color
     assert player.color == new_color
 
 
-def test_color_getter():
-    player = Player(name, color)
-    assert player.color == color
-
-
-def test_data_storage():
+def test_data_storage(set_up_player):
+    name, color = set_up_player
     player = Player(name, color)
     player.store_data()
     player2 = Player(name, color)

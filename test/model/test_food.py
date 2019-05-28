@@ -11,14 +11,14 @@ def set_up_food_fixed():
     return position, size1, size2
 
 
-def test__init__(set_up_food_fixed):
+def test_init__(set_up_food_fixed):
     position, size1, size2 = set_up_food_fixed
     food = Food(position, size1)
     assert ((food.position == position).all())
     assert food.size == size1
 
 
-def test_update_food(set_up_food_fixed):
+def test_update(set_up_food_fixed):
     position, size1, size2 = set_up_food_fixed
     food1 = Food(position, size1)
     new_position1 = food1.update(size1)
