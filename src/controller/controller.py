@@ -7,6 +7,8 @@ from src.model.player import Player
 from src.model.game_state import GameState
 from src.view.view import View
 
+from src.settings import all_params
+
 
 class Controller:
     def __init__(self):
@@ -114,7 +116,7 @@ class Controller:
         :return: empty
         """
         # Currently Frame rate set to 30
-        max_frames = 30
+        max_frames = all_params.controller_params.framerate
         while True:
 
             current_time = time.time()
