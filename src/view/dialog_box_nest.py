@@ -24,9 +24,9 @@ class DialogBoxNest(DialogBox):
 
     def set_sliders(self):
         for i, data in enumerate(self.slider_data):
-            self.sliders.append(Slider(self.view, data["identifier"], self.x + self.width * 0.1,
-                                       self.y + self.height * 0.1 * (i + 1), self.width * 0.80,
-                                       height=self.height * 0.1, max_value=data["max_value"],
+            self.sliders.append(Slider(self.view, data["identifier"], self.x_percentage + self.w_percentage * 0.1,
+                                       self.y_percentage + self.h_percentage * 0.1 * (i + 1), self.w_percentage * 0.80,
+                                       height=self.h_percentage * 0.1, max_value=data["max_value"],
                                        min_value=data["min_value"], default_value=data["default_value"],
                                        name=data["name"]))
 

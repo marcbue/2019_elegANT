@@ -6,10 +6,6 @@ class Slider(UIElement):
     def __init__(self, view, identifier, x, y, width, height, max_value=100, min_value=0, default_value=50,
                  shape="square", name="val:"):
         super(Slider, self).__init__(view, identifier, x, y, width, height)
-        self.x = self.xc
-        self.y = self.yc
-        self.width = self.w
-        self.height = self.h
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.identifier = identifier
         self.value = default_value
@@ -18,6 +14,7 @@ class Slider(UIElement):
         self.shape = shape
         self.name = name
         self.on("click", self.click)
+        print(self.x,self,y,self.width,self.height)
 
     def click(self):
         mouse_pos_x, mouse_pos_y = self.view.mouse_pos

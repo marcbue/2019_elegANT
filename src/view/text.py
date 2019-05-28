@@ -6,11 +6,6 @@ class Text(UIElement):
     def __init__(self, view, identifier, x, y, width, height):
         pygame.init()
         super(Text, self).__init__(view, identifier, x, y, width, height)
-
-        self.x = self.xc
-        self.y = self.yc
-        self.width = self.w
-        self.height = self.h
         self.fontsize = self.width * self.height
 
     def set_text(self, text):

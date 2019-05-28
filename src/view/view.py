@@ -27,10 +27,8 @@ class View:
         # Currently not used
         self.width = width
         self.height = height
-        res_width = display_info.current_w
-        res_height = display_info.current_h
-        self.res_width = res_width
-        self.res_height = res_height
+        self.res_width = display_info.current_w
+        self.res_height = display_info.current_h
         self.state = None
 
         # Only works for windows --> need to check operating system

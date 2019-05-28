@@ -5,19 +5,15 @@ import pygame
 class UIElement(ViewElement):
 
     def __init__(self, view, identifier, x, y, width, height, active=False):
+        self.x_percentage = x
+        self.y_percentage = y
+        self.w_percentage = width
+        self.h_percentage = height
+        x = 0 + int(x / 100 * view.res_width)
+        y = 0 + int(y / 100 * view.res_height)
+        width = int(width / 100 * view.res_width)
+        height = int(height / 100 * view.res_height)
         super(UIElement, self).__init__(view, identifier, x, y, width, height)
-
-        self.view = view
-        self.identifier = identifier
-
-        display_info = pygame.display.Info()
-        res_width = display_info.current_w
-        res_height = display_info.current_h
-
-        self.xc = 0 + int(x / 100 * res_width)
-        self.yc = 0 + int(y / 100 * res_height)
-        self.w = int(width / 100 * res_width)
-        self.h = int(height / 100 * res_height)
 
         self.active = active
         self.hovered = False
@@ -62,9 +58,9 @@ class UIElement(ViewElement):
 
     def mouse_on_object(self, pos):
         if self.shape == 'circle':
-            return self.xc + self.radius > pos[0] > self.xc - self.radius \
-                and self.yc + self.radius > pos[1] > self.yc - self.radius
+            return self.x + self.radius > pos[0] > self.x - self.radius \
+                and self.y + self.radius > pos[1] > self.y - self.radius
         elif self.shape == 'square':
-            return self.xc + self.w > pos[0] > self.xc and self.yc + self.h > pos[1] > self.yc
+            return self.x + self.width > pos[0] > self.x and self.y + self.height > pos[1] > self.y
 
 
