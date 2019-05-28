@@ -10,7 +10,8 @@ from src.view.view import View
 
 class Controller:
     def __init__(self):
-        self.player = Player()
+
+        # self.player = Player()
         self.view = View(1300, 800)
         self.view.change_view_state(View.STARTVIEW)
         self.game_state = None
@@ -23,6 +24,11 @@ class Controller:
         self.event_list_game_view = {
             'build_scout': self.create_ant,
             'quit_game': self.quit_button_pressed
+        }
+
+        self.event_list = {
+            'start_view': self.event_list_start_view,
+            'game_view': self.event_list_game_view
         }
         self.game_loop()
 
@@ -68,6 +74,40 @@ class Controller:
         thread = Thread(target=_create_ant)
         thread.start()
 
+    def get_events(self, view_state):
+
+        # Get the list of events from view
+        event_argument_list = self.view.events()
+        # Getting events and arguments as two lists
+        event = list(event_argument_list.keys())
+        args = list(event_argument_list.values())
+
+        for i in range(len(event)):
+            if event[i] in self.event_list[view_state].keys():
+                if args[i] is not None:
+                    if view_state == 'start_view':
+                        self.game_state = self.event_list[view_state][event[i]](*args[i])
+                    else:
+                        self.event_list[view_state][event[i]](*args[i])
+
+    def game_state_init(self):
+        """
+
+        :return:
+        """
+
+        self.get_events('start_view')
+
+    def game_state_update(self):
+        """
+
+        :return:
+        """
+
+        self.view.update(self.game_state.get_objects_in_region(self.view.pos[0], self.view.pos[1]))
+        self.get_events('game_view')
+        self.game_state.update()
+
     def game_loop(self):
         """
         Main game loop
@@ -81,43 +121,11 @@ class Controller:
 
             if self.game_state is None:
                 self.view.draw()
-
-                # Get the list of events from view
-                # event_argument_list = self.view.get_event()
-                event_argument_list = self.view.events()
-                if event_argument_list:
-                    print(event_argument_list)
-
-                # Getting events and arguments as two lists
-                event = list(event_argument_list.keys())
-                args = list(event_argument_list.values())
-
-                # Initializing player and game_state class
-                for i in range(len(event)):
-                    if event[i] in self.event_list_start_view.keys():
-                        if args[i] is not None:
-                            self.game_state = self.event_list_start_view[event[i]](*args[i])
+                self.game_state_init()
 
             else:
                 self.view.draw()
-                self.view.update(self.game_state.get_objects_in_region(self.view.pos[0], self.view.pos[1]))
-
-                # Get the list of events from view
-                # event_argument_list = self.view.get_event()
-                event_argument_list = self.view.events()
-                if event_argument_list:
-                    print(event_argument_list)
-
-                # Getting events and arguments as two lists
-                event = list(event_argument_list.keys())
-                args = list(event_argument_list.values())
-
-                for i in range(len(event)):
-                    print(event[i])
-                    if event[i] in self.event_list_game_view.keys():
-                        self.event_list_game_view[event[i]](*args[i])
-
-                self.game_state.update()
+                self.game_state_update()
 
             # For frame rate adjustment
             exit_time = time.time()
