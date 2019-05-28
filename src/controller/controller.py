@@ -1,5 +1,9 @@
+import time
 import sys
 import time
+
+from threading import Thread
+
 from src.model.player import Player
 from src.model.game_state import GameState
 from src.view.view import View
@@ -47,16 +51,23 @@ class Controller:
         """
         sys.exit()
 
-    def create_ant(self):
+    def create_ant(self, button):
         """
         Event-handler for creating ants using the create ants button
         :param nest_position: Position of nest that should create ants
         :param ant_amount: Amount of ants created with one event
         :return: empty
         """
-        print(self.game_state.get_nests())
-        nest = self.game_state.get_nests()[0]
-        self.game_state.create_ants(nest, amount=1)
+        button.state = 'loading'
+
+        def _create_ant():
+            time.sleep(4)
+            nest = self.game_state.get_nests()[0]
+            self.game_state.create_ants(nest, amount=1)
+            self.view.increment_ant_count()
+
+        thread = Thread(target=_create_ant)
+        thread.start()
 
     def game_loop(self):
         """
