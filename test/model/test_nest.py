@@ -16,7 +16,7 @@ def nest_creation_fixed():
 def test_nest_creation(nest_creation_fixed):
     position, player, size, health = nest_creation_fixed
     nest = Nest(position, player, size, health)
-    assert ((nest.position == position).all())
+    assert (nest.position == position).all()
     assert nest.owner == player
     assert nest.size == size
     assert nest.health == health
