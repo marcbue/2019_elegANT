@@ -1,4 +1,5 @@
 from src.model.nest import Nest
+from src.model.player import Player
 import pytest
 import array
 
@@ -6,16 +7,16 @@ import array
 @pytest.fixture
 def nest_creation_fixed():
     position = array.array('f', [0.5, 0.5])
-    color = "red"
+    player = Player(name="Nobody", color="red")
     size = 5
     health = 10
-    return (position, color, size, health)
+    return (position, player, size, health)
 
 
 def test_nest_creation(nest_creation_fixed):
-    position, color, size, health = nest_creation_fixed
-    nest = Nest(position, color, size, health)
-    assert nest.position[:] == position[:] and nest.color == color and nest.size == size and nest.health == health
+    position, player, size, health = nest_creation_fixed
+    nest = Nest(position, player, size, health)
+    assert nest.position[:] == position[:] and nest.owner == player and nest.size == size and nest.health == health
 
 
 @pytest.fixture

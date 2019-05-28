@@ -17,7 +17,7 @@ class Pheromone(GameObject):
                 a number that specifies the pheromone level at this position
     """
 
-    def __init__(self, position, color, initial_strength=1):
+    def __init__(self, position, color, initial_strength=1.):
         """
 
         :param position: (list) coordinates of the nest
@@ -31,14 +31,14 @@ class Pheromone(GameObject):
     def update(self, *args):
         self._decay()
         # TODO: use another cutoff value for pheromone disappearance
-        if self.strength <= 10**-8:
-            self.strength = 0
+        if self.strength <= 1e-8:
+            self.strength = 0.
             return None
         else:
             return self.position
 
-    def increase(self, added_strength=1):
-        if added_strength <= 0:
+    def increase(self, added_strength=1.):
+        if added_strength <= 0.:
             raise ValueError('This function should not be used to decrease pheromone strength (or leave it unchanged)')
         self.strength += added_strength
 

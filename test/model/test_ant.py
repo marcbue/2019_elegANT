@@ -1,10 +1,12 @@
 from src.model.ant import Ant
 from src.model.nest import Nest
+from src.model.player import Player
 from src.utils import array
 import numpy as np
 
-nest = Nest(position=array([0, 0]), color='red', size=10, health=100)
-ant = Ant(color='red', home_nest=nest)
+player = Player(name="Nobody", color="blue")
+nest = Nest(position=array([0, 0]), player=player, size=10, health=100)
+ant = Ant(player=player, home_nest=nest)
 
 
 def test_move_has_food():

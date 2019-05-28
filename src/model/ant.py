@@ -25,7 +25,7 @@ class Ant(GameObject):
 
     """
 
-    def __init__(self, color, home_nest):
+    def __init__(self, player, home_nest):
         """Initialize ant object color and position
 
         :param color: (str) Color of the ant
@@ -34,8 +34,7 @@ class Ant(GameObject):
         """
         position = home_nest.position
         super(Ant, self).__init__(position)
-        # TODO: assign id
-        self.color = color
+        self.owner = player
         self.has_food = False
         self.energy = 100
         self.momentum = array([0., 0.])
