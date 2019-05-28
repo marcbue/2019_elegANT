@@ -14,7 +14,6 @@ class Slider(UIElement):
         self.shape = shape
         self.name = name
         self.on("click", self.click)
-        print(self.x,self,y,self.width,self.height)
 
     def click(self):
         mouse_pos_x, mouse_pos_y = self.view.mouse_pos
