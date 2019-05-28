@@ -86,8 +86,11 @@ class Ant(GameObject):
             return self.move_randomly()
 
     def move_randomly(self):
-        movement = randint(low=-1, high=2, size=2)  # random move
-        self.momentum += 0.5 * self.momentum + movement
+        while True:  # to avoid standing still and devide by zero
+            movement = randint(low=-1, high=2, size=2)  # random move
+            self.momentum += 0.5 * self.momentum + movement
+            if np.linalg.norm(self.momentum) > 0:
+                break
         self.momentum /= np.linalg.norm(self.momentum)
         self.position = self.position + self.momentum
         return self.position
@@ -96,7 +99,10 @@ class Ant(GameObject):
         # Go to the nearest nest.
         # TO DO get nearest nest position
         # assuming that nest_position is the nearest nest position
-        return_movement = (obj_position - self.position) / np.linalg.norm(obj_position - self.position)
+        if np.linalg.norm(obj_position - self.position) > 0:
+            return_movement = (obj_position - self.position) / np.linalg.norm(obj_position - self.position)
+        else:
+            return_movement = array([0, 0])  # THIS IS NOT THE BEST IMPLEMENTATION
         self.position += return_movement
         return self.position
 
