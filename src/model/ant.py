@@ -14,8 +14,7 @@ class Ant(GameObject):
 
             Attributes
             ----------
-            color: string
-                a string of the ant color
+            owner: Player object that the Pheromone belongs to
             position: list
                 a list of the ant coordinates
             has_food: boolean
@@ -26,9 +25,9 @@ class Ant(GameObject):
     """
 
     def __init__(self, player, home_nest):
-        """Initialize ant object color and position
+        """Initialize ant object owner and position
 
-        :param color: (str) Color of the ant
+        :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
 
         """
