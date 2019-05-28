@@ -19,6 +19,9 @@ def test_move_has_food():
     position = ant.move([])
     # asserting that x-move is towards the nest
     assert np.isclose(position, array([0, 9])).all(), 'incorrect x-move direction'
+    ant.position = array([0, 0])
+    position = ant.move([])
+    assert np.isclose(position, array([0, 0])).all(), 'moves after reaching the object'
 
 
 def test_move_randomly():

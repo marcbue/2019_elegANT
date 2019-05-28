@@ -3,7 +3,7 @@ import pickle
 
 class Player:
 
-    def __init__(self, name="player 1", color="red"):
+    def __init__(self, name, color):
         self.name = name
         self.color = color
 
