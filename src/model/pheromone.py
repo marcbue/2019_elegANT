@@ -28,7 +28,6 @@ class Pheromone(GameObject):
         self.color = color
         self.strength = initial_strength
 
-
     def update(self, *args):
         self._decay()
         # TODO: use another cutoff value for pheromone disappearance
@@ -45,4 +44,4 @@ class Pheromone(GameObject):
 
     def _decay(self):
         # TODO decide on another decaying scheme
-        self.strength = 0.75*self.strength
+        self.strength = 0.75 * self.strength
