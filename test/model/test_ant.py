@@ -29,9 +29,9 @@ def test_move_has_food():
 def test_move_randomly():
     ant.has_food = False
     ant.position = array([0, 0])
-    ant.momentum = array([0, 0])
+    ant.direction = array([0, 0])
     previous_position = array(ant.position)
     position = ant.move([])
     assert np.isclose(position, ant.position).all(), 'position not updated'
-    assert np.isclose(1, np.linalg.norm(ant.momentum)).all(), 'momentum not one: %r' % ant.momentum
+    assert np.isclose(1, np.linalg.norm(ant.direction)).all(), 'direction not one: %r' % ant.direction
     assert np.isclose(1, np.linalg.norm(ant.position - previous_position)).all(), 'movement not one: %r' % ant.position
