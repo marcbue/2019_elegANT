@@ -41,7 +41,7 @@ class GameState:
         positions = []
         for i in range(len(player_list)):
             positions.append(random(2) * 250)
-        return self.world.create_nests(all_colors, positions, health=100, size=10)
+        self.world.create_nests(all_colors, positions, health=100, size=10)
 
     def get_objects_in_region(self, top_left, bottom_right):
         """ Get list of positions and all included objects (ants, nests, foods, pheromones, etc) in a specific
