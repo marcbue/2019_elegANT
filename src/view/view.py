@@ -13,6 +13,7 @@ from src.utils import array
 from .dialog_box_nest import DialogBoxNest
 
 # import numpy as np
+import platform
 
 # View
 class View:
@@ -21,9 +22,25 @@ class View:
 
     def __init__(self, width, height):
         pygame.init()
+        display_info = pygame.display.Info()
+
+        # Currently not used
+        self.width = width
+        self.height = height
+        self.res_width = display_info.current_w
+        self.res_height = display_info.current_h
         self.state = None
-        self.size = width, height
-        self.screen = pygame.display.set_mode(self.size)
+
+        # Only works for windows --> need to check operating system
+        if platform.system() == 'Windows':
+            from ctypes import windll
+            windll.user32.SetProcessDPIAware()
+            true_res = (windll.user32.GetSystemMetrics(0), windll.user32.GetSystemMetrics(1))
+            self.screen = pygame.display.set_mode(true_res, pygame.FULLSCREEN)
+
+        else:
+            self.screen = pygame.display.set_mode((self.res_width, self.res_height), pygame.FULLSCREEN)
+
         self.background_color = pygame.Color("white")
         self.mouse_pos = pygame.mouse.get_pos()
         self.mouse_event = pygame.mouse.get_pressed()
@@ -50,7 +67,7 @@ class View:
         self.elements = {}
 
         # add elements for the main text
-        text = Text(self, "headline", 250, 100, -1, -1, 115)
+        text = Text(self, "headline", 17.5, 10, 0.8, 0.9)
         text.set_text("ElegANT")
         self.add_element(text)
 
@@ -65,45 +82,59 @@ class View:
             (0, 200, 0),
             (255, 165, 0)
         ]
-        self.add_element(ColorSelector(self, "color_selector", 850, 350, 150, player_colors))
 
-        # add element for start button and the text on it
-        start_button = Button(self, "start_button", 100, 600, 250, 100, -1,
-                              (100, 100, 100), (150, 150, 150), shape='square')
+        self.add_element(ColorSelector(self, "color_selector", 60, 50, 5, 1, player_colors))
+
+        start_button = Button(self, "start_button", 5, 85, 12.5, 10, -1, (100, 100, 100), (150, 150, 150), 'square')
 
         # Add start game event
         start_button.on("click", lambda: self.event_dict.update({"start_button":
                                                                 (self.get_element_by_id(
                                                                     "color_selector").get_selection(),
-                                                                    self.get_element_by_id("textbox").text)}))
+                                                                 self.get_element_by_id("textbox").text)}))
 
         self.add_element(start_button)
 
-        starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
+        starttext = Text(self, "starttext", 11.5, 90, 0.5, 0.6)
         starttext.set_text("START")
         self.add_element(starttext)
 
-        inputname = Text(self, "inputname", 220, 250, -1, -1, 30)
+        quit_button = Button(self, "quit_button", 98.25, 0.8, 1.5, 2.5, -1, (250, 0, 0), (150, 150, 150), 'square')
+        self.add_element(quit_button)
+        
+        quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
+
+        quittext = Text(self, "quittext", 99, 2, 0.3, 0.4)
+        quittext.set_text("X")
+        self.add_element(quittext)
+
+        inputname = Text(self, "inputname", 13, 27, 0.5, 0.4)
         inputname.set_text("Please enter your name")
         self.add_element(inputname)
 
-        # add element for the input box name
-        self.add_element(InputBox(self, "textbox", 100, 300, 250, 50, (0, 0, 0), (255, 100, 100), ''))
+        self.add_element(InputBox(self, "textbox", 5, 32, 12.5, 5, (0, 0, 0), (255, 100, 100), ''))
+
+        buttontext = Text(self, "buttontext", 60, 27, 0.5, 0.4)
+        buttontext.set_text("Please choose color of ant")
+        self.add_element(buttontext)
 
     def _game_view(self):
         self.elements = {}
 
+        # add quit button
+        quit_button = Button(self, "quit_button", 98.25, 0.8, 1.5, 2.5, -1, (250, 0, 0), (150, 150, 150), 'square')
+        self.add_element(quit_button)
+
+        quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
+
+        quittext = Text(self, "quittext", 99, 2, 0.3, 0.4)
+        quittext.set_text("X")
+        self.add_element(quittext)
+
         # Create world which contains all game objects
         self.add_element(World(self, "world", 0, 0, 250, 250))
 
-        # TODO add sliders to the game view
-        # self.add_element(
-        # Button(self, "start_button", 100, 600, 250, 100, -1, (100, 100, 100), (150, 150, 150), 'square'))  # orange
-        # starttext = Text(self, "starttext", 225, 650, -1, -1, 50)
-        # starttext.set_text("START")
-        # self.add_element(starttext)
-
-        build_scout_button = BuildScoutButton(self, "build_scout", 100, 600, 100, 100, -1, (255, 20, 147),
+        build_scout_button = BuildScoutButton(self, "build_scout", 5, 85, 5, 9, -1, (255, 20, 147),
                                               (255, 105, 180), 'square')
 
         # Add start game event
@@ -113,16 +144,16 @@ class View:
 
         self.add_element(build_scout_button)
 
-        change_scout_stats = Button(self, "change_scout_stats", 0, 0, 100, 100, -1, pygame.Color("white"),
+        change_scout_stats = Button(self, "change_scout_stats", 0, 0, 10, 10, -1, pygame.Color("white"),
                                     (150, 150, 150), 'square', has_image=True,
                                     image_path="src/view/images/scout_stat_button.png")
 
         self.add_element(DialogBoxNest(self,
                                        f"view_box_id_scout_box",
                                        slider_data=[
-                                           {"name": "explorativeness", "min_value": 0,
+                                           {"name": "Explorativeness", "min_value": 0,
                                             "max_value": 100, "default_value": 50, "identifier": "0000"},
-                                           {"name": "aggressiveness", "min_value": 0,
+                                           {"name": "Aggressiveness", "min_value": 0,
                                             "max_value": 100, "default_value": 50, "identifier": "0001"}],
                                        active=False,
                                        name="Scout Stats"))

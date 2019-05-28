@@ -11,9 +11,7 @@ class Button(UIElement):
         self.color = color1
         self.radius = radius
         self.shape = shape
-        self.width = width
-        self.height = height
-        self.rect = pygame.Rect(x, y, width, height)
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.has_image = has_image
         self.image_path = image_path
 

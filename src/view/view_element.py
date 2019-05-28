@@ -1,3 +1,4 @@
+
 class ViewElement:
     def __init__(self, view, identifier, x, y, width, height):
         self.identifier = identifier

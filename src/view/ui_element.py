@@ -5,7 +5,16 @@ import pygame
 class UIElement(ViewElement):
 
     def __init__(self, view, identifier, x, y, width, height, active=False):
+        self.x_percentage = x
+        self.y_percentage = y
+        self.w_percentage = width
+        self.h_percentage = height
+        x = 0 + int(x / 100 * view.res_width)
+        y = 0 + int(y / 100 * view.res_height)
+        width = int(width / 100 * view.res_width)
+        height = int(height / 100 * view.res_height)
         super(UIElement, self).__init__(view, identifier, x, y, width, height)
+
         self.active = active
         self.hovered = False
 
@@ -53,3 +62,5 @@ class UIElement(ViewElement):
                 and self.y + self.radius > pos[1] > self.y - self.radius
         elif self.shape == 'square':
             return self.x + self.width > pos[0] > self.x and self.y + self.height > pos[1] > self.y
+
+

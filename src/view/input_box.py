@@ -3,12 +3,9 @@ from .ui_element import UIElement
 
 
 class InputBox(UIElement):
-
     def __init__(self, view, identifier, x, y, width, height, color1, color2, text='', shape='square'):
-        super(InputBox, self).__init__(view, identifier, x, y, width, height)
-        self.rect = pygame.Rect(x, y, width, height)
-        self.width = width
-        self.height = height
+        UIElement.__init__(self, view, identifier, x, y, width, height)
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.color1 = color1
         self.color2 = color2
         self.color = color1
@@ -41,8 +38,8 @@ class InputBox(UIElement):
         else:
             self.color = self.color1
 
-        width = max(250, self.txt_surface.get_width() + 10)
-        self.rect.w = width
+        width = max(self.width, self.txt_surface.get_width() + 0.10 * self.width)
+        self.rect.width = width
 
         self.view.screen.fill(self.view.background_color, self.rect)
         self.view.screen.blit(self.txt_surface, (self.rect.x + 5, self.rect.y + 5))
