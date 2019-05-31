@@ -10,7 +10,7 @@ ant = Ant(player=player, home_nest=nest)
 
 
 def test_move_has_food():
-    ant.has_food = True
+    ant.has_food = 1
     ant.position = array([10, 0])
     position = ant.move([])
     # asserting that y-move is towards the nest
@@ -27,7 +27,7 @@ def test_move_has_food():
 
 
 def test_move_randomly():
-    ant.has_food = False
+    ant.has_food = 0
     ant.position = array([0, 0])
     ant.direction = array([0, 0])
     previous_position = array(ant.position)
