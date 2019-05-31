@@ -18,7 +18,7 @@ class Ant(GameObject):
             owner: Player object that the Pheromone belongs to
             position: list
                 a list of the ant coordinates
-            has_food: fload
+            has_food: float
                 how much food the ant is carrying
             energy: int
                 a number that specifies current energy value the ant has
@@ -123,7 +123,7 @@ class Ant(GameObject):
         changes the position of the ant using a random walk and combining it with the direction
         :return: the updated position is returned
         """
-        while True:  # to avoid standing still and devide by zero
+        while True:  # to avoid standing still and divide by zero
             movement = randint(low=-1, high=2, size=2)  # random move
             self.direction += self.direction_memory * self.direction + movement
             if np.linalg.norm(self.direction) > 0:

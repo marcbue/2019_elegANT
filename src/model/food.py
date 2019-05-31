@@ -12,4 +12,3 @@ class Food(GameObject):
             return None
         else:
             return self.position
-
