@@ -15,13 +15,23 @@ class Ant(GameObject):
 
             Attributes
             ----------
-            owner: Player object that the Pheromone belongs to
+            owner: Player
+                Player object that the ant belongs to
             position: list
                 a list of the ant coordinates
             has_food: float
                 how much food the ant is carrying
             energy: int
                 a number that specifies current energy value the ant has
+            direction: array
+                an array with the orientation/direction of the ant
+            home: Nest
+                Nest object that the ant belongs to
+            pheromone_strength: float
+                strength of the pheromone to leave in next step. This depends on food size and distance to nest.
+
+
+
 
     """
 
@@ -47,6 +57,10 @@ class Ant(GameObject):
         self.max_pheromone_strength = 10.
         self.pheromone_dist_decay = 0.95
         self.direction_memory = 0.5
+        self.foodiness = 1.
+        self.inscentiveness = 1.
+        self.directionism = 1.
+        self.explorativeness = 1.
 
     def get_position(self):
         """
@@ -108,15 +122,89 @@ class Ant(GameObject):
         :param visible_objects: (list) All the possible neighboring positions the ant can move to
         :return:
         """
+
+        # Go to nest if has food
         if self.has_food:
             return self.move_to(self.home.position)
-        for obj in visible_objects:
-            if type(obj) == Food:
-                return self.move_to(obj.position)
-            # 2. elif it smells, go to smell
+
+        # Choose a position in a probabilistic fashion
         else:
-            # if no food, it will move randomly
-            return self.move_randomly()
+            foods = []
+            pheromones = []
+
+            # Checking nearest objects
+            for obj in visible_objects:
+
+                # Selecting Food and Pheromone objects
+                # Other object types are ignored (Ant, Nest)
+                if type(obj) == Food:
+                    foods.append(obj)
+                elif type(obj) == Pheromone:
+                    pheromones.append(obj)
+
+            # Priority is to get food
+            if foods:
+                # Go directly to food if there is only one source
+                if len(foods) == 1:
+                    return self.move_to(foods[0].position)
+
+                # Compare food sources in terms of size and distance to nest
+                else:
+
+                    # Getting features of food objects
+                    data = np.zeros(len(foods), 2)
+                    for i, obj in enumerate(foods):
+                        # Food size
+                        data[i,0] = obj.size
+                        # Distance to nest
+                        data[i,1] = np.linalg.norm(obj.position - self.home.position)
+
+                    # Rescaling each feature to have values bounded by 1
+                    data /= np.max(data, axis=0)
+
+                    # Calculating probability distribution
+                    probs = (data[:,0]**self.foodiness)*(data[:,1]**self.explorativeness)
+                    probs /= np.sum(probs)
+
+                    # Drawing an object from the prob distribution
+                    index = np.random.choice(len(foods), p=probs)
+                    return self.move_to(foods[index].position)
+
+            # In case there is no food pheromones are taken into account
+            elif pheromones:
+                # Go directly to scent if there is only one source
+                if len(pheromones) == 1:
+                    return self.move_to(pheromones[0].position)
+
+                # Compare pheromone sources
+                else:
+
+                    # Getting features of pheromone objects
+                    data = np.zeros(len(pheromones), 3)
+                    for i, obj in enumerate(pheromones):
+                        # Intensity
+                        data[i,0] = obj.strength
+                        # Distance to nest
+                        data[i,1] = np.linalg.norm(obj.position - self.home.position)
+                        # Difference in momentum
+                        # TODO define difference in momentum
+                        data[i,2] = 1
+
+                    # Rescaling each feature to have values bounded by 1
+                    data /= np.max(data, axis=0)
+
+                    # Calculating probability distribution
+                    probs = (data[:,0]**self.inscentiveness)*(data[:,1]**self.explorativeness)\
+                            *(data[:, 2] ** self.directionism)
+                    probs /= np.sum(probs)
+
+                    # Draw an object from the prob distribution
+                    index = np.random.choice(len(pheromones), p=probs)
+                    return self.move_to(pheromones[index].position)
+
+            else:
+                # In case there is no food nor pheromone scents, move randomly
+                return self.move_randomly()
 
     def move_randomly(self):
         """
