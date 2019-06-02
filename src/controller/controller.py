@@ -7,6 +7,8 @@ from src.model.player import Player
 from src.model.game_state import GameState
 from src.view.view import View
 
+from src.settings import all_params
+
 
 class Controller:
     def __init__(self):
@@ -50,8 +52,9 @@ class Controller:
             print('Player name not entered')
 
     def quit_button_pressed(self):
-        """
 
+        """
+        Quit button event handler
         :return: empty
         """
         sys.exit()
@@ -76,6 +79,14 @@ class Controller:
 
     def get_events(self, view_state):
 
+        """
+        Function to get events from view and call the corresponding functions
+        according to view_state
+
+        :param view_state: String specifying state of view
+        :return: nothing
+        """
+
         # Get the list of events from view
         event_argument_list = self.view.events()
         # Getting events and arguments as two lists
@@ -92,16 +103,18 @@ class Controller:
 
     def game_state_init(self):
         """
-
-        :return:
+        Function to initialize game state
+        when game state is none
+        :return: nothing
         """
 
         self.get_events('start_view')
 
     def game_state_update(self):
         """
-
-        :return:
+        Function to update game state
+        when game state is not none
+        :return: nothing
         """
 
         self.view.update(self.game_state.get_objects_in_region(self.view.pos[0], self.view.pos[1]))
@@ -113,8 +126,9 @@ class Controller:
         Main game loop
         :return: empty
         """
+
         # Currently Frame rate set to 30
-        max_frames = 30
+        max_frames = all_params.controller_params.framerate
         while True:
 
             current_time = time.time()
