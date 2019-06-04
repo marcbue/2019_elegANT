@@ -112,7 +112,7 @@ class Ant(GameObject):
 
     def at_nest(self):
         if distance(self.position - self.home.position) <= 1.:
-            # self.position = self.home.position
+            self.position = self.home.position
             self.unload_food()
             self.pheromone_strength = 0.
             return True
@@ -128,7 +128,7 @@ class Ant(GameObject):
         for obj in noticeable_objects:
             if isinstance(obj, Food):
                 if distance(self.position - obj.position) <= 1.:
-                    # self.position = obj.position
+                    self.position = obj.position
                     self.load_food(obj)
                     self.pheromone_strength = min(100. * (obj.size / distance(self.position - self.home.position)),
                                                   self.max_pheromone_strength) / self.pheromone_dist_decay
