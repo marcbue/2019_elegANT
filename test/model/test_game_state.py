@@ -3,7 +3,7 @@ from src.model.game_state import GameState
 from src.model.player import Player
 from src.model.food import Food
 from src.utils import array
-from .test_kd_tree_and_dict import array_in_list
+
 
 @pytest.fixture
 def set_up_game_state_fixed():
@@ -26,8 +26,8 @@ def test_generate_random_food(set_up_game_state_fixed):
     players, game_state = set_up_game_state_fixed
     content = game_state.world.dump_content()
     old_foods = [obj for obj in content if type(obj) == Food]
-    top_left = array([-10,10])
-    bottom_right  = array([10,-10])
+    top_left = array([-10, 10])
+    bottom_right = array([10, -10])
     amount = 10
     sizes = list(range(10))
     game_state.generate_random_food(top_left, bottom_right, amount, sizes)
