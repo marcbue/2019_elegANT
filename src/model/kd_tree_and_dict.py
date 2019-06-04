@@ -154,15 +154,18 @@ class KdTreeAndDict(World):
                 if type(item) == Ant:
                     # TODO: pick radius (or implement it in ant class)
                     noticeable_objects = self.get_circular_region(item.position, radius=10)
-                    # TODO: needs noticeable objects
-                    new_position, new_pheromone = tuple(item.update(noticeable_objects))
+                    new_position, new_pheromone = item.update(noticeable_objects)
 
                     # Only handle if new pheromone object needs to be created.
                     if new_pheromone is not None:
-                        self.all_objects.setdefault(tuple(new_position), []).append(item)
+                        pheromone_pos = tuple(new_pheromone.position)
+                        self.all_objects.setdefault(pheromone_pos, []).append(new_pheromone)
 
                 else:
-                    new_position = tuple(item.update())
+                    new_position = item.update()
+
+                # TODO: should not be needed
+                new_position = tuple(new_position)
 
                 # Remove old positions.
                 self.all_objects[old_position].remove(item)
