@@ -14,8 +14,8 @@ def setup_environment():
     return player, nest, ant
 
 
-def test_move_has_food():
-    player, nest, ant = setup_environment()
+def test_move_has_food(setup_environment):
+    player, nest, ant = setup_environment
     ant.has_food = 1.
     ant.position = array([10., 0.])
     position = ant.move([])
@@ -32,8 +32,8 @@ def test_move_has_food():
     assert np.isclose(position, array([0., 0.])).all(), 'moves after reaching the object'
 
 
-def test_move_randomly():
-    player, nest, ant = setup_environment()
+def test_move_randomly(setup_environment):
+    player, nest, ant = setup_environment
     ant.has_food = 0.
     ant.position = array([0., 0.])
     ant.direction = array([0., 0.])
@@ -44,8 +44,8 @@ def test_move_randomly():
     assert np.isclose(1, np.linalg.norm(ant.position - previous_position)).all(), 'movement not one: %r' % ant.position
 
 
-def test_unload_food():
-    player, nest, ant = setup_environment()
+def test_unload_food(setup_environment):
+    player, nest, ant = setup_environment
     ant.has_food = 1.
     ant.position = array([0., 0.])
     ant.unload_food()
