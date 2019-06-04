@@ -5,14 +5,14 @@ import pytest
 @pytest.fixture
 def set_up_player():
     name = "franz"
-    color = "red"
+    color = (0, 0, 0)
     return name, color
 
 
 @pytest.fixture
 def change_player():
     name = "herbert"
-    color = "rosa"
+    color = (178, 58, 238)
     return name, color
 
 

@@ -4,7 +4,7 @@ from src.model.player import Player
 from src.utils import array
 import numpy as np
 
-player = Player(name="Nobody", color="blue")
+player = Player(name="Nobody", color=(178, 58, 238))
 nest = Nest(position=array([0, 0]), player=player, size=10, health=100)
 ant = Ant(player=player, home_nest=nest)
 

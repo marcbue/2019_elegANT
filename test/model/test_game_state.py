@@ -8,7 +8,7 @@ from .test_kd_tree_and_dict import array_in_list
 @pytest.fixture
 def set_up_game_state_fixed():
     """Initializes and returns GameState with one player"""
-    players = [Player("Nobody", "black")]
+    players = [Player("Nobody", (0, 0, 0))]
     game_state = GameState(players)
     return players, game_state
 
@@ -17,7 +17,6 @@ def test___init__(set_up_game_state_fixed):
     players, game_state = set_up_game_state_fixed
     content = game_state.world.dump_content()
     foods = [obj for obj in content if type(obj) == Food]
-    print(foods)
     assert len(foods) == 50
     assert len(game_state.get_nests()) == len(players)
     assert len(game_state.get_ants()) == 0
