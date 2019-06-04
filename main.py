@@ -1,3 +1,5 @@
 from src.controller.controller import Controller
 
-controller = Controller()
+if __name__ == "__main__":
+    controller = Controller()
+    controller.game_loop()
