@@ -29,9 +29,24 @@ class Ant(GameObject):
                 Nest object that the ant belongs to
             pheromone_strength: float
                 strength of the pheromone to leave in next step. This depends on food size and distance to nest.
-
-
-
+            loading_capacity: float
+                maximum amount of food that the ant can carry
+            min_pheromone_strength: float
+                minimum amount of pheromone that the ant leaves
+            max_pheromone_strength: float
+                maximum amount of pheromone that the ant leaves
+            pheromone_dist_decay: float
+                factor by which the pheromone strength is preserved while leaving the trail towards the nest
+            direction_memory: float
+                used for random movement. how much the ant takes into account the previous direction for new movement
+            foodiness: float
+                movement preference for big size of food
+            inscentiveness: float
+                movement preference for high intensity of pheromone
+            directionism: float
+                movement preference for previous movement direction
+            explorativeness: float
+                movement preference for big distances from nest
 
     """
 
@@ -123,7 +138,14 @@ class Ant(GameObject):
             return False
 
     def move_to_food(self, foods):
+        """
+        Selection of Food to move towards, and ant movement
+        :param foods: (list) Food objects in noticeable objects
+        :return: (array) new ant position
+        """
+        # For non empty list of foods
         if foods:
+
             # Go directly to food if there is only one source
             if len(foods) == 1:
                 return self.move_to(foods[0].position)
@@ -153,7 +175,14 @@ class Ant(GameObject):
             return None
 
     def move_to_pheromone(self, pheromones):
+        """
+        Selection of Pheromone to move towards, and ant movement
+        :param pheromones: (list) Pheromone objects in noticeable objects
+        :return: (array) new ant position
+        """
+        # For non empty list of foods
         if pheromones:
+
             # Go directly to scent if there is only one source
             if len(pheromones) == 1:
                 return self.move_to(pheromones[0].position)
@@ -188,9 +217,11 @@ class Ant(GameObject):
 
     def move(self, visible_objects):
         """
-        Move the ant to a new position at each time iteration. It moves it randomly in the first milestone.
-        :param visible_objects: (list) All the possible neighboring positions the ant can move to
-        :return:
+        Move the ant to a new position at each time iteration.
+        If food is detected, movement is done in that direction. If no food is detected, pheromones are followed.
+        Movement is random if there are no objects in visible objects.
+        :param visible_objects: (list) All the possible objects that the ant can perceive
+        :return: (array) Position to which the ant moves
         """
 
         # Go to nest if has food
