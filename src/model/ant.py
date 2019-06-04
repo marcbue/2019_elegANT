@@ -4,6 +4,7 @@ from .food import Food
 from .game_object import GameObject
 from src.utils import randint, array, get_objects_of_type
 from .pheromone import Pheromone
+distance = np.linalg.norm
 
 
 class Ant(GameObject):
@@ -47,8 +48,8 @@ class Ant(GameObject):
         self.owner = player
         self.owner.ants.add(self)
 
-        self.has_food = 0
-        self.energy = 100
+        self.has_food = 0.
+        self.energy = 100.
         self.direction = array([0., 0.])
         self.home = home_nest
         self.pheromone_strength = 0.
@@ -76,9 +77,9 @@ class Ant(GameObject):
         Flip (has_food) variable to 0 when the ant reaches the nest and unload the food
         :return:
         """
-        if self.position == self.home.position():
+        if distance(self.position - self.home.position()) <= 1.:
             self.home.increase_food(self.has_food)
-            self.has_food = 0
+            self.has_food = 0.
 
     def load_food(self, food):
         """
@@ -91,32 +92,45 @@ class Ant(GameObject):
             self.has_food = self.loading_capacity
         else:
             self.has_food = food.size
-            food.size = 0
+            food.size = 0.
 
     def update(self, *args):
         # If ant dies, remove it from the players ants.
-        if self.energy <= 0:
+        if self.energy <= 0.:
             self.owner.ants.remove(self)
-
         if self.has_food:
-            return self.move(args[0]), self.set_trace(args[0])
+            if self.at_nest():
+                return self.position, None
+            else:
+                return self.move(args[0]), self.set_trace(args[0])
+
         else:
             if self.at_food(args[0]):
                 return self.position, None
             else:
                 return self.move(args[0]), None
 
-    def at_food(self, visible_objects):
+    def at_nest(self):
+        if distance(self.position - self.home.position) <= 1.:
+            # self.position = self.home.position
+            self.unload_food()
+            self.pheromone_strength = 0.
+            return True
+        else:
+            return False
+
+    def at_food(self, noticeable_objects):
         """
         checks if ant is at food location, if True, Load Food and set has_food to True
-        :param visible_objects:
+        :param noticeable_objects:
         :return: True if ant is at food position, else False
         """
-        for obj in visible_objects:
+        for obj in noticeable_objects:
             if isinstance(obj, Food):
-                if np.isclose(np.round(self.position), np.round(obj.position)).all():
+                if distance(self.position - obj.position) <= 1.:
+                    # self.position = obj.position
                     self.load_food(obj)
-                    self.pheromone_strength = min(100 * (obj.size / np.linalg.norm(self.position - self.home.position)),
+                    self.pheromone_strength = min(100. * (obj.size / distance(self.position - self.home.position)),
                                                   self.max_pheromone_strength) / self.pheromone_dist_decay
                     return True
         else:
@@ -137,7 +151,7 @@ class Ant(GameObject):
                     # Food size
                     data[i, 0] = obj.size
                     # Distance to nest
-                    data[i, 1] = np.linalg.norm(obj.position - self.home.position)
+                    data[i, 1] = distance(obj.position - self.home.position)
 
                 # Rescaling each feature to have values bounded by 1
                 data /= np.max(data, axis=0)
@@ -167,7 +181,7 @@ class Ant(GameObject):
                     # Intensity
                     data[i, 0] = obj.strength
                     # Distance to nest
-                    data[i, 1] = np.linalg.norm(obj.position - self.home.position)
+                    data[i, 1] = distance(obj.position - self.home.position)
                     # Difference in momentum
                     # TODO define difference in momentum
                     data[i, 2] = 1
@@ -186,10 +200,10 @@ class Ant(GameObject):
         else:
             return None
 
-    def move(self, visible_objects):
+    def move(self, noticeable_objects):
         """
         Move the ant to a new position at each time iteration. It moves it randomly in the first milestone.
-        :param visible_objects: (list) All the possible neighboring positions the ant can move to
+        :param noticeable_objects: (list) All the possible neighboring positions the ant can move to
         :return:
         """
 
@@ -200,8 +214,8 @@ class Ant(GameObject):
         # Choose a position in a probabilistic fashion
         else:
             # Checking nearest objects
-            foods = get_objects_of_type(visible_objects, Food)
-            pheromones = get_objects_of_type(visible_objects, Pheromone)
+            foods = get_objects_of_type(noticeable_objects, Food)
+            pheromones = get_objects_of_type(noticeable_objects, Pheromone)
 
             # Priority is to get food
             if foods:
@@ -223,9 +237,9 @@ class Ant(GameObject):
         while True:  # to avoid standing still and divide by zero
             movement = randint(low=-1, high=2, size=2)  # random move
             self.direction += self.direction_memory * self.direction + movement
-            if np.linalg.norm(self.direction) > 0:
+            if distance(self.direction) > 0.:
                 break
-        self.direction /= np.linalg.norm(self.direction)
+        self.direction /= distance(self.direction)
         self.position = self.position + self.direction
         return self.position
 
@@ -238,25 +252,25 @@ class Ant(GameObject):
         # Go to the nearest nest.
         # TO DO get nearest nest position
         # assuming that nest_position is the nearest nest position
-        if np.linalg.norm(obj_position - self.position) > 0:
-            return_movement = (obj_position - self.position) / np.linalg.norm(obj_position - self.position)
+        if distance(obj_position - self.position) > 0.:
+            return_movement = (obj_position - self.position) / distance(obj_position - self.position)
         else:
-            return_movement = array([0, 0])  # THIS IS NOT THE BEST IMPLEMENTATION
+            return_movement = array([0., 0.])  # THIS IS NOT THE BEST IMPLEMENTATION
         self.position += return_movement
         return self.position
 
-    def set_trace(self, visible_objects):
+    def set_trace(self, noticeable_objects):
         """
         if there is an existing pheromone in the position, add strength
         otherwise it will create a new pheromone
-        :param visible_objects:
+        :param noticeable_objects:
         :return: None if existing pheromone otherwise a new pheromone object
         """
         self.pheromone_strength = max(self.min_pheromone_strength,
                                       self.pheromone_dist_decay * self.pheromone_strength)
-        for obj in visible_objects:
+        for obj in noticeable_objects:
             if isinstance(obj, Pheromone):
-                if np.isclose(np.round(self.position), np.round(obj.position)).all():
+                if distance(self.position - obj.position) <= 1.:
                     obj.increase(added_strength=self.pheromone_strength)
                     return None
         else:
