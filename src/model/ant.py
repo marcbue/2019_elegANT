@@ -3,6 +3,7 @@ import numpy as np
 from .food import Food
 from .game_object import GameObject
 from src.utils import randint, array
+from .pheromone import Pheromone
 
 
 class Ant(GameObject):
@@ -14,8 +15,7 @@ class Ant(GameObject):
 
             Attributes
             ----------
-            color: string
-                a string of the ant color
+            owner: Player object that the Pheromone belongs to
             position: list
                 a list of the ant coordinates
             has_food: boolean
@@ -25,20 +25,19 @@ class Ant(GameObject):
 
     """
 
-    def __init__(self, color, home_nest):
-        """Initialize ant object color and position
+    def __init__(self, player, home_nest):
+        """Initialize ant object owner and position
 
-        :param color: (str) Color of the ant
+        :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
 
         """
         position = home_nest.position
         super(Ant, self).__init__(position)
-        # TODO: assign id
-        self.color = color
+        self.owner = player
         self.has_food = False
         self.energy = 100
-        self.momentum = array([0., 0.])
+        self.direction = array([0., 0.])
         self.home = home_nest
 
     def get_position(self):
@@ -67,7 +66,43 @@ class Ant(GameObject):
         self.has_food = True
 
     def update(self, *args):
-        return self.move(args[0])
+        if self.has_food:
+            return self.move(args[0]), self.release_pheromone(args[0])
+        else:
+            if self.at_food(args[0]):
+                return self.position
+            else:
+                return self.move(args[0])
+
+    def at_food(self, visible_objects):
+        """
+        checks if ant is at food location, if True, Load Food and set has_food to True
+        :param visible_objects:
+        :return: True if ant is at food position, else False
+        """
+        for obj in visible_objects:
+            if isinstance(obj, Food):
+                if np.isclose(np.round(self.position), np.round(obj.position)).all():
+                    # DECREASE FOOD
+                    self.has_food = True
+                    return True
+        else:
+            return False
+
+    def release_pheromone(self, visible_objects):
+        """
+        if there is an existing pheromone in the position, add strength
+        otherwise it will create a new pheromone
+        :param visible_objects:
+        :return: None if existing pheromone otherwise a new pheromone object
+        """
+        for obj in visible_objects:
+            if isinstance(obj, Pheromone):
+                if np.isclose(np.round(self.position), np.round(obj.position)).all():
+                    obj.increase(added_strength=1)
+                    return None
+        else:
+            return Pheromone(self.position, self.owner)
 
     def move(self, visible_objects):
         """ Move the ant to a new position at each time iteration. It moves it randomly in the first milestone.
@@ -86,17 +121,23 @@ class Ant(GameObject):
             return self.move_randomly()
 
     def move_randomly(self):
-        movement = randint(low=-1, high=2, size=2)  # random move
-        self.momentum += 0.5 * self.momentum + movement
-        self.momentum /= np.linalg.norm(self.momentum)
-        self.position = self.position + self.momentum
+        while True:  # to avoid standing still and devide by zero
+            movement = randint(low=-1, high=2, size=2)  # random move
+            self.direction += 0.5 * self.direction + movement
+            if np.linalg.norm(self.direction) > 0:
+                break
+        self.direction /= np.linalg.norm(self.direction)
+        self.position = self.position + self.direction
         return self.position
 
     def move_to(self, obj_position):
         # Go to the nearest nest.
         # TO DO get nearest nest position
         # assuming that nest_position is the nearest nest position
-        return_movement = (obj_position - self.position) / np.linalg.norm(obj_position - self.position)
+        if np.linalg.norm(obj_position - self.position) > 0:
+            return_movement = (obj_position - self.position) / np.linalg.norm(obj_position - self.position)
+        else:
+            return_movement = array([0, 0])  # THIS IS NOT THE BEST IMPLEMENTATION
         self.position += return_movement
         return self.position
 

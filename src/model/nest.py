@@ -12,7 +12,7 @@ class Nest(GameObject):
             ----------
             position: list
                 a list of all coordinates of nest position
-            color: string
+            player: Player object owning the nest
                 a string for the nest color
             size: int
                 a number for the radius of the nest
@@ -25,17 +25,17 @@ class Nest(GameObject):
 
     """
 
-    def __init__(self, position, color, size, health):
+    def __init__(self, position, player, size, health):
         """
 
         :param position: (list) coordinates of the nest
-        :param color: (str) color of the nest
+        :param color: ((R,G,B) tuple) color of the nest
         :param size: (int) radius of the nest
         :param health: (int) health if the nest
         """
         super(Nest, self).__init__(position)
         # TODO: also needs id
-        self.color = color
+        self.owner = player
         self.size = size
         self.health = health
         self.food = 0

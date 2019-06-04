@@ -5,8 +5,8 @@ import pygame
 
 class DialogBoxNest(DialogBox):
     def __init__(self, view, identifier, slider_data=[], active="False", name="Dialog_Box"):
-        super(DialogBoxNest, self).__init__(view, identifier, x=view.size[0] * 0.75, y=0,
-                                            width=view.size[0] * 0.25, height=view.size[1])
+        super(DialogBoxNest, self).__init__(view, identifier, x=75, y=0,
+                                            width=25, height=100)
         self.slider_data = slider_data
         self.active = active
         self.show_sliders = active
@@ -24,9 +24,9 @@ class DialogBoxNest(DialogBox):
 
     def set_sliders(self):
         for i, data in enumerate(self.slider_data):
-            self.sliders.append(Slider(self.view, data["identifier"], self.x + self.width * 0.1,
-                                       self.y + self.height * 0.1 * (i + 1), self.width * 0.80,
-                                       height=self.height * 0.1, max_value=data["max_value"],
+            self.sliders.append(Slider(self.view, data["identifier"], self.x_percentage + self.w_percentage * 0.1,
+                                       self.y_percentage + self.h_percentage * 0.1 * (i + 1), self.w_percentage * 0.80,
+                                       height=self.h_percentage * 0.1, max_value=data["max_value"],
                                        min_value=data["min_value"], default_value=data["default_value"],
                                        name=data["name"]))
 

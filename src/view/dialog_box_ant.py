@@ -4,8 +4,8 @@ import pygame
 
 class DialogBoxAnt(DialogBox):
     def __init__(self, view, identifier, ant):
-        super(DialogBoxAnt, self).__init__(view, identifier, x=view.size[0], y=view.size[1] * 0.75, width=view.size[0],
-                                           height=view.size[1] * 0.25)
+        super(DialogBoxAnt, self).__init__(view, identifier, x=75, y=0,
+                                           width=25, height=100)
         self.ant = ant
 
     def draw(self):
