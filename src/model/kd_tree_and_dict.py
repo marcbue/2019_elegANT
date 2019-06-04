@@ -168,7 +168,14 @@ class KdTreeAndDict(World):
                 new_position = tuple(new_position)
 
                 # Remove old positions.
-                self.all_objects[old_position].remove(item)
+                # TODO: This is only so that the game runs smoothly.
+                # TODO: Why is this needed?
+                # TODO: Thank Marc :)
+                try:
+                    self.all_objects[old_position].remove(item)
+                except ValueError:
+                    pass
+
                 if self.all_objects[old_position] is []:
                     self.all_objects.pop(old_position)
 
