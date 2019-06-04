@@ -3,13 +3,19 @@ from src.model.nest import Nest
 from src.model.player import Player
 from src.utils import array
 import numpy as np
+import pytest
 
-player = Player(name="Nobody", color=(178, 58, 238))
-nest = Nest(position=array([0., 0.]), player=player, size=10., health=100.)
-ant = Ant(player=player, home_nest=nest)
+
+@pytest.fixture
+def setup_environment():
+    player = Player(name="Nobody", color=(178, 58, 238))
+    nest = Nest(position=array([0., 0.]), player=player, size=10., health=100.)
+    ant = Ant(player=player, home_nest=nest)
+    return player, nest, ant
 
 
 def test_move_has_food():
+    player, nest, ant = setup_environment()
     ant.has_food = 1.
     ant.position = array([10., 0.])
     position = ant.move([])
@@ -27,6 +33,7 @@ def test_move_has_food():
 
 
 def test_move_randomly():
+    player, nest, ant = setup_environment()
     ant.has_food = 0.
     ant.position = array([0., 0.])
     ant.direction = array([0., 0.])
@@ -38,6 +45,7 @@ def test_move_randomly():
 
 
 def test_unload_food():
+    player, nest, ant = setup_environment()
     ant.has_food = 1.
     ant.position = array([0., 0.])
     ant.unload_food()
