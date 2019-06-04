@@ -35,3 +35,10 @@ def test_move_randomly():
     assert np.isclose(position, ant.position).all(), 'position not updated'
     assert np.isclose(1, np.linalg.norm(ant.direction)).all(), 'direction not one: %r' % ant.direction
     assert np.isclose(1, np.linalg.norm(ant.position - previous_position)).all(), 'movement not one: %r' % ant.position
+
+
+def test_unload_food():
+    ant.has_food = 1.0
+    ant.position = array([0, 0])
+    ant.unload_food()
+    assert ant.has_food == 0., 'food is not unloaded'

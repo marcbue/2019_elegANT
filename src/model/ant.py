@@ -77,9 +77,8 @@ class Ant(GameObject):
         Flip (has_food) variable to 0 when the ant reaches the nest and unload the food
         :return:
         """
-        if distance(self.position - self.home.position()) <= 1.:
-            self.home.increase_food(self.has_food)
-            self.has_food = 0.
+        self.home.increase_food(self.has_food)
+        self.has_food = 0.
 
     def load_food(self, food):
         """
