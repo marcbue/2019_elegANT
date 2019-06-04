@@ -38,7 +38,8 @@ def test_move_randomly():
 
 
 def test_unload_food():
-    ant.has_food = 1.0
-    ant.position = array([0, 0])
+    ant.has_food = 1.
+    ant.position = array([0., 0.])
     ant.unload_food()
     assert ant.has_food == 0., 'food is not unloaded'
+

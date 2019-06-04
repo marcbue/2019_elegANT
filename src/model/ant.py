@@ -88,27 +88,6 @@ class Ant(GameObject):
         """
         return self.position
 
-    def unload_food(self):  # TO DO
-        """
-        Flip (has_food) variable to 0 when the ant reaches the nest and unload the food
-        :return:
-        """
-        self.home.increase_food(self.has_food)
-        self.has_food = 0.
-
-    def load_food(self, food):
-        """
-        increase (has_food) variable to loading capacity when the ant finds food
-        :param food: the food object
-        :return:
-        """
-        if food.size >= self.loading_capacity:
-            food.size -= self.loading_capacity
-            self.has_food = self.loading_capacity
-        else:
-            self.has_food = food.size
-            food.size = 0.
-
     def update(self, *args):
         # If ant dies, remove it from the players ants.
         if self.energy <= 0.:
@@ -124,6 +103,37 @@ class Ant(GameObject):
                 return self.position, None
             else:
                 return self.move(args[0]), None
+
+    def move(self, noticeable_objects):
+        """
+        Move the ant to a new position at each time iteration.
+        If food is detected, movement is done in that direction. If no food is detected, pheromones are followed.
+        Movement is random if there are no objects in visible objects.
+        :param noticeable_objects: (list) All the possible objects that the ant can perceive
+        :return: (array) Position to which the ant moves
+        """
+
+        # Go to nest if has food
+        if self.has_food:
+            return self.move_to(self.home.position)
+
+        # Choose a position in a probabilistic fashion
+        else:
+            # Checking nearest objects
+            foods = get_objects_of_type(noticeable_objects, Food)
+            pheromones = get_objects_of_type(noticeable_objects, Pheromone)
+
+            # Priority is to get food
+            if foods:
+                return self.move_to_food(foods)
+
+            # In case there is no food pheromones are taken into account
+            elif pheromones:
+                return self.move_to_pheromone(pheromones)
+
+            else:
+                # In case there is no food nor pheromone scents, move randomly
+                return self.move_randomly()
 
     def at_nest(self):
         if distance(self.position - self.home.position) <= 1.:
@@ -150,6 +160,27 @@ class Ant(GameObject):
                     return True
         else:
             return False
+
+    def unload_food(self):  # TO DO
+        """
+        Flip (has_food) variable to 0 when the ant reaches the nest and unload the food
+        :return:
+        """
+        self.home.increase_food(self.has_food)
+        self.has_food = 0.
+
+    def load_food(self, food):
+        """
+        increase (has_food) variable to loading capacity when the ant finds food
+        :param food: the food object
+        :return:
+        """
+        if food.size >= self.loading_capacity:
+            food.size -= self.loading_capacity
+            self.has_food = self.loading_capacity
+        else:
+            self.has_food = food.size
+            food.size = 0.
 
     def move_to_food(self, foods):
         """
@@ -228,37 +259,6 @@ class Ant(GameObject):
                 return self.move_to(pheromones[index].position)
         else:
             return None
-
-    def move(self, noticeable_objects):
-        """
-        Move the ant to a new position at each time iteration.
-        If food is detected, movement is done in that direction. If no food is detected, pheromones are followed.
-        Movement is random if there are no objects in visible objects.
-        :param noticeable_objects: (list) All the possible objects that the ant can perceive
-        :return: (array) Position to which the ant moves
-        """
-
-        # Go to nest if has food
-        if self.has_food:
-            return self.move_to(self.home.position)
-
-        # Choose a position in a probabilistic fashion
-        else:
-            # Checking nearest objects
-            foods = get_objects_of_type(noticeable_objects, Food)
-            pheromones = get_objects_of_type(noticeable_objects, Pheromone)
-
-            # Priority is to get food
-            if foods:
-                return self.move_to_food(foods)
-
-            # In case there is no food pheromones are taken into account
-            elif pheromones:
-                return self.move_to_pheromone(pheromones)
-
-            else:
-                # In case there is no food nor pheromone scents, move randomly
-                return self.move_randomly()
 
     def move_randomly(self):
         """
