@@ -2,7 +2,7 @@ import numpy as np
 
 from .food import Food
 from .game_object import GameObject
-from src.utils import randint, array, get_objects_of_type
+from src.utils import randint, array, get_objects_of_type, zeros
 from .pheromone import Pheromone
 distance = np.linalg.norm
 
@@ -146,7 +146,7 @@ class Ant(GameObject):
             else:
 
                 # Getting features of food objects
-                data = np.zeros(len(foods), 2)
+                data = zeros((len(foods), 2))
                 for i, obj in enumerate(foods):
                     # Food size
                     data[i, 0] = obj.size
@@ -176,7 +176,7 @@ class Ant(GameObject):
             else:
 
                 # Getting features of pheromone objects
-                data = np.zeros(len(pheromones), 3)
+                data = zeros((len(pheromones), 3))
                 for i, obj in enumerate(pheromones):
                     # Intensity
                     data[i, 0] = obj.strength
