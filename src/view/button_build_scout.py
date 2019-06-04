@@ -58,6 +58,7 @@ class BuildScoutButton(Button):
         rect = [self.x, self.y, self.width, self.height]
         self.view.screen.fill(self.color1, rect, 2)
         pygame.draw.arc(self.view.screen, self.color2, rect, start, end, int(self.width / 2))
-        self._loading_angle += 360/(all_params.controller_params.framerate*all_params.controller_params.create_ant_time)
+        denominator_angle = all_params.controller_params.framerate * all_params.controller_params.create_ant_time
+        self._loading_angle += 360 / denominator_angle
 
         self.draw_counter()
