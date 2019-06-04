@@ -31,11 +31,21 @@ def ones(*args, **kwargs):
 def uniform(*args, **kwargs):
     return np.random.uniform(*args, **kwargs).astype(dtype)
 
+
 def randint(*args, **kwargs):
     if kwargs.get('size', 1) == 1:
         return np.random.randint(*args, **kwargs)
     else:
         return np.random.randint(*args, **kwargs).astype(dtype)
 
+
 def random(*args, **kwargs):
     return np.random.random(*args, **kwargs).astype(dtype)
+
+
+def get_objects_of_type(visible_objects, target_type):
+    sublist = []
+    for obj in visible_objects:
+        if type(obj) == target_type:
+            sublist.append(obj)
+    return sublist
