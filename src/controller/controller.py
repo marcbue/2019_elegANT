@@ -69,7 +69,7 @@ class Controller:
         button.state = 'loading'
 
         def _create_ant():
-            time.sleep(4)
+            time.sleep(all_params.controller_params.create_ant_time)
             nest = self.game_state.get_nests()[0]
             self.game_state.create_ants(nest, amount=1)
             self.view.increment_ant_count()
