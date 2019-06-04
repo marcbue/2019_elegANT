@@ -46,7 +46,8 @@ class Ant(GameObject):
         position = home_nest.position
         super(Ant, self).__init__(position)
         self.owner = player
-        self.owner.ants.add(self)
+        # TODO: needs to be updated as well
+        # self.owner.ants.add(self)
 
         self.has_food = 0.
         self.energy = 100.
