@@ -6,6 +6,8 @@ class Player:
     def __init__(self, name, color):
         self.name = name
         self.color = color
+        # All ants the player owns.
+        self.ants = set()
 
     def store_data(self):
         """stores the data of a player in a pickle file"""

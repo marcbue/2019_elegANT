@@ -45,6 +45,8 @@ class Ant(GameObject):
         position = home_nest.position
         super(Ant, self).__init__(position)
         self.owner = player
+        self.owner.ants.add(self)
+
         self.has_food = 0
         self.energy = 100
         self.direction = array([0., 0.])
@@ -92,6 +94,10 @@ class Ant(GameObject):
             food.size = 0
 
     def update(self, *args):
+        # If ant dies, remove it from the players ants.
+        if self.energy <= 0:
+            self.owner.ants.remove(self)
+
         if self.has_food:
             return self.move(args[0]), self.set_trace(args[0])
         else:
