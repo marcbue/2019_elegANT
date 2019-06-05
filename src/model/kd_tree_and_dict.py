@@ -5,7 +5,7 @@ from .ant import Ant
 from .food import Food
 from .nest import Nest
 from .world import World
-from src.utils import timing
+# from src.utils import timing
 
 from src.utils import array
 
