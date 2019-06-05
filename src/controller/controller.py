@@ -66,15 +66,16 @@ class Controller:
         :param button: Create Ants button
         :return: nothing
         """
-        button.state = 'loading'
+        if button.state != 'loading':
+            button.state = 'loading'
 
-        def _create_ant():
-            time.sleep(all_params.controller_params.create_ant_time)
-            nest = self.game_state.get_nests()[0]
-            self.game_state.create_ants(nest, amount=1)
-            self.view.increment_ant_count()
+            def _create_ant():
+                time.sleep(all_params.controller_params.create_ant_time)
+                nest = self.game_state.get_nests()[0]
+                self.game_state.create_ants(nest, amount=1)
+                self.view.increment_ant_count()
 
-        create_thread(func=_create_ant)
+            create_thread(func=_create_ant)
 
     def get_events(self, view_state):
 
