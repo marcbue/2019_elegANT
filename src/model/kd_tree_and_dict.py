@@ -5,6 +5,7 @@ from .ant import Ant
 from .food import Food
 from .nest import Nest
 from .world import World
+from src.utils import timing
 
 from src.utils import array
 
@@ -144,6 +145,7 @@ class KdTreeAndDict(World):
             result.append(sub_result)
         return result
 
+    # @timing # TODO: check in real game how much time is needed
     def update(self):
         """ Update the positions of all ants after their movement in one iteration and remove the previous positions"""
         all_lists = list(self.all_objects.values())

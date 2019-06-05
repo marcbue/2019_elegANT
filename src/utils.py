@@ -4,6 +4,8 @@ to keep memory constant.
 """
 
 import numpy as np
+from time import time
+from functools import wraps
 
 dtype = np.float32
 
@@ -49,3 +51,22 @@ def get_objects_of_type(visible_objects, target_type):
         if type(obj) == target_type:
             sublist.append(obj)
     return sublist
+
+
+def timing(f):
+    """
+    Attributed to яүυк from Stackexchange.
+    Prints the time a function needed to execute.
+    :param f: function
+    :return:
+    """
+
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        start = time()
+        result = f(*args, **kwargs)
+        end = time()
+        print('Time: {} : {}'.format(f.__name__, end - start))
+        return result
+
+    return wrapper
