@@ -81,6 +81,10 @@ class Ant(GameObject):
         self.directionism = 1.
         self.explorativeness = 1.
 
+    def __str__(self):
+        return "Ant {} at position {} and energy lvl {} from player {}".format(self.id, self.position, self.energy,
+                                                                               self.owner)
+
     def get_position(self):
         """
         Get the coordinates of the object ant position

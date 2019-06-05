@@ -12,3 +12,6 @@ class Food(GameObject):
             return None
         else:
             return self.position
+
+    def __str__(self):
+        return "Food {} at {} with size {}".format(self.id, self.position, self.size)
