@@ -64,7 +64,6 @@ class World(ViewElement):
                 view_element.x, view_element.y = self._to_view_coordinates(element.position)
                 if type(element) == Model_Ant:
                     view_element.direction = element.direction
-                    print(element.direction)
             else:
                 view_x, view_y = self._to_view_coordinates(element.position)
                 color = (255, 0, 0)  # element.color
