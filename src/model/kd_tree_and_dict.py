@@ -167,7 +167,7 @@ class KdTreeAndDict(World):
                     new_position = item.update()
 
                 # TODO: should not be needed
-                new_position = tuple(new_position)
+                # new_position = tuple(new_position)
 
                 # Remove old positions.
                 # TODO: This is only so that the game runs smoothly.

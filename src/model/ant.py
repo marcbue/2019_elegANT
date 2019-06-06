@@ -201,25 +201,38 @@ class Ant(GameObject):
 
             # Compare food sources in terms of size and distance to nest
             else:
-
-                # Getting features of food objects
-                data = zeros((len(foods), 2))
+                sub_food = []
                 for i, obj in enumerate(foods):
-                    # Food size
-                    data[i, 0] = obj.size
-                    # Distance to nest
-                    data[i, 1] = distance(obj.position - self.home.position)
+                    # If food size equal to zero, we ignore the Food object
+                    if obj.size == 0:
+                        pass
+                    # If distance is equal to zero, we ignore the Food object
+                    elif distance(obj.position - self.home.position) == 0:
+                        pass
+                    else:
+                        sub_food.append(obj)
 
-                # Rescaling each feature to have values bounded by 1
-                data /= np.max(data, axis=0)
+                if sub_food:
+                    # Getting features of food objects
+                    data = zeros((len(sub_food), 2))
+                    for i, obj in enumerate(sub_food):
+                        # Food size
+                        data[i, 0] = obj.size
+                        # Distance to nest
+                        data[i, 1] = distance(obj.position - self.home.position)
 
-                # Calculating probability distribution
-                probs = (data[:, 0] ** self.foodiness) * (data[:, 1] ** self.explorativeness)
-                probs /= np.sum(probs)
+                    # Rescaling each feature to have values bounded by 1
+                    data /= np.max(data, axis=0)
 
-                # Drawing an object from the prob distribution
-                index = np.random.choice(len(foods), p=probs)
-                return self.move_to(foods[index].position)
+                    # Calculating probability distribution
+                    probs = (data[:, 0] ** self.foodiness) * (data[:, 1] ** self.explorativeness)
+                    probs /= np.sum(probs)
+
+                    # Drawing an object from the prob distribution
+                    index = np.random.choice(len(sub_food), p=probs)
+                    return self.move_to(sub_food[index].position)
+                else:
+                    return None
         else:
             return None
 
