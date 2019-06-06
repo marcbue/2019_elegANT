@@ -1,7 +1,5 @@
 import pygame
 from .view_element import ViewElement
-from math import sqrt
-
 
 class Nest(ViewElement):
     def __init__(self, view, identifier, x, y, max_radius, color, value, max_value=500):
@@ -18,7 +16,7 @@ class Nest(ViewElement):
     def draw(self):
         self.width = self.height = self._update_width_height()
         image = pygame.transform.scale(self.image, (self.width, self.height))
-        self.view.screen.blit(image, (self.x-self.width/2, self.y-self.height/2, self.width, self.height))
+        self.view.screen.blit(image, (self.x - self.width / 2, self.y - self.height / 2, self.width, self.height))
         
     def _update_width_height(self):
-        return int(((self.max_radius*2 - 80) * self.value / self.max_value) + 80)
+        return int(((self.max_radius * 2 - 80) * self.value / self.max_value) + 80)

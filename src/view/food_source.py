@@ -1,7 +1,5 @@
 import pygame
 from .view_element import ViewElement
-from math import sqrt
-
 
 class FoodSource(ViewElement):
     def __init__(self, view, identifier, x, y, max_radius, value, max_value=100):
@@ -17,7 +15,7 @@ class FoodSource(ViewElement):
     def draw(self):
         self.width = self.height = self._update_width_height()
         image = pygame.transform.scale(self.image, (self.width, self.height))
-        self.view.screen.blit(image, (self.x-self.width/2, self.y-self.height/2, self.width, self.height))
+        self.view.screen.blit(image, (self.x - self.width / 2, self.y - self.height / 2, self.width, self.height))
     
     def _update_width_height(self):
-        return int(((self.max_radius*2 - 40) * self.value / self.max_value) + 40)
+        return int(((self.max_radius * 2 - 40) * self.value / self.max_value) + 40)

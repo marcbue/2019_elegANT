@@ -76,10 +76,12 @@ class World(ViewElement):
                 color = (87, 112, 219)  # element.color
 
                 if type(element) == Model_Nest:
-                    self.game_elements[element.id] = Nest(self.view, element.id, view_x, view_y, 128, color, element.health)
+                    self.game_elements[element.id] = Nest(self.view, element.id, view_x,
+                                                          view_y, 128, color, element.health)
 
                 elif type(element) == Model_Ant:
-                    self.game_elements[element.id] = Ant(self.view, element.id, view_x, view_y, color, element.direction, element.energy)
+                    self.game_elements[element.id] = Ant(self.view, element.id, view_x, view_y,
+                                                         color, element.direction, element.energy)
                 elif type(element) == Model_Food:
                     self.game_elements[element.id] = FoodSource(self.view, element.id, view_x, view_y, 128, 100)
                 
