@@ -1,12 +1,51 @@
 from src.model.ant import Ant
 from src.model.nest import Nest
+from src.model.food import Food
 from src.model.player import Player
+from src.model.pheromone import Pheromone
 from src.utils import array
 import numpy as np
+import pytest
 
 player = Player(name="Nobody", color=(178, 58, 238))
 nest = Nest(position=array([0., 0.]), player=player, size=10., health=100.)
 ant = Ant(player=player, home_nest=nest)
+
+
+@pytest.fixture
+def set_up_pheromones():
+    player = Player("Nobody", (178, 58, 238))
+    position = array([5, 5])
+    intensity = 20.
+    pheromone1 = Pheromone(position, player, intensity)
+    position = array([4, 5])
+    intensity = 10.
+    pheromone2 = Pheromone(position, player, intensity)
+    pheromones = [pheromone1, pheromone2]
+    return pheromones
+
+@pytest.fixture
+def set_up_ants():
+    anty = Ant(player=player, home_nest=nest)
+    return [anty]*5
+
+@pytest.fixture
+def set_up_foods():
+    player = Player("Nobody", (178, 58, 238))
+    position = array([5, 5])
+    intensity = 20.
+    pheromone1 = Pheromone(position, player, intensity)
+    position = array([4, 5])
+    intensity = 10.
+    pheromone2 = Pheromone(position, player, intensity)
+    pheromones = [pheromone1, pheromone2]
+    return pheromones
+
+def set_up_food_fixed():
+    position = array([0.5, 0.5])
+    size1 = 5
+    size2 = -2
+    return position, size1, size2
 
 
 def test_move_has_food():
