@@ -6,6 +6,12 @@ class Player:
     def __init__(self, name, color):
         self.name = name
         self.color = color
+        # TODO: needs to be updated every time as well
+        # All ants the player owns.
+        # self.ants = set()
+
+    def __str__(self):
+        return "Player {} with color {}".format(self.name, self.color)
 
     def store_data(self):
         """stores the data of a player in a pickle file"""
