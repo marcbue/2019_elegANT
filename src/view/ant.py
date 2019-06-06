@@ -8,7 +8,6 @@ class Ant(ViewElement):
     def __init__(self, view, identifier, x, y, color, direction, health):
         super(Ant, self).__init__(view, identifier, x, y, width=64, height=64)
         self.z_index = 9
-        self.color = color
         self.direction = direction
         self.health = health
         self.has_food = False

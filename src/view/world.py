@@ -67,6 +67,7 @@ class World(ViewElement):
                 view_element.x, view_element.y = self._to_view_coordinates(element.position)
                 if type(element) == Model_Ant:
                     view_element.direction = element.direction
+                    view_element.has_food = element.has_food
                 if type(element) == Model_Food:
                     view_element.value = element.size
             # Create elements
@@ -75,10 +76,9 @@ class World(ViewElement):
                 color = (87, 112, 219)  # element.color
 
                 if type(element) == Model_Nest:
-                    self.game_elements[element.id] = Nest(self.view, element.id, view_x, view_y, 30, color)
+                    self.game_elements[element.id] = Nest(self.view, element.id, view_x, view_y, 128, color, element.health)
 
                 elif type(element) == Model_Ant:
-                    print(element.owner)
                     self.game_elements[element.id] = Ant(self.view, element.id, view_x, view_y, color, element.direction, element.energy)
                 elif type(element) == Model_Food:
                     self.game_elements[element.id] = FoodSource(self.view, element.id, view_x, view_y, 128, 100)
