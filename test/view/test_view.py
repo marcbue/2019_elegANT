@@ -14,4 +14,4 @@ def test_view_state():
 
 def test_view_size():
     view = View(1300, 800)
-    assert view.size == (1300, 800)
+    assert view.width == 1300 and view.height == 800

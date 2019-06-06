@@ -1,15 +1,19 @@
 from src.model.ant import Ant
 from src.model.nest import Nest
-from src.model.food import Food
+# from src.model.food import Food
 from src.model.player import Player
 from src.model.pheromone import Pheromone
 from src.utils import array
 import numpy as np
 import pytest
 
-player = Player(name="Nobody", color=(178, 58, 238))
-nest = Nest(position=array([0., 0.]), player=player, size=10., health=100.)
-ant = Ant(player=player, home_nest=nest)
+
+@pytest.fixture
+def setup_environment():
+    player = Player(name="Nobody", color=(178, 58, 238))
+    nest = Nest(position=array([0., 0.]), player=player, size=10., health=100.)
+    ant = Ant(player=player, home_nest=nest)
+    return player, nest, ant
 
 
 @pytest.fixture
@@ -24,10 +28,12 @@ def set_up_pheromones():
     pheromones = [pheromone1, pheromone2]
     return pheromones
 
+
 @pytest.fixture
-def set_up_ants():
-    anty = Ant(player=player, home_nest=nest)
-    return [anty]*5
+def set_up_ants(setup_environment):
+    player, nest, ant = setup_environment
+    return [ant] * 5
+
 
 @pytest.fixture
 def set_up_foods():
@@ -41,6 +47,7 @@ def set_up_foods():
     pheromones = [pheromone1, pheromone2]
     return pheromones
 
+
 def set_up_food_fixed():
     position = array([0.5, 0.5])
     size1 = 5
@@ -48,7 +55,8 @@ def set_up_food_fixed():
     return position, size1, size2
 
 
-def test_move_has_food():
+def test_move_has_food(setup_environment):
+    player, nest, ant = setup_environment
     ant.has_food = 1.
     ant.position = array([10., 0.])
     position = ant.move([])
@@ -65,7 +73,8 @@ def test_move_has_food():
     assert np.isclose(position, array([0., 0.])).all(), 'moves after reaching the object'
 
 
-def test_move_randomly():
+def test_move_randomly(setup_environment):
+    player, nest, ant = setup_environment
     ant.has_food = 0.
     ant.position = array([0., 0.])
     ant.direction = array([0., 0.])
@@ -76,8 +85,10 @@ def test_move_randomly():
     assert np.isclose(1, np.linalg.norm(ant.position - previous_position)).all(), 'movement not one: %r' % ant.position
 
 
-def test_unload_food():
-    ant.has_food = 1.0
-    ant.position = array([0, 0])
+def test_unload_food(setup_environment):
+    player, nest, ant = setup_environment
+    ant.has_food = 1.
+    ant.position = array([0., 0.])
     ant.unload_food()
     assert ant.has_food == 0., 'food is not unloaded'
+

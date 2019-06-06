@@ -10,6 +10,9 @@ class Player:
         # All ants the player owns.
         # self.ants = set()
 
+    def __str__(self):
+        return "Player {} with color {}".format(self.name, self.color)
+
     def store_data(self):
         """stores the data of a player in a pickle file"""
         pickle.dump(self, open(str(self.name) + ".p", "wb"))

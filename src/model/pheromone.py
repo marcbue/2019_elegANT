@@ -28,6 +28,10 @@ class Pheromone(GameObject):
         self.owner = player
         self.strength = initial_strength
 
+    def __str__(self):
+        return "Pheromone {} at position {} with strength {} from player {}".format(self.id, self.position,
+                                                                                    self.strength, self.owner)
+
     def update(self, *args):
         self._decay()
         # TODO: use another cutoff value for pheromone disappearance

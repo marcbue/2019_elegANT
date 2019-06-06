@@ -2,6 +2,7 @@ from .kd_tree_and_dict import KdTreeAndDict
 from src.utils import random, array
 import numpy as np
 
+
 # Interface with controller
 # GameState calls world interface
 class GameState:
