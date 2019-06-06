@@ -7,7 +7,7 @@ from src.utils import array
 @pytest.fixture
 def nest_creation_fixed():
     position = array([0.5, 0.5])
-    player = Player(name="Nobody", color="red")
+    player = Player(name="Nobody", color=(178, 58, 238))
     size = 5
     health = 10
     return (position, player, size, health)
@@ -31,7 +31,7 @@ def set_up_food_fixed():
 @pytest.fixture
 def set_up_nest():
     position = array([0.5, 0.5])
-    color = "red"
+    color = (178, 58, 238)
     size = 5
     health = 10
     return position, color, size, health

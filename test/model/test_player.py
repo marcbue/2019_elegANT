@@ -1,18 +1,20 @@
 from src.model.player import Player
+# from src.model.ant import Ant
+# from src.model.nest import Nest
 import pytest
 
 
 @pytest.fixture
 def set_up_player():
     name = "franz"
-    color = "red"
+    color = (0, 0, 0)
     return name, color
 
 
 @pytest.fixture
 def change_player():
     name = "herbert"
-    color = "rosa"
+    color = (178, 58, 238)
     return name, color
 
 
@@ -47,3 +49,14 @@ def test_data_storage(set_up_player):
     player2 = Player(name, color)
     player2.read_data(filename=str(name) + ".p")
     assert player.__dict__ == player2.__dict__
+
+
+# def test_owning_ants(set_up_player):  # TODO
+#     player_name, color = set_up_player
+#     player = Player(player_name, color)
+#     print(player)
+#     # Check that there are no ants.
+#     assert not bool(player.ants)
+#     nest = Nest([0, 0], player, 1, 100)
+#     player.ants.add(Ant(player, nest))
+#     assert bool(player.ants)
