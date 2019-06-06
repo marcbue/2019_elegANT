@@ -1,17 +1,20 @@
 import pygame
 import math
 from .view_element import ViewElement
+from math import sqrt
 
 
 class Ant(ViewElement):
-    def __init__(self, view, identifier, x, y, color):
+    def __init__(self, view, identifier, x, y, color, direction, health):
         super(Ant, self).__init__(view, identifier, x, y, width=64, height=64)
+        self.z_index = 9
         self.color = color
-        self.direction = [0., 0.]
+        self.direction = direction
+        self.health = health
         self.has_food = False
         name = "_".join((str(c) for c in color))
-        self.img = pygame.image.load("src/view/images/219_95_87_worker.png")
-        self.img_food = pygame.image.load("src/view/images/219_95_87_worker_food.png")
+        self.img = pygame.image.load(f"src/view/images/{name}_worker.png")
+        self.img_food = pygame.image.load(f"src/view/images/{name}_worker_food.png")
 
     def draw(self):
         ant_img = self.img_food if self.has_food else self.img
