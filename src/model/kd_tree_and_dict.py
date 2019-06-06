@@ -5,6 +5,7 @@ from .ant import Ant
 from .food import Food
 from .nest import Nest
 from .world import World
+# from src.utils import timing
 
 from src.utils import array
 
@@ -144,6 +145,7 @@ class KdTreeAndDict(World):
             result.append(sub_result)
         return result
 
+    # @timing # TODO: check in real game how much time is needed
     def update(self):
         """ Update the positions of all ants after their movement in one iteration and remove the previous positions"""
         all_lists = list(self.all_objects.values())
@@ -154,13 +156,28 @@ class KdTreeAndDict(World):
                 if type(item) == Ant:
                     # TODO: pick radius (or implement it in ant class)
                     noticeable_objects = self.get_circular_region(item.position, radius=10)
-                    # TODO: needs noticeable objects
-                    new_position = tuple(item.update(noticeable_objects))
+                    new_position, new_pheromone = item.update(noticeable_objects)
+
+                    # Only handle if new pheromone object needs to be created.
+                    if new_pheromone is not None:
+                        pheromone_pos = tuple(new_pheromone.position)
+                        self.all_objects.setdefault(pheromone_pos, []).append(new_pheromone)
+
                 else:
-                    new_position = tuple(item.update())
+                    new_position = item.update()
+
+                # TODO: should not be needed
+                # new_position = tuple(new_position)
 
                 # Remove old positions.
-                self.all_objects[old_position].remove(item)
+                # TODO: This is only so that the game runs smoothly.
+                # TODO: Why is this needed?
+                # TODO: Thank Marc :)
+                try:
+                    self.all_objects[old_position].remove(item)
+                except ValueError:
+                    pass
+
                 if self.all_objects[old_position] is []:
                     self.all_objects.pop(old_position)
 
@@ -286,4 +303,3 @@ class KdTreeAndDict(World):
         everything = self.dump_content()
         nests = [obj for obj in everything if type(obj) is Nest]
         return nests
-
