@@ -1,5 +1,6 @@
 from .game_object import GameObject
 
+
 class Food(GameObject):
 
     def __init__(self, position, size):
@@ -12,3 +13,5 @@ class Food(GameObject):
         else:
             return self.position
 
+    def __str__(self):
+        return "Food {} at {} with size {}".format(self.id, self.position, self.size)
