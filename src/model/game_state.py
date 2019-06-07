@@ -1,5 +1,7 @@
 from .kd_tree_and_dict import KdTreeAndDict
-from src.utils import random
+from src.utils import random, array
+import numpy as np
+
 
 # Interface with controller
 # GameState calls world interface
@@ -42,6 +44,7 @@ class GameState:
         for i in range(len(player_list)):
             positions.append(random(2) * 250)
         self.world.create_nests(all_colors, positions, health=100, size=10)
+        self.generate_random_food(array([-250, 250]), array([250, -250]), 50, [5] * 50)
 
     def get_objects_in_region(self, top_left, bottom_right):
         """ Get list of positions and all included objects (ants, nests, foods, pheromones, etc) in a specific
@@ -79,3 +82,13 @@ class GameState:
 
     def get_ants(self):
         return self.world.get_ants()
+
+    def generate_random_food(self, top_left, bottom_right, amount, size_list):
+        position_list = []
+        for i in range(amount):
+            x_span = bottom_right[0] - top_left[0]
+            x_position = top_left[0] + x_span * random(1)
+            y_span = top_left[1] - bottom_right[1]
+            y_position = top_left[0] + y_span * random(1)
+            position_list.append(np.concatenate((x_position, y_position)))
+        self.create_food(position_list, size_list)

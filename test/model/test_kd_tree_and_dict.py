@@ -7,6 +7,7 @@ from src.model.game_object import GameObject
 from src.model.kd_tree_and_dict import KdTreeAndDict
 from src.model.nest import Nest
 from src.model.world import World
+from src.model.player import Player
 
 from src.utils import array, randint
 
@@ -35,8 +36,11 @@ def set_up_tree_nests_fixed():
     """Sets up nests at fixed position. Use this if you do not want two nests to be created at one position."""
     tree = KdTreeAndDict()
     positions = [array([5, 5]), array([-5, -5]), array([1000, 1000])]
-    colors = ['red', 'green', 'blue']
-    tree.create_nests(colors, positions, size=1, health=100)
+    players = [Player("franz", (0, 0, 0)),
+               Player("calvin", (178, 58, 238)),
+               Player("hobbes", (122, 86, 201))]
+
+    tree.create_nests(players, positions, size=1, health=100)
 
     return tree, positions
 

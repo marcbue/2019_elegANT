@@ -1,10 +1,11 @@
 import time
 import sys
 
-from threading import Thread
+from src.controller.utils import create_thread
 
 from src.model.player import Player
 from src.model.game_state import GameState
+
 from src.view.view import View
 
 from src.settings import all_params
@@ -20,19 +21,18 @@ class Controller:
 
         self.event_list_start_view = {
             'start_button': self.start_button_pressed,
-            'quit_game': self.quit_button_pressed
+            'quit_game': self.exit_game
         }
 
         self.event_list_game_view = {
             'build_scout': self.create_ant,
-            'quit_game': self.quit_button_pressed
+            'quit_game': self.exit_game
         }
 
         self.event_list = {
             'start_view': self.event_list_start_view,
             'game_view': self.event_list_game_view
         }
-        self.game_loop()
 
     def start_button_pressed(self, color, player_name):
         """
@@ -51,31 +51,30 @@ class Controller:
             # TODO Get view to show pop up with message
             print('Player name not entered')
 
-    def quit_button_pressed(self):
+    @staticmethod
+    def exit_game():
 
         """
-        Quit button event handler
-        :return: empty
+        Quit game method
+        :return: nothing
         """
         sys.exit()
 
     def create_ant(self, button):
         """
         Event-handler for creating ants using the create ants button
-        :param nest_position: Position of nest that should create ants
-        :param ant_amount: Amount of ants created with one event
-        :return: empty
+        :param button: Create Ants button
+        :return: nothing
         """
         button.state = 'loading'
 
         def _create_ant():
-            time.sleep(4)
+            time.sleep(all_params.controller_params.create_ant_time)
             nest = self.game_state.get_nests()[0]
             self.game_state.create_ants(nest, amount=1)
             self.view.increment_ant_count()
 
-        thread = Thread(target=_create_ant)
-        thread.start()
+        create_thread(func=_create_ant)
 
     def get_events(self, view_state):
 
@@ -89,10 +88,10 @@ class Controller:
 
         # Get the list of events from view
         event_argument_list = self.view.events()
+
         # Getting events and arguments as two lists
         event = list(event_argument_list.keys())
         args = list(event_argument_list.values())
-
         for i in range(len(event)):
             if event[i] in self.event_list[view_state].keys():
                 if args[i] is not None:
@@ -124,11 +123,10 @@ class Controller:
     def game_loop(self):
         """
         Main game loop
-        :return: empty
+        :return: nothing
         """
 
-        # Currently Frame rate set to 30
-        max_frames = all_params.controller_params.framerate
+        frame_rate = all_params.controller_params.framerate
         while True:
 
             current_time = time.time()
@@ -144,10 +142,6 @@ class Controller:
             # For frame rate adjustment
             exit_time = time.time()
             time_elapsed = exit_time - current_time
-            frames_per_sec = 1. / max_frames
+            frames_per_sec = 1. / frame_rate
             time.sleep(max(frames_per_sec - time_elapsed, 0))
 
-
-if __name__ == "__main__":
-    controller = Controller()
-    controller.game_loop()

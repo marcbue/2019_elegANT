@@ -8,7 +8,7 @@ from src.utils import array
 @pytest.fixture
 def set_up_pheromone():
     position = array([5, 5])
-    player = Player("Nobody", "purple")
+    player = Player("Nobody", (178, 58, 238))
     test_pheromone = Pheromone(position, player)
     return (position, player, test_pheromone)
 

@@ -3,6 +3,7 @@ class ControllerParams:
     def __init__(self, framerate=30):
         super(ControllerParams, self).__init__()
         self.framerate = framerate
+        self.create_ant_time = 2
 
 
 class ModelParams:
