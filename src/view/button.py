@@ -22,7 +22,9 @@ class Button(UIElement):
             pygame.draw.circle(self.view.screen, self.color, (self.x, self.y), self.radius)
             if self.has_image is True:
                 image = pygame.transform.scale(pygame.image.load(self.image_path), (self.width, self.height))
-                self.view.screen.blit(image, pygame.Rect(self.x - (self.width // 2), self.y - (self.height // 2), self.width, self.height))
+                self.view.screen.blit(image,
+                                      pygame.Rect(self.x - (self.width // 2), self.y - (self.height // 2), self.width,
+                                                  self.height))
         elif self.shape == 'square':
             pygame.draw.rect(self.view.screen, self.color, (self.x, self.y, self.width, self.height))
             if self.has_image is True:
