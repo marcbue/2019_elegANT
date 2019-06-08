@@ -1,14 +1,14 @@
 import pickle
 
-
 class Player:
 
     def __init__(self, name, color):
         self.name = name
         self.color = color
         # TODO: needs to be updated every time as well
+        # TODO: for what needed, uuids or also positions?
         # All ants the player owns.
-        # self.ants = set()
+        self.ants = set()
 
     def __str__(self):
         return "Player {} with color {}".format(self.name, self.color)
