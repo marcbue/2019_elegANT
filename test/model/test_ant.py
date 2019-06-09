@@ -7,6 +7,8 @@ from src.utils import array
 import numpy as np
 import pytest
 
+# TODO it would be best if all tests only call update function to make sure update logic is correct
+
 
 @pytest.fixture
 def set_up_environment():
@@ -48,6 +50,7 @@ def set_up_foods():
     return pheromones
 
 
+# should this be removed?
 def set_up_food_fixed():
     position = array([0.5, 0.5])
     size1 = 5.
@@ -61,21 +64,30 @@ def set_up_food():
     return food
 
 
+def test_update_remove_ant(set_up_environment):
+    player, nest, ant = set_up_environment
+    ant.energy = 0
+    ant.update([])
+    assert len(player.ants) == 0, 'the ant has not died'
+
+
 def test_move_has_food(set_up_environment):
     player, nest, ant = set_up_environment
     ant.has_food = 1.
-    ant.position = array([10., 0.])
-    position = ant.move([])
+
     # asserting that y-move is towards the nest
+    ant.position = array([10., 0.])
+    position, _ = ant.update([])
     assert np.isclose(position, array([9., 0.])).all(), 'incorrect y-move direction'
-    # asserting that the position is updated
-    assert np.isclose(ant.position, position).all(), 'position not updated'
-    ant.position = array([0., 10.])
-    position = ant.move([])
+
     # asserting that x-move is towards the nest
+    ant.position = array([0., 10.])
+    position, _ = ant.update([])
     assert np.isclose(position, array([0., 9.])).all(), 'incorrect x-move direction'
+
+    # asserting the arrival
     ant.position = array([0., 0.])
-    position = ant.move([])
+    position, _ = ant.update([])
     assert np.isclose(position, array([0., 0.])).all(), 'moves after reaching the object'
 
 
@@ -85,8 +97,7 @@ def test_move_randomly(set_up_environment):
     ant.position = array([0., 0.])
     ant.direction = array([0., 0.])
     init_position = array(ant.position)
-    position = ant.move([])
-    assert np.isclose(position, ant.position).all(), 'position not updated'
+    position, _ = ant.update([])
     assert np.isclose(1., np.linalg.norm(ant.direction)), 'direction not one: %r' % ant.direction
     assert np.isclose(1., np.linalg.norm(ant.position - init_position)), 'movement not one: %r' % ant.position
 
@@ -125,7 +136,7 @@ def test_get_position(set_up_environment):
     player, nest, ant = set_up_environment
     init_position = ant.get_position()
     ant.has_food = 0.
-    ant_position = ant.move([])
+    ant_position, _ = ant.update([])
     new_position = ant.get_position()
     assert np.isclose(0., np.linalg.norm(ant_position - new_position)), 'ant position is not updated'
     assert np.isclose(1., np.linalg.norm(new_position - init_position)), 'ant did not move in steps on one'
