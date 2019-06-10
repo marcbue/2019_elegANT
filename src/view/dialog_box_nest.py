@@ -4,7 +4,7 @@ import pygame
 
 
 class DialogBoxNest(DialogBox):
-    def __init__(self, view, identifier, slider_data=[], active="False", name="Dialog_Box"):
+    def __init__(self, view, identifier, slider_data=[], active=False, name="Dialog_Box"):
         super(DialogBoxNest, self).__init__(view, identifier, x=75, y=0,
                                             width=25, height=100)
         self.slider_data = slider_data
