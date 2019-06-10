@@ -1,5 +1,5 @@
 from .game_object import GameObject
-
+from src.settings import all_params
 
 class Food(GameObject):
 
@@ -8,7 +8,7 @@ class Food(GameObject):
         self.size = size
 
     def update(self, *args):
-        if self.size <= 0:
+        if self.size <= all_params.model_params.food_min_size:
             return None
         else:
             return self.position
