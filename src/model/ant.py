@@ -111,7 +111,8 @@ class Ant(GameObject):
         if self.energy <= all_params.model_params.ant_min_energy:
             self.owner.ants.remove(self)
         if self.has_food:
-            if self.at_nest:  # has ant already arrived home?
+            # has ant already arrived home?
+            if self.at_nest:
                 return self.position, None
             else:  # Go to nest if has food
                 return self.move_to(self.home.position), self.set_trace(args[0])
@@ -289,7 +290,7 @@ class Ant(GameObject):
 
     def move_randomly(self):
         """
-        changes the position of the ant using a random walk and combining it with the direction
+        changes the position of the ant using a random walk and combining it with the previous direction
         direction is updated
         :return: the updated position is returned
         """
@@ -309,9 +310,7 @@ class Ant(GameObject):
         :param obj_position: the position of object which the ant should move towards
         :return: the updated position
         """
-        # Go to the nearest nest.
-        # TO DO get nearest nest position
-        # assuming that nest_position is the nearest nest position
+        # Go towards the position of obj_position
         if distance(obj_position - self.position) > 0.:
             return_movement = (obj_position - self.position) / distance(obj_position - self.position)
         else:
