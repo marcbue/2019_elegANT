@@ -1,31 +1,24 @@
 import pygame
+import math
 from .view_element import ViewElement
-from math import sqrt
-
 
 class Ant(ViewElement):
-    def __init__(self, view, identifier, x, y, radius, color, health=10, max_health=10, shape='square',
-                 has_image=True, image_path='src/view/images/ant.png'):
-        super(Ant, self).__init__(view, identifier, x, y, width=radius * 2, height=radius * 2)
-        self.color = color
-        self.radius = radius
-        self.shape = shape
+    def __init__(self, view, identifier, x, y, color, direction, health):
+        super(Ant, self).__init__(view, identifier, x, y, width=64, height=64)
+        self.z_index = 9
+        self.direction = direction
         self.health = health
-        self.max_health = max_health
-        self.has_image = has_image
-        self.image_path = image_path
-        if self.has_image:
-            self.image = pygame.image.load(self.image_path)
+        self.has_food = False
+        name = "_".join((str(c) for c in color))
+        self.img = pygame.image.load(f"src/view/images/{name}_worker.png")
+        self.img_food = pygame.image.load(f"src/view/images/{name}_worker_food.png")
 
     def draw(self):
-        relative_width = int(self.width * sqrt(self.health / self.max_health))
-        relative_height = int(self.height * sqrt(self.health / self.max_health))
-
-        if self.has_image:
-            image = pygame.transform.scale(self.image, (relative_width, relative_height))
-            self.view.screen.blit(image, (self.x, self.y, relative_width, relative_height))
-        elif self.shape == 'circle':
-            relative_radius = int(self.radius * 2 * sqrt(self.health / self.max_health))
-            pygame.draw.circle(self.view.screen, self.color, (self.x, self.y), relative_radius)
-        elif self.shape == 'square':
-            pygame.draw.rect(self.view.screen, self.color, (self.x, self.y, relative_width, relative_height))
+        ant_img = self.img_food if self.has_food else self.img
+        
+        rotation = math.atan2(self.direction[0], self.direction[1]) * (180 / math.pi) * -1
+        ant_img = pygame.transform.rotate(ant_img, rotation)
+        loc = ant_img.get_rect().center
+        loc = (self.x - (loc[0]), self.y - (loc[1]))
+        
+        self.view.screen.blit(ant_img, loc)
