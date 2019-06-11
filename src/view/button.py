@@ -27,6 +27,8 @@ class Button(UIElement):
                                                   self.height))
         elif self.shape == 'square':
             pygame.draw.rect(self.view.screen, self.color, (self.x, self.y, self.width, self.height))
+
             if self.has_image is True:
                 image = pygame.transform.scale(pygame.image.load(self.image_path), (self.width, self.height))
                 self.view.screen.blit(image, pygame.Rect(self.x, self.y, self.width, self.height))
+
