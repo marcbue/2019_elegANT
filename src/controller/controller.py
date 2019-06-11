@@ -43,7 +43,7 @@ class Controller:
         """
         if player_name:
             self.view.change_view_state(View.GAMEVIEW)
-            player = Player(color, player_name)
+            player = Player(player_name, color)
             player_list = [player]
             game_state = GameState(player_list)
             return game_state
