@@ -10,10 +10,11 @@ STATE_BUTTON = 'add'
 STATE_LOADING = 'loading'
 
 
-class BuildScoutButton(Button):
-    def __init__(self, *args, **kwargs):
-        super(BuildScoutButton, self).__init__(*args, **kwargs)
+class BuildAntButton(Button):
+    def __init__(self, ant_type, *args, **kwargs):
+        super(BuildAntButton, self).__init__(*args, **kwargs)
 
+        self.ant_type = ant_type
         self.state = STATE_BUTTON
         self.counter = 0
         self._loading_angle = 0
