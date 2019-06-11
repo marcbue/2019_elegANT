@@ -300,6 +300,7 @@ class Ant(GameObject):
         else:
             return_movement = array([0., 0.])  # THIS IS NOT THE BEST IMPLEMENTATION
         self.position += return_movement
+        self.direction = return_movement
         return self.position
 
     def set_trace(self, noticeable_objects):
