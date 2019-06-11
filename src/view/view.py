@@ -73,17 +73,17 @@ class View:
 
         # Add element for choosing players color
         player_colors = [
-            (220, 0, 0),
-            (255, 160, 125),
-            (0, 0, 255),
-            (255, 20, 147),
-            (178, 58, 238),
-            (0, 245, 255),
-            (0, 200, 0),
-            (255, 165, 0)
+            (219, 95, 87),
+            (219, 194, 87),
+            (145, 219, 87),
+            (87, 219, 128),
+            (87, 211, 219),
+            (87, 112, 219),
+            (161, 87, 219),
+            (219, 87, 178)
         ]
 
-        self.add_element(ColorSelector(self, "color_selector", 60, 50, 5, 1, player_colors))
+        self.add_element(ColorSelector(self, "color_selector", 60, 50, 20, 20, player_colors))
 
         start_button = Button(self, "start_button", 5, 85, 12.5, 10, -1, (100, 100, 100), (150, 150, 150), 'square')
 
