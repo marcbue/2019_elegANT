@@ -199,7 +199,8 @@ class View:
                     element.event_handler(event)
 
         if self.event_dict:
-            print(self.event_dict)
+            pass
+            #print(self.event_dict)
 
         return self.event_dict
 

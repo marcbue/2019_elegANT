@@ -75,12 +75,13 @@ class World(ViewElement):
                 elif type(element) == Model_Ant:
                     self.game_elements[element.id] = Ant(self.view, "ant", view_x, view_y, 10, (220, 0, 0))
                 else:
-                    print(f"Should create {element}")
+                    pass
+                    #print(f"Should create {element}")
 
         # Remove out of view elements
         for element_id in list(self.game_elements.keys()):
             if element_id not in element_ids:
-                print(f"Remove Element {element_id} from view")
+                #print(f"Remove Element {element_id} from view")
                 del self.game_elements[element_id]
 
     def _to_view_coordinates(self, position):
