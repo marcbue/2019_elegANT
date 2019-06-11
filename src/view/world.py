@@ -73,7 +73,8 @@ class World(ViewElement):
             # Create elements
             else:
                 view_x, view_y = self._to_view_coordinates(element.position)
-                color = (87, 112, 219)  # element.color
+                if hasattr(element, 'owner'):
+                    color = element.owner
 
                 if type(element) == Model_Nest:
                     self.game_elements[element.id] = Nest(self.view, element.id, view_x,
