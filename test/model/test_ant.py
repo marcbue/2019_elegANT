@@ -7,6 +7,7 @@ from src.utils import array
 import numpy as np
 import pytest
 
+
 # TODO it would be best if all tests only call update function to make sure update logic is correct
 
 
@@ -62,13 +63,6 @@ def set_up_food_fixed():
 def set_up_food():
     food = Food(position=array([13., 17.]), size=1)
     return food
-
-
-def test_update_remove_ant(set_up_environment):
-    player, nest, ant = set_up_environment
-    ant.energy = 0
-    ant.update([])
-    assert len(player.ants) == 0, 'the ant has not died'
 
 
 def test_move_has_food(set_up_environment):
