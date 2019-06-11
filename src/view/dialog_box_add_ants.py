@@ -1,4 +1,3 @@
-import math
 import pygame
 from .dialog_box import DialogBox
 from .button_build_ant import BuildAntButton
@@ -14,7 +13,7 @@ class DialogBoxAddAnts(DialogBox):
         self.name = name
         self.buttons = {}
         self.ant_types = [
-           'scout'
+            'scout'
         ]
         self.set_buttons()
 
@@ -47,7 +46,12 @@ class DialogBoxAddAnts(DialogBox):
         self.view.add_element(build_ants_button)
 
         if self.active:
-            pygame.draw.rect(self.view.screen, pygame.Color("white"), [self.x + 100, self.y - 50, 300, self.height + 50], 2)
+            pygame.draw.rect(
+                self.view.screen,
+                pygame.Color("white"),
+                [self.x + 100, self.y - 50, 300, self.height + 50],
+                2
+            )
 
             for identifier, button in self.buttons.items():
                 self.view.add_element(button)
