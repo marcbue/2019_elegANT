@@ -199,12 +199,9 @@ class Ant(GameObject):
         :param food: the food object
         :return:
         """
-        if food.size >= self.loading_capacity:
-            food.size -= self.loading_capacity
-            self.has_food = self.loading_capacity
-        else:
-            self.has_food = food.size
-            food.size = 0.
+
+        amount_taken = food.take_some(self.loading_capacity)
+        self.has_food = amount_taken
 
     def move_to_food(self, foods):
         """
