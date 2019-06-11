@@ -111,7 +111,7 @@ class Ant(GameObject):
         if self.energy <= all_params.model_params.ant_min_energy:
             self.owner.ants.remove(self)
         if self.has_food:
-            if self.at_nest():  # has ant already arrived home?
+            if self.at_nest:  # has ant already arrived home?
                 return self.position, None
             else:  # Go to nest if has food
                 return self.move_to(self.home.position), self.set_trace(args[0])
@@ -134,40 +134,55 @@ class Ant(GameObject):
         foods = get_objects_of_type(noticeable_objects, Food)
         pheromones = get_objects_of_type(noticeable_objects, Pheromone)
 
-        if foods:  # Priority is to get food
+        # Priority is to get food
+        if foods:
             return self.move_to_food(foods)
 
-        elif pheromones:  # In case there is no food, pheromones are taken into account
+        # In case there is no food, pheromones are taken into account
+        elif pheromones:
             return self.move_to_pheromone(pheromones)
 
-        else:  # In case there is no food nor pheromone scents, move randomly
+        # In case there is no food nor pheromone scents, move randomly
+        else:
             return self.move_randomly()
 
     def at_nest(self):
+        """
+        checks if ant is close enough to nest position, if True, unload food, and set pheromone strength to zero
+        :return: True is ant is at nest position, otherwise False
+        """
+        at_nest = False
+
         if distance(self.position - self.home.position) <= all_params.model_params.ant_min_dist_to_nest:
             self.position = self.home.position
             self.unload_food()
             self.pheromone_strength = 0.
-            return True
-        else:
-            return False
+            at_nest = True
+
+        return at_nest
 
     def at_food(self, noticeable_objects):
         """
-        checks if ant is at food location, if True, Load Food and set has_food to loaded food
+        checks if ant is at food location, if True, load food and set has_food to loaded food
         :param noticeable_objects:
         :return: True if ant is at food position, else False
         """
-        for obj in noticeable_objects:
-            if isinstance(obj, Food):
+        at_food = False
+
+        # getting list of foods from noticeable objects
+        foods = get_objects_of_type(noticeable_objects, Food)
+
+        if foods:
+            for obj in foods:
                 if distance(self.position - obj.position) <= all_params.model_params.ant_min_dist_to_food:
                     self.position = obj.position
                     self.load_food(obj)
                     self.pheromone_strength = min(100. * (obj.size / distance(self.position - self.home.position)),
                                                   self.max_pheromone_strength) / self.pheromone_dist_decay
-                    return True
-        else:
-            return False
+                    at_food = True
+                    break
+
+        return at_food
 
     def unload_food(self):  # TO DO
         """
@@ -275,6 +290,7 @@ class Ant(GameObject):
     def move_randomly(self):
         """
         changes the position of the ant using a random walk and combining it with the direction
+        direction is updated
         :return: the updated position is returned
         """
         while True:  # to avoid standing still and divide by zero
@@ -289,6 +305,7 @@ class Ant(GameObject):
     def move_to(self, obj_position):
         """
         changing the position of the ant towards the given obj_position with step size of one
+        direction is updated
         :param obj_position: the position of object which the ant should move towards
         :return: the updated position
         """
