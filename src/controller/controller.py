@@ -26,6 +26,7 @@ class Controller:
 
         self.event_list_game_view = {
             'build_scout': self.create_ant,
+            'show_build_ants': self.show_build_ants_dialog,
             'quit_game': self.exit_game
         }
 

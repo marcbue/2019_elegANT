@@ -47,7 +47,7 @@ class DialogBoxAddAnts(DialogBox):
         self.view.add_element(build_ants_button)
 
         if self.active:
-            pygame.draw.rect(self.view.screen, pygame.Color("black"), [self.x + 100, self.y - 50, 1000, self.height + 50], 2)
+            pygame.draw.rect(self.view.screen, pygame.Color("white"), [self.x + 100, self.y - 50, 300, self.height + 50], 2)
 
             for identifier, button in self.buttons.items():
                 self.view.add_element(button)

@@ -192,7 +192,6 @@ class View:
             else:
                 iteration_copy = self.elements.copy()
                 for element in iteration_copy.values():
-                    print("element", element)
                     element.event_handler(event)
 
         if self.event_dict:
