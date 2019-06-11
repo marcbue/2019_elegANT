@@ -111,7 +111,7 @@ class Ant(GameObject):
         if self.energy <= all_params.model_params.ant_min_energy:
             self.owner.ants.remove(self)
         if self.has_food:
-            if self.at_nest:  # has ant already arrived home?
+            if self.at_nest():  # has ant already arrived home?
                 return self.position, None
             else:  # Go to nest if has food
                 return self.move_to(self.home.position), self.set_trace(args[0])
