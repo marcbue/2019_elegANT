@@ -109,7 +109,7 @@ class Ant(GameObject):
         :return: [tuple] updated ant position, new pheromone or None
         """
         if self.energy <= all_params.model_params.ant_min_energy:
-            self.owner.ants.remove(self)
+            return None, None
         if self.has_food:
 
             if self.at_nest():
