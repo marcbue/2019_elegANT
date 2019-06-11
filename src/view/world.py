@@ -92,7 +92,6 @@ class World(ViewElement):
         # Remove out of view elements
         for element_id in list(self.game_elements.keys()):
             if element_id not in element_ids:
-                #print(f"Remove Element {element_id} from view")
                 del self.game_elements[element_id]
 
     def _to_view_coordinates(self, position):

@@ -198,10 +198,6 @@ class View:
                 for element in iteration_copy.values():
                     element.event_handler(event)
 
-        if self.event_dict:
-            pass
-            #print(self.event_dict)
-
         return self.event_dict
 
     def increment_ant_count(self):
