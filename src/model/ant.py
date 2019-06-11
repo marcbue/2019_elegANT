@@ -154,7 +154,7 @@ class Ant(GameObject):
         at_nest = False
 
         if distance(self.position - self.home.position) <= all_params.model_params.ant_min_dist_to_nest:
-            self.position = self.home.position
+            self.position = self.home.position.copy()
             self.unload_food()
             self.pheromone_strength = 0.
             at_nest = True
@@ -175,7 +175,7 @@ class Ant(GameObject):
         if foods:
             for obj in foods:
                 if distance(self.position - obj.position) <= all_params.model_params.ant_min_dist_to_food:
-                    self.position = obj.position
+                    self.position = obj.position.copy()
                     self.load_food(obj)
                     self.pheromone_strength = min(100. * (obj.size / distance(self.position - self.home.position)),
                                                   self.max_pheromone_strength) / self.pheromone_dist_decay
@@ -332,7 +332,7 @@ class Ant(GameObject):
                     obj.increase(added_strength=self.pheromone_strength)
                     return None
         else:
-            return Pheromone(self.position, self.owner, initial_strength=self.pheromone_strength)
+            return Pheromone(self.position.copy(), self.owner, initial_strength=self.pheromone_strength)
 
     # TODO: This needs an update function that the world class can call for each ant. -- Unless move is going to
     #  handle food detection, loading, unloading, etc...
