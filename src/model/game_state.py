@@ -39,11 +39,10 @@ class GameState:
         """
         self.players = player_list
         self.world = KdTreeAndDict()
-        all_colors = [player.color for player in player_list]
         positions = []
         for i in range(len(player_list)):
             positions.append(random(2) * 250)
-        self.world.create_nests(all_colors, positions, health=100, size=10)
+        self.world.create_nests(player_list, positions, health=100, size=10)
         self.generate_random_food(array([-250, 250]), array([250, -250]), 50, [5] * 50)
 
     def get_objects_in_region(self, top_left, bottom_right):

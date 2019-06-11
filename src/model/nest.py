@@ -1,4 +1,5 @@
 from .game_object import GameObject
+from src.settings import all_params
 
 
 class Nest(GameObject):
@@ -38,7 +39,7 @@ class Nest(GameObject):
         self.owner = player
         self.size = size
         self.health = health
-        self.food = 0
+        self.food = all_params.model_params.nest_initial_food
         self.ant_ids = set()
 
     def __str__(self):
@@ -53,7 +54,6 @@ class Nest(GameObject):
 
         """
         self.food += food_amount
-        return self.food
 
     def create_ant(self):
         """ Create new ant to this nest after checking if the nest has enough food.
@@ -61,7 +61,7 @@ class Nest(GameObject):
         :return:
 
         """
-        ant_cost = 1
+        ant_cost = all_params.model_params.creating_ant_cost
         if self.food >= ant_cost:
             self.food -= ant_cost
             # Generate ant at position in nest.
@@ -74,7 +74,7 @@ class Nest(GameObject):
 
         """
         self.health -= damage
-        if self.health <= 0:
+        if self.health <= all_params.model_params.nest_min_health:
             print("Oh no, your colony has a problem!")
             # TODO: remove colony
 
@@ -87,7 +87,7 @@ class Nest(GameObject):
         return len(self.ant_ids)
 
     def update(self, *args):
-        if self.health <= 0:
+        if self.health <= all_params.model_params.nest_min_health:
             return None
         else:
             return self.position

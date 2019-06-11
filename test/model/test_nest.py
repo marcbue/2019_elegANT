@@ -23,12 +23,6 @@ def test_nest_creation(nest_creation_fixed):
 
 
 @pytest.fixture
-def set_up_food_fixed():
-    food_amount = 3.5
-    return food_amount
-
-
-@pytest.fixture
 def set_up_nest():
     position = array([0.5, 0.5])
     color = (178, 58, 238)
@@ -37,11 +31,12 @@ def set_up_nest():
     return position, color, size, health
 
 
-def test_increase_food(set_up_nest, set_up_food_fixed):
+def test_increase_food(set_up_nest):
     position, color, size, health = set_up_nest
+    food_amount = 3.5
     nest = Nest(position, color, size, health)
-    food_amount = set_up_food_fixed
-    amount_tested = nest.increase_food(food_amount)
+    nest.increase_food(food_amount)
+    amount_tested = nest.food
     assert food_amount == amount_tested
 
 
@@ -52,16 +47,10 @@ def test_increase_food(set_up_nest, set_up_food_fixed):
 #     assert
 
 
-@pytest.fixture
-def set_up_damage_fixed():
-    damage = 5
-    return damage
-
-
-def test_decrease_health(set_up_nest, set_up_damage_fixed):
+def test_decrease_health(set_up_nest):
     position, color, size, health = set_up_nest
+    damage = 5
     nest = Nest(position, color, size, health)
-    damage = set_up_damage_fixed
     nest.decrease_health(damage)
     assert nest.health == health - damage
 
@@ -70,15 +59,10 @@ def test_decrease_health(set_up_nest, set_up_damage_fixed):
 #     assert
 #
 
-@pytest.fixture
-def health_update_fixed():
+
+def test_update(set_up_nest):
     health1 = 5
     health2 = -3
-    return health1, health2
-
-
-def test_update(set_up_nest, health_update_fixed):
-    health1, health2 = health_update_fixed
     position, color, size, health = set_up_nest
     nest1 = Nest(position, color, size, health1)
     new_position1 = nest1.update(health1)
