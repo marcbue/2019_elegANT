@@ -3,9 +3,9 @@ import pygame
 from .button import Button
 
 
-class BuildAntsButton(Button):
+class AntsDialogButton(Button):
     def __init__(self, *args, **kwargs):
-        super(BuildAntsButton, self).__init__(*args, **kwargs)
+        super(AntsDialogButton, self).__init__(*args, **kwargs)
 
         self.counter = 0
         self._loading_angle = 0
