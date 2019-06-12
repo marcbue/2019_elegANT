@@ -39,11 +39,11 @@ class Nest(GameObject):
         self.owner = player
         self.size = size
         self.health = health
-        self.food = all_params.model_params.nest_initial_food
+        self.food = all_params.NestModelParams.initial_food
         self.ant_ids = set()
 
     def __str__(self):
-        return "Nest {} at postion {} with health {} and food {}".format(self.id, self.position, self.health,
+        return "Nest {} at position {} with health {} and food {}".format(self.id, self.position, self.health,
                                                                          self.food)
 
     def increase_food(self, food_amount):
@@ -61,7 +61,7 @@ class Nest(GameObject):
         :return:
 
         """
-        ant_cost = all_params.model_params.creating_ant_cost
+        ant_cost = all_params.NestModelParams.create_ant_cost
         if self.food >= ant_cost:
             self.food -= ant_cost
             # Generate ant at position in nest.
@@ -74,7 +74,7 @@ class Nest(GameObject):
 
         """
         self.health -= damage
-        if self.health <= all_params.model_params.nest_min_health:
+        if self.health <= all_params.NestModelParams.min_health:
             print("Oh no, your colony has a problem!")
             # TODO: remove colony
 
@@ -87,7 +87,7 @@ class Nest(GameObject):
         return len(self.ant_ids)
 
     def update(self, *args):
-        if self.health <= all_params.model_params.nest_min_health:
+        if self.health <= all_params.NestModelParams.min_health:
             return None
         else:
             return self.position
