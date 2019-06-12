@@ -67,22 +67,22 @@ class Ant(GameObject):
         # TODO: needs to be updated as well
         self.owner.ants.add(self)
 
-        self.has_food = all_params.model_params.ant_has_food
-        self.energy = all_params.model_params.ant_initial_energy
-        self.direction = all_params.model_params.ant_initial_direction
+        self.has_food = all_params.ant_model_params.has_food
+        self.energy = all_params.ant_model_params.initial_energy
+        self.direction = all_params.ant_model_params.initial_direction
         self.home = home_nest
-        self.pheromone_strength = all_params.model_params.ant_initial_pheromone_strength
+        self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
 
         # setting parameters
-        self.loading_capacity = all_params.model_params.ant_loading_capacity
-        self.min_pheromone_strength = all_params.model_params.min_pheromone_strength
-        self.max_pheromone_strength = all_params.model_params.max_pheromone_strength
-        self.pheromone_dist_decay = all_params.model_params.pheromone_dist_decay
-        self.direction_memory = all_params.model_params.ant_direction_memory
-        self.foodiness = all_params.model_params.ant_foodiness
-        self.inscentiveness = all_params.model_params.ant_inscentiveness
-        self.directionism = all_params.model_params.ant_directionism
-        self.explorativeness = all_params.model_params.ant_explorativeness
+        self.loading_capacity = all_params.ant_model_params.loading_capacity
+        self.min_pheromone_strength = all_params.ant_model_params.min_pheromone_strength
+        self.max_pheromone_strength = all_params.ant_model_params.max_pheromone_strength
+        self.pheromone_dist_decay = all_params.ant_model_params.pheromone_dist_decay
+        self.direction_memory = all_params.ant_model_params.direction_memory
+        self.foodiness = all_params.ant_model_params.foodiness
+        self.inscentiveness = all_params.ant_model_params.inscentiveness
+        self.directionism = all_params.ant_model_params.directionism
+        self.explorativeness = all_params.ant_model_params.explorativeness
 
     def __str__(self):
         return "Ant {} at position {} and energy lvl {} from player {}".format(self.id, self.position,
@@ -108,7 +108,7 @@ class Ant(GameObject):
         :param args: [iterable?] list/tuple of noticeable objects
         :return: [tuple] updated ant position, new pheromone or None
         """
-        if self.energy <= all_params.model_params.ant_min_energy:
+        if self.energy <= all_params.ant_model_params.min_energy:
             return None, None
 
         if self.has_food:
@@ -155,7 +155,7 @@ class Ant(GameObject):
         """
         at_nest = False
 
-        if distance(self.position - self.home.position) <= all_params.model_params.ant_min_dist_to_nest:
+        if distance(self.position - self.home.position) <= all_params.ant_model_params.min_dist_to_nest:
             self.position = self.home.position.copy()
             self.unload_food()
             self.pheromone_strength = 0.
@@ -176,7 +176,7 @@ class Ant(GameObject):
 
         if foods:
             for obj in foods:
-                if distance(self.position - obj.position) <= all_params.model_params.ant_min_dist_to_food:
+                if distance(self.position - obj.position) <= all_params.ant_model_params.min_dist_to_food:
                     self.position = obj.position.copy()
                     self.load_food(obj)
                     self.pheromone_strength = min(100. * (obj.size / distance(self.position - self.home.position)),
@@ -328,7 +328,7 @@ class Ant(GameObject):
                                       self.pheromone_dist_decay * self.pheromone_strength)
         for obj in noticeable_objects:
             if isinstance(obj, Pheromone):
-                if distance(self.position - obj.position) <= all_params.model_params.ant_max_dist_to_pheromone:
+                if distance(self.position - obj.position) <= all_params.ant_model_params.max_dist_to_pheromone:
                     obj.increase(added_strength=self.pheromone_strength)
                     return None
         else:
