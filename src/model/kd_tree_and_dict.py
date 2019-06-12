@@ -157,7 +157,7 @@ class KdTreeAndDict(World):
                 if type(item) == Ant:
                     # TODO: pick radius (or implement it in ant class)
                     noticeable_objects = self.get_circular_region(item.position,
-                                                                  radius=all_params.TreeModelParams.circular_region_radius)
+                                                                  radius=all_params.tree_model_params.circular_region_radius)
                     new_position, new_pheromone = item.update(noticeable_objects)
 
                     # Only handle if new pheromone object needs to be created.
