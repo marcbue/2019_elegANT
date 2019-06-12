@@ -9,7 +9,7 @@ class Food(GameObject):
         self.size = size
 
     def update(self, *args):
-        if self.size <= all_params.FoodModelParams.min_size:
+        if self.size <= all_params.food_model_params.min_size:
             return None
         else:
             return self.position
