@@ -1,6 +1,7 @@
 from .game_object import GameObject
 from src.settings import all_params
 
+
 class Pheromone(GameObject):
     """
             A class used to represent a nest object
@@ -17,7 +18,7 @@ class Pheromone(GameObject):
                 a number that specifies the pheromone level at this position
     """
 
-    def __init__(self, position, player, initial_strength=all_params.model_params.pheromone_initial_strength):
+    def __init__(self, position, player, initial_strength=all_params.PheromoneModelParams.initial_strength):
         """
 
         :param position: (list) coordinates of the nest
@@ -35,17 +36,17 @@ class Pheromone(GameObject):
     def update(self, *args):
         self._decay()
         # TODO: use another cutoff value for pheromone disappearance
-        if self.strength <= all_params.model_params.pheromone_min_strength:
+        if self.strength <= all_params.PheromoneModelParams.min_strength:
             self.strength = 0.
             return None
         else:
             return self.position
 
-    def increase(self, added_strength=all_params.model_params.pheromone_added_strength):
-        if added_strength <= all_params.model_params.pheromone_min_strength:
+    def increase(self, added_strength=all_params.PheromoneModelParams.added_strength):
+        if added_strength <= all_params.PheromoneModelParams.min_strength:
             raise ValueError('This function should not be used to decrease pheromone strength (or leave it unchanged)')
         self.strength += added_strength
 
     def _decay(self):
         # TODO decide on another decaying scheme
-        self.strength = all_params.model_params.pheromone_decay_factor * self.strength
+        self.strength = all_params.PheromoneModelParams.decay_factor * self.strength
