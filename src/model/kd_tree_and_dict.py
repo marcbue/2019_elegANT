@@ -1,4 +1,5 @@
 from scipy.spatial import cKDTree
+import numpy as np
 
 from .ant import Ant
 from .food import Food
@@ -44,7 +45,7 @@ class KdTreeAndDict(World):
 
         """
         # TODO: can multithread if called with many params and -1
-        dists, idx = self.kd_tree.query(position, k, p=all_params.model_params.tree_distance_type)
+        dists, idx = self.kd_tree.query(position, k, p=2)
         dict_idxs = self.point_matrix[idx]
         if k == 1:
             game_object_list = self.all_objects.get(tuple(dict_idxs), [])
@@ -92,7 +93,7 @@ class KdTreeAndDict(World):
         :return result: (list) All objects in the specified circular region
 
         """
-        position_idx = self.kd_tree.query_ball_point(center, radius, p=all_params.model_params.circular_region_distance)
+        position_idx = self.kd_tree.query_ball_point(center, radius, p=2)
         positions = self.point_matrix[position_idx]
         result = []
         for position in positions:
@@ -112,7 +113,7 @@ class KdTreeAndDict(World):
         # TODO: can multithread if called with many params and -1
         if len(position_list) == 1:
             return self.get_k_nearest(position_list, k)
-        dists, idx_list = self.kd_tree.query(position_list, k, p=all_params.model_params.tree_distance_type)
+        dists, idx_list = self.kd_tree.query(position_list, k, p=2)
         result = []
         for idx in idx_list:
             if len(idx.shape) == 0:
@@ -135,7 +136,7 @@ class KdTreeAndDict(World):
         """
 
         position_idx_list = self.kd_tree.query_ball_point(center_list, radius_list,
-                                                          p=all_params.model_params.circular_region_distance)
+                                                          p=2)
         result = []
         for position_idx in position_idx_list:
             positions = self.point_matrix[position_idx]
@@ -156,7 +157,7 @@ class KdTreeAndDict(World):
                 if type(item) == Ant:
                     # TODO: pick radius (or implement it in ant class)
                     noticeable_objects = self.get_circular_region(item.position,
-                                                                  radius=all_params.model_params.circular_region_radius)
+                                                                  radius=all_params.TreeModelParams.circular_region_radius)
                     new_position, new_pheromone = item.update(noticeable_objects)
 
                     # Only handle if new pheromone object needs to be created.
@@ -261,7 +262,7 @@ class KdTreeAndDict(World):
 
         """
 
-        position_idx = self.kd_tree.query_ball_point(center, radius, p=all_params.model_params.square_region_distance)
+        position_idx = self.kd_tree.query_ball_point(center, radius, p=np.inf)
         positions = self.point_matrix[position_idx]
         result = []
         for position in positions:
