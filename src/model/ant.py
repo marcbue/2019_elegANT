@@ -61,7 +61,7 @@ class Ant(GameObject):
         :param home_nest: (Nest) Coordinates of ant position
 
         """
-        position = home_nest.position
+        position = home_nest.position.copy()
         super(Ant, self).__init__(position)
         self.owner = player
         # TODO: needs to be updated as well
@@ -109,9 +109,11 @@ class Ant(GameObject):
         :return: [tuple] updated ant position, new pheromone or None
         """
         if self.energy <= all_params.model_params.ant_min_energy:
-            self.owner.ants.remove(self)
+            return None, None
+
         if self.has_food:
-            if self.at_nest():  # has ant already arrived home?
+
+            if self.at_nest():
                 return self.position, None
             else:  # Go to nest if has food
                 return self.move_to(self.home.position), self.set_trace(args[0])
@@ -134,40 +136,55 @@ class Ant(GameObject):
         foods = get_objects_of_type(noticeable_objects, Food)
         pheromones = get_objects_of_type(noticeable_objects, Pheromone)
 
-        if foods:  # Priority is to get food
+        # Priority is to get food
+        if foods:
             return self.move_to_food(foods)
 
-        elif pheromones:  # In case there is no food, pheromones are taken into account
+        # In case there is no food, pheromones are taken into account
+        elif pheromones:
             return self.move_to_pheromone(pheromones)
 
-        else:  # In case there is no food nor pheromone scents, move randomly
+        # In case there is no food nor pheromone scents, move randomly
+        else:
             return self.move_randomly()
 
     def at_nest(self):
+        """
+        checks if ant is close enough to nest position, if True, unload food, and set pheromone strength to zero
+        :return: True is ant is at nest position, otherwise False
+        """
+        at_nest = False
+
         if distance(self.position - self.home.position) <= all_params.model_params.ant_min_dist_to_nest:
-            self.position = self.home.position
+            self.position = self.home.position.copy()
             self.unload_food()
             self.pheromone_strength = 0.
-            return True
-        else:
-            return False
+            at_nest = True
+
+        return at_nest
 
     def at_food(self, noticeable_objects):
         """
-        checks if ant is at food location, if True, Load Food and set has_food to loaded food
+        checks if ant is at food location, if True, load food and set has_food to loaded food
         :param noticeable_objects:
         :return: True if ant is at food position, else False
         """
-        for obj in noticeable_objects:
-            if isinstance(obj, Food):
+        at_food = False
+
+        # getting list of foods from noticeable objects
+        foods = get_objects_of_type(noticeable_objects, Food)
+
+        if foods:
+            for obj in foods:
                 if distance(self.position - obj.position) <= all_params.model_params.ant_min_dist_to_food:
-                    self.position = obj.position
+                    self.position = obj.position.copy()
                     self.load_food(obj)
                     self.pheromone_strength = min(100. * (obj.size / distance(self.position - self.home.position)),
                                                   self.max_pheromone_strength) / self.pheromone_dist_decay
-                    return True
-        else:
-            return False
+                    at_food = True
+                    break
+
+        return at_food
 
     def unload_food(self):  # TO DO
         """
@@ -183,12 +200,9 @@ class Ant(GameObject):
         :param food: the food object
         :return:
         """
-        if food.size >= self.loading_capacity:
-            food.size -= self.loading_capacity
-            self.has_food = self.loading_capacity
-        else:
-            self.has_food = food.size
-            food.size = 0.
+
+        amount_taken = food.take_some(self.loading_capacity)
+        self.has_food = amount_taken
 
     def move_to_food(self, foods):
         """
@@ -274,7 +288,8 @@ class Ant(GameObject):
 
     def move_randomly(self):
         """
-        changes the position of the ant using a random walk and combining it with the direction
+        changes the position of the ant using a random walk and combining it with the previous direction
+        direction is updated
         :return: the updated position is returned
         """
         while True:  # to avoid standing still and divide by zero
@@ -289,17 +304,17 @@ class Ant(GameObject):
     def move_to(self, obj_position):
         """
         changing the position of the ant towards the given obj_position with step size of one
+        direction is updated
         :param obj_position: the position of object which the ant should move towards
         :return: the updated position
         """
-        # Go to the nearest nest.
-        # TO DO get nearest nest position
-        # assuming that nest_position is the nearest nest position
+        # Go towards the position of obj_position
         if distance(obj_position - self.position) > 0.:
             return_movement = (obj_position - self.position) / distance(obj_position - self.position)
         else:
             return_movement = array([0., 0.])  # THIS IS NOT THE BEST IMPLEMENTATION
         self.position += return_movement
+        self.direction = return_movement
         return self.position
 
     def set_trace(self, noticeable_objects):
@@ -317,7 +332,7 @@ class Ant(GameObject):
                     obj.increase(added_strength=self.pheromone_strength)
                     return None
         else:
-            return Pheromone(self.position, self.owner, initial_strength=self.pheromone_strength)
+            return Pheromone(self.position.copy(), self.owner, initial_strength=self.pheromone_strength)
 
     # TODO: This needs an update function that the world class can call for each ant. -- Unless move is going to
     #  handle food detection, loading, unloading, etc...

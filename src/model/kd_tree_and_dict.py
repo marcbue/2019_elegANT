@@ -1,11 +1,9 @@
-import numpy as np
 from scipy.spatial import cKDTree
 
 from .ant import Ant
 from .food import Food
 from .nest import Nest
 from .world import World
-# from src.utils import timing
 
 from src.utils import array
 from src.settings import all_params
@@ -136,7 +134,8 @@ class KdTreeAndDict(World):
 
         """
 
-        position_idx_list = self.kd_tree.query_ball_point(center_list, radius_list, p=all_params.model_params.circular_region_distance)
+        position_idx_list = self.kd_tree.query_ball_point(center_list, radius_list,
+                                                          p=all_params.model_params.circular_region_distance)
         result = []
         for position_idx in position_idx_list:
             positions = self.point_matrix[position_idx]
@@ -156,7 +155,8 @@ class KdTreeAndDict(World):
 
                 if type(item) == Ant:
                     # TODO: pick radius (or implement it in ant class)
-                    noticeable_objects = self.get_circular_region(item.position, radius=all_params.model_params.circular_region_radius)
+                    noticeable_objects = self.get_circular_region(item.position,
+                                                                  radius=all_params.model_params.circular_region_radius)
                     new_position, new_pheromone = item.update(noticeable_objects)
 
                     # Only handle if new pheromone object needs to be created.
@@ -171,13 +171,10 @@ class KdTreeAndDict(World):
                 # new_position = tuple(new_position)
 
                 # Remove old positions.
-                # TODO: This is only so that the game runs smoothly.
-                # TODO: Why is this needed?
-                # TODO: Thank Marc :)
                 try:
                     self.all_objects[old_position].remove(item)
                 except ValueError:
-                    pass
+                    print(item)
 
                 if self.all_objects[old_position] is []:
                     self.all_objects.pop(old_position)

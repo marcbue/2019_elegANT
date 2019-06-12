@@ -16,3 +16,8 @@ class Food(GameObject):
 
     def __str__(self):
         return "Food {} at {} with size {}".format(self.id, self.position, self.size)
+
+    def take_some(self, max_amount):
+        actual_amount = min(self.size, max_amount)
+        self.size -= actual_amount
+        return actual_amount

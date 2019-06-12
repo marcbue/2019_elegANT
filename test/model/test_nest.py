@@ -35,7 +35,8 @@ def test_increase_food(set_up_nest):
     position, color, size, health = set_up_nest
     food_amount = 3.5
     nest = Nest(position, color, size, health)
-    amount_tested = nest.increase_food(food_amount)
+    nest.increase_food(food_amount)
+    amount_tested = nest.food
     assert food_amount == amount_tested
 
 
