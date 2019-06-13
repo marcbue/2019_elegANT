@@ -60,15 +60,16 @@ class GameState:
         """Return the states of all the objects and their positions at each time iteration """
         self.world.update()
 
-    def create_ants(self, nest, amount):
+    def create_ants(self, nest, ant_type="worker", amount=1):
         """Create new ant objects in the specific nest with the given positions
 
         :param nest: nest
+        :param ant_type: (string) Has to be one of "worker" or "scout", defines the type of Ant to be created
         :param amount: (int) number of ants that should be created
         :return:
 
         """
-        return self.world.create_ants(nest, amount)
+        return self.world.create_ants(nest, ant_type, amount)
 
     def create_nest(self, nest_position, player, size, health):
         return self.world.create_nests(nest_position, player, size, health)

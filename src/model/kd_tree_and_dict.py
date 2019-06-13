@@ -191,7 +191,7 @@ class KdTreeAndDict(World):
             self.all_objects.setdefault(tuple(position), []).append(Nest(position, player, size, health))
         self._update_tree()
 
-    def create_ants(self, nest, amount):
+    def create_ants(self, nest, ant_type, amount):
         """ Create new ant objects in a specific nest with the given amount and update the tree
 
         :param nest: nest object where new ants should be created
@@ -199,24 +199,18 @@ class KdTreeAndDict(World):
 
         """
 
-        # TODO: Make it so that signature is create_ants(self, ant_type, nest, amount), so that calling in controller
-        #  is simple, but discuss with controller before hand
-        #  Implementation would be quite nice as given below
-
-        """
         if ant_type == "worker":
             CorrectAnt = Worker
-        elif ant_type == "scout"
-            CorrectAnt = Scout
-            
-        for _ in range(amount):
-            self.all_objects.setdefault(tuple(position), []).append(CorrectAnt(player, nest))
-        """
+        # TODO: decomment once Scout exists
+        # elif ant_type == "scout"
+        #    CorrectAnt = Scout
+        else:
+            raise ValueError("Incorrect Ant type passed at ant creation.")
 
         player = nest.owner
         position = nest.position
         for _ in range(amount):
-            self.all_objects.setdefault(tuple(position), []).append(Worker(player, nest))
+            self.all_objects.setdefault(tuple(position), []).append(CorrectAnt(player, nest))
         self._update_tree()
 
     def create_food(self, position_list, size_list):
