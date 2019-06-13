@@ -84,9 +84,10 @@ def set_up_ants_fixed(set_up_food_fixed):
     tree, positions = set_up_food_fixed
     nest_positions = positions["nests"]
     nests = [tree.get_at_position(position)[0] for position in nest_positions]
+    ant_type = "worker"
     ant_positions = []
     for i, nest in enumerate(nests):
-        tree.create_ants(nest, i)
+        tree.create_ants(nest, ant_type, i)
         these_ants = []
         for j in range(i):
             these_ants.append(nest.position)
@@ -131,10 +132,12 @@ def test_create_ants(set_up_tree_nests_fixed):
     set_up_tree_nests_fixed should not build two nests at one position."""
     tree, positions = set_up_tree_nests_fixed
     amount_ants = randint(1, 6)
+    # TODO: extend by other ant_types
+    ant_type = "worker"
 
     for pos in positions:
         nest = tree.get_at_position(pos)[0]
-        tree.create_ants(nest, amount_ants)
+        tree.create_ants(nest, ant_type, amount_ants)
 
     for pos in positions:
         objects_at_pos = tree.get_at_position(pos)
