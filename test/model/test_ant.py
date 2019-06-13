@@ -1,4 +1,4 @@
-from src.model.ant import Ant
+from src.model.worker import Worker
 from src.model.nest import Nest
 from src.model.food import Food
 from src.model.player import Player
@@ -15,7 +15,7 @@ import pytest
 def set_up_environment():
     player = Player(name="Nobody", color=(178, 58, 238))
     nest = Nest(position=array([0., 0.]), player=player, size=10., health=100.)
-    ant = Ant(player=player, home_nest=nest)
+    ant = Worker(player=player, home_nest=nest)
     return player, nest, ant
 
 

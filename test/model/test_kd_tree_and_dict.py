@@ -1,7 +1,7 @@
 import pytest
 from numpy import linalg
 
-from src.model.ant import Ant
+from src.model.worker import Worker
 from src.model.food import Food
 from src.model.game_object import GameObject
 from src.model.kd_tree_and_dict import KdTreeAndDict
@@ -139,7 +139,7 @@ def test_create_ants(set_up_tree_nests_fixed):
     for pos in positions:
         objects_at_pos = tree.get_at_position(pos)
         assert len(objects_at_pos) == amount_ants + 1
-        assert sum([isinstance(obj, Ant) for obj in objects_at_pos]) == amount_ants
+        assert sum([isinstance(obj, Worker) for obj in objects_at_pos]) == amount_ants
 
 
 def test_create_nests(set_up_tree_nests_fixed):

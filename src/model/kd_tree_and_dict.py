@@ -1,5 +1,7 @@
 from scipy.spatial import cKDTree
+import numpy as np
 
+from .worker import Worker
 from .ant import Ant
 from .food import Food
 from .nest import Nest
@@ -44,7 +46,7 @@ class KdTreeAndDict(World):
 
         """
         # TODO: can multithread if called with many params and -1
-        dists, idx = self.kd_tree.query(position, k, p=all_params.model_params.tree_distance_type)
+        dists, idx = self.kd_tree.query(position, k, p=2)
         dict_idxs = self.point_matrix[idx]
         if k == 1:
             game_object_list = self.all_objects.get(tuple(dict_idxs), [])
@@ -92,7 +94,7 @@ class KdTreeAndDict(World):
         :return result: (list) All objects in the specified circular region
 
         """
-        position_idx = self.kd_tree.query_ball_point(center, radius, p=all_params.model_params.circular_region_distance)
+        position_idx = self.kd_tree.query_ball_point(center, radius, p=2)
         positions = self.point_matrix[position_idx]
         result = []
         for position in positions:
@@ -112,7 +114,7 @@ class KdTreeAndDict(World):
         # TODO: can multithread if called with many params and -1
         if len(position_list) == 1:
             return self.get_k_nearest(position_list, k)
-        dists, idx_list = self.kd_tree.query(position_list, k, p=all_params.model_params.tree_distance_type)
+        dists, idx_list = self.kd_tree.query(position_list, k, p=2)
         result = []
         for idx in idx_list:
             if len(idx.shape) == 0:
@@ -135,7 +137,7 @@ class KdTreeAndDict(World):
         """
 
         position_idx_list = self.kd_tree.query_ball_point(center_list, radius_list,
-                                                          p=all_params.model_params.circular_region_distance)
+                                                          p=2)
         result = []
         for position_idx in position_idx_list:
             positions = self.point_matrix[position_idx]
@@ -153,10 +155,10 @@ class KdTreeAndDict(World):
             for item in listy:
                 old_position = tuple(item.position)
 
-                if type(item) == Ant:
+                if isinstance(item, Ant):
                     # TODO: pick radius (or implement it in ant class)
-                    noticeable_objects = self.get_circular_region(item.position,
-                                                                  radius=all_params.model_params.circular_region_radius)
+                    noticeable_objects = self.get_circular_region(
+                        item.position, radius=all_params.tree_model_params.circular_region_radius)
                     new_position, new_pheromone = item.update(noticeable_objects)
 
                     # Only handle if new pheromone object needs to be created.
@@ -167,14 +169,8 @@ class KdTreeAndDict(World):
                 else:
                     new_position = item.update()
 
-                # TODO: should not be needed
-                # new_position = tuple(new_position)
-
                 # Remove old positions.
-                try:
-                    self.all_objects[old_position].remove(item)
-                except ValueError:
-                    print(item)
+                self.all_objects[old_position].remove(item)
 
                 if self.all_objects[old_position] is []:
                     self.all_objects.pop(old_position)
@@ -207,10 +203,24 @@ class KdTreeAndDict(World):
 
         """
 
+        # TODO: Make it so that signature is create_ants(self, ant_type, nest, amount), so that calling in controller
+        #  is simple, but discuss with controller before hand
+        #  Implementation would be quite nice as given below
+
+        """
+        if ant_type == "worker":
+            CorrectAnt = Worker
+        elif ant_type == "scout"
+            CorrectAnt = Scout
+            
+        for _ in range(amount):
+            self.all_objects.setdefault(tuple(position), []).append(CorrectAnt(player, nest))
+        """
+
         player = nest.owner
         position = nest.position
         for _ in range(amount):
-            self.all_objects.setdefault(tuple(position), []).append(Ant(player, nest))
+            self.all_objects.setdefault(tuple(position), []).append(Worker(player, nest))
         self._update_tree()
 
     def create_food(self, position_list, size_list):
@@ -261,7 +271,7 @@ class KdTreeAndDict(World):
 
         """
 
-        position_idx = self.kd_tree.query_ball_point(center, radius, p=all_params.model_params.square_region_distance)
+        position_idx = self.kd_tree.query_ball_point(center, radius, p=np.inf)
         positions = self.point_matrix[position_idx]
         result = []
         for position in positions:
@@ -290,7 +300,7 @@ class KdTreeAndDict(World):
         """
 
         everything = self.dump_content()
-        ants = [obj for obj in everything if type(obj) is Ant]
+        ants = [obj for obj in everything if isinstance(obj, Ant)]
         return ants
 
     def get_nests(self):
