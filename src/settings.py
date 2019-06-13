@@ -20,7 +20,6 @@ class AntModelParams:
 
     def __init__(self):
         super(AntModelParams, self).__init__()
-        self.has_food = 0.
         self.initial_energy = 100.
         self.initial_direction = array([0., 0.])
         self.initial_pheromone_strength = 0.

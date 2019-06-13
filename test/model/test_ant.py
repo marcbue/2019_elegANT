@@ -1,4 +1,4 @@
-from src.model.ant import Ant
+from src.model.worker import Ant
 from src.model.nest import Nest
 from src.model.food import Food
 from src.model.player import Player

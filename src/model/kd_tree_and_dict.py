@@ -1,7 +1,7 @@
 from scipy.spatial import cKDTree
 import numpy as np
 
-from .ant import Ant
+from .worker import Ant
 from .food import Food
 from .nest import Nest
 from .world import World

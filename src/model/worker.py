@@ -1,8 +1,7 @@
 import numpy as np
-from abc import ABC, abstractmethod
 
 from .food import Food
-from .game_object import  GameObject
+from .ant import Ant
 from .pheromone import Pheromone
 
 from src.utils import randint, array, get_objects_of_type, zeros
@@ -11,8 +10,51 @@ from src.settings import all_params
 distance = np.linalg.norm
 
 
-class Ant(GameObject, ABC):
-    def __init__(self, player, home_nest, foodiness = 0, inscentiveness = 0, directionism = 0, explorativeness = 0):
+class Worker(Ant):
+    """
+            A class used to represent an ant object
+            It inherits from GameObject class
+
+            ...
+
+            Attributes
+            ----------
+            owner: Player
+                Player object that the ant belongs to
+            position: list
+                a list of the ant coordinates
+            has_food: float
+                how much food the ant is carrying
+            energy: int
+                a number that specifies current energy value the ant has
+            direction: array
+                an array with the orientation/direction of the ant
+            home: Nest
+                Nest object that the ant belongs to
+            pheromone_strength: float
+                strength of the pheromone to leave in next step. This depends on food size and distance to nest.
+            loading_capacity: float
+                maximum amount of food that the ant can carry
+            min_pheromone_strength: float
+                minimum amount of pheromone that the ant leaves
+            max_pheromone_strength: float
+                maximum amount of pheromone that the ant leaves
+            pheromone_dist_decay: float
+                factor by which the pheromone strength is preserved while leaving the trail towards the nest
+            direction_memory: float
+                used for random movement. how much the ant takes into account the previous direction for new movement
+            foodiness: float
+                movement preference for big size of food
+            inscentiveness: float
+                movement preference for high intensity of pheromone
+            directionism: float
+                movement preference for previous movement direction
+            explorativeness: float
+                movement preference for big distances from nest
+
+    """
+
+    def __init__(self, player, home_nest):
         """Initialize ant object owner and position
 
         :param player: (Player) Owning Player of the ant
@@ -22,55 +64,25 @@ class Ant(GameObject, ABC):
         position = home_nest.position.copy()
         super(Ant, self).__init__(position)
         self.owner = player
-        # TODO: This is to be done outside of the ant class
-        # self.owner.ants.add(self)
+        # TODO: needs to be updated as well
+        self.owner.ants.add(self)
 
-        # All ants always have these
+        self.has_food = 0.
         self.energy = all_params.ant_model_params.initial_energy
         self.direction = all_params.ant_model_params.initial_direction
         self.home = home_nest
+        self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
+
+        # setting parameters
+        self.loading_capacity = all_params.ant_model_params.loading_capacity
+        self.min_pheromone_strength = all_params.ant_model_params.min_pheromone_strength
+        self.max_pheromone_strength = all_params.ant_model_params.max_pheromone_strength
+        self.pheromone_dist_decay = all_params.ant_model_params.pheromone_dist_decay
         self.direction_memory = all_params.ant_model_params.direction_memory
-
-        # Different ant types use a different subset of these parameters. All ants ar instantiated with all present
-        # parameters, and the ant type itself decides which ones to use. This mechanism is consists of the fact that
-        # the abstract class has setters for all of these values that automatically set these parameters to an invalid
-        # value and each Ant type should override only the setters of the variables that it actually uses.
-        self.foodiness = foodiness
-        self.inscentiveness = inscentiveness
-        self.directionism = directionism
-        self.explorativeness = explorativeness
-
-    @property
-    def foodiness(self):
-        return self.__foodiness
-
-    @foodiness.setter
-    def foodiness(self, value):
-        self.__foodiness = None
-
-    @property
-    def inscentiveness(self):
-        return self.__inscentiveness
-
-    @inscentiveness.setter
-    def inscentiveness(self, value):
-        self.__inscentiveness = None
-
-    @property
-    def directionism (self):
-        return self.__directionism
-
-    @directionism.setter
-    def directionism(self, value):
-        self.__directionism = None
-
-    @property
-    def explorativeness(self):
-        return self.__explorativeness
-
-    @explorativeness.setter
-    def explorativeness(self, value):
-        self.__explorativeness = None
+        self.foodiness = all_params.ant_model_params.foodiness
+        self.inscentiveness = all_params.ant_model_params.inscentiveness
+        self.directionism = all_params.ant_model_params.directionism
+        self.explorativeness = all_params.ant_model_params.explorativeness
 
     def __str__(self):
         return "Ant {} at position {} and energy lvl {} from player {}".format(self.id, self.position,
@@ -152,7 +164,8 @@ class Ant(GameObject, ABC):
         return at_nest
 
     def at_food(self, noticeable_objects):
-        """
+        """from abc import ABC, abstractmethod
+
         checks if ant is at food location, if True, load food and set has_food to loaded food
         :param noticeable_objects:
         :return: True if ant is at food position, else False

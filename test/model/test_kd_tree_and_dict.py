@@ -1,7 +1,7 @@
 import pytest
 from numpy import linalg
 
-from src.model.ant import Ant
+from src.model.worker import Ant
 from src.model.food import Food
 from src.model.game_object import GameObject
 from src.model.kd_tree_and_dict import KdTreeAndDict

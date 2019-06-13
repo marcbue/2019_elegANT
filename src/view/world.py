@@ -9,8 +9,8 @@ from .ant import Ant
 from .food_source import FoodSource
 
 from src.model.nest import Nest as Model_Nest
-from src.model.ant import Ant as Model_Ant
-from src.model.ant import Food as Model_Food
+from src.model.worker import Ant as Model_Ant
+from src.model.worker import Food as Model_Food
 
 
 class World(ViewElement):
