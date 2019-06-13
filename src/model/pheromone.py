@@ -1,7 +1,6 @@
 from .game_object import GameObject
 from src.settings import all_params
 
-
 class Pheromone(GameObject):
     """
             A class used to represent a nest object
@@ -43,7 +42,7 @@ class Pheromone(GameObject):
             return self.position
 
     def increase(self, added_strength=all_params.pheromone_model_params.added_strength):
-        if added_strength <= all_params.pheromone_model_params.added_strength:
+        if added_strength <= 0:
             raise ValueError('This function should not be used to decrease pheromone strength (or leave it unchanged)')
         self.strength += added_strength
 

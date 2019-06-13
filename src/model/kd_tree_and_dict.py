@@ -1,7 +1,8 @@
 from scipy.spatial import cKDTree
 import numpy as np
 
-from .worker import Ant
+from .worker import Worker
+from .ant import Ant
 from .food import Food
 from .nest import Nest
 from .world import World
@@ -154,10 +155,10 @@ class KdTreeAndDict(World):
             for item in listy:
                 old_position = tuple(item.position)
 
-                if type(item) == Ant:
+                if isinstance(item, Ant):
                     # TODO: pick radius (or implement it in ant class)
-                    noticeable_objects = self.get_circular_region(item.position,
-                                                                  radius=all_params.tree_model_params.circular_region_radius)
+                    noticeable_objects = self.get_circular_region(
+                        item.position, radius=all_params.tree_model_params.circular_region_radius)
                     new_position, new_pheromone = item.update(noticeable_objects)
 
                     # Only handle if new pheromone object needs to be created.
@@ -168,14 +169,8 @@ class KdTreeAndDict(World):
                 else:
                     new_position = item.update()
 
-                # TODO: should not be needed
-                # new_position = tuple(new_position)
-
                 # Remove old positions.
-                try:
-                    self.all_objects[old_position].remove(item)
-                except ValueError:
-                    print(item)
+                self.all_objects[old_position].remove(item)
 
                 if self.all_objects[old_position] is []:
                     self.all_objects.pop(old_position)
@@ -208,10 +203,24 @@ class KdTreeAndDict(World):
 
         """
 
+        # TODO: Make it so that signature is create_ants(self, ant_type, nest, amount), so that calling in controller
+        #  is simple, but discuss with controller before hand
+        #  Implementation would be quite nice as given below
+
+        """
+        if ant_type == "worker":
+            CorrectAnt = Worker
+        elif ant_type == "scout"
+            CorrectAnt = Scout
+            
+        for _ in range(amount):
+            self.all_objects.setdefault(tuple(position), []).append(CorrectAnt(player, nest))
+        """
+
         player = nest.owner
         position = nest.position
         for _ in range(amount):
-            self.all_objects.setdefault(tuple(position), []).append(Ant(player, nest))
+            self.all_objects.setdefault(tuple(position), []).append(Worker(player, nest))
         self._update_tree()
 
     def create_food(self, position_list, size_list):
@@ -291,7 +300,7 @@ class KdTreeAndDict(World):
         """
 
         everything = self.dump_content()
-        ants = [obj for obj in everything if type(obj) is Ant]
+        ants = [obj for obj in everything if isinstance(obj, Ant)]
         return ants
 
     def get_nests(self):

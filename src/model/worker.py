@@ -54,23 +54,16 @@ class Worker(Ant):
 
     """
 
-    def __init__(self, player, home_nest):
+    def __init__(self, player, home_nest, foodiness=1, inscentiveness=1, directionism=1, explorativeness=1):
         """Initialize ant object owner and position
 
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
 
         """
-        position = home_nest.position.copy()
-        super(Ant, self).__init__(position)
-        self.owner = player
-        # TODO: needs to be updated as well
-        self.owner.ants.add(self)
+        super(Worker, self).__init__(player, home_nest, foodiness, inscentiveness, directionism, explorativeness)
 
         self.has_food = 0.
-        self.energy = all_params.ant_model_params.initial_energy
-        self.direction = all_params.ant_model_params.initial_direction
-        self.home = home_nest
         self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
 
         # setting parameters
@@ -78,15 +71,40 @@ class Worker(Ant):
         self.min_pheromone_strength = all_params.ant_model_params.min_pheromone_strength
         self.max_pheromone_strength = all_params.ant_model_params.max_pheromone_strength
         self.pheromone_dist_decay = all_params.ant_model_params.pheromone_dist_decay
-        self.direction_memory = all_params.ant_model_params.direction_memory
-        self.foodiness = all_params.ant_model_params.foodiness
-        self.inscentiveness = all_params.ant_model_params.inscentiveness
-        self.directionism = all_params.ant_model_params.directionism
-        self.explorativeness = all_params.ant_model_params.explorativeness
 
-    def __str__(self):
-        return "Ant {} at position {} and energy lvl {} from player {}".format(self.id, self.position,
-                                                                               self.energy, self.owner)
+    # TODO: Please decide which type of ant is going to use which of these parameters and make 100% sure to remove the
+    #  methods related to unsued ones
+    @property
+    def foodiness(self):
+        return self.__foodiness
+
+    @foodiness.setter
+    def foodiness(self, value):
+        self.__foodiness = value
+
+    @property
+    def directionism(self):
+        return self.__directionism
+
+    @directionism.setter
+    def directionism(self, value):
+        self.__directionism = value
+
+    @property
+    def inscentiveness(self):
+        return self.__inscentiveness
+
+    @inscentiveness.setter
+    def inscentiveness(self, value):
+        self.__inscentiveness = value
+
+    @property
+    def explorativeness(self):
+        return self.__explorativeness
+
+    @explorativeness.setter
+    def explorativeness(self, value):
+        self.__explorativeness = value
 
     def get_position(self):
         """
@@ -108,8 +126,7 @@ class Worker(Ant):
         :param args: [iterable?] list/tuple of noticeable objects
         :return: [tuple] updated ant position, new pheromone or None
         """
-        if self.energy <= all_params.ant_model_params.min_energy:
-            return None, None
+        super().update()
 
         if self.has_food:
 
@@ -279,8 +296,8 @@ class Worker(Ant):
             data /= np.max(data, axis=0)
 
             # Calculating probability distribution
-            probs = (data[:, 0] ** self.inscentiveness) * (data[:, 1] ** self.explorativeness) \
-                * (data[:, 2] ** self.directionism)
+            probs = (data[:, 0] ** self.inscentiveness) * (data[:, 1] ** self.explorativeness)
+            probs *= (data[:, 2] ** self.directionism)
             probs /= np.sum(probs)
 
             # Draw an object from the prob distribution
@@ -334,6 +351,3 @@ class Worker(Ant):
                     return None
         else:
             return Pheromone(self.position.copy(), self.owner, initial_strength=self.pheromone_strength)
-
-    # TODO: This needs an update function that the world class can call for each ant. -- Unless move is going to
-    #  handle food detection, loading, unloading, etc...

@@ -1,4 +1,3 @@
-import numpy as np
 from src.utils import array
 
 
@@ -7,7 +6,7 @@ class ControllerParams:
     def __init__(self, framerate=30):
         super(ControllerParams, self).__init__()
         self.framerate = framerate
-        self.create_ant_time = 2
+        self.create_ant_time = 1
 
 
 class ModelParams:
@@ -61,7 +60,7 @@ class PheromoneModelParams:
         super(PheromoneModelParams, self).__init__()
         self.initial_strength = 1.
         self.min_strength = 1e-8
-        self.added_strength = 1.
+        self.added_strength = 1
         self.decay_factor = 0.75
 
 

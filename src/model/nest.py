@@ -44,7 +44,7 @@ class Nest(GameObject):
 
     def __str__(self):
         return "Nest {} at position {} with health {} and food {}".format(self.id, self.position, self.health,
-                                                                         self.food)
+                                                                          self.food)
 
     def increase_food(self, food_amount):
         """ Increase the food level by the added food_amount to the nest
