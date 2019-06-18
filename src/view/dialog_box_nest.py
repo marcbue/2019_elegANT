@@ -36,7 +36,6 @@ class DialogBoxNest(DialogBox):
             txt_surface = self.view.FONT.render(self.name, True, pygame.Color("black"))
             self.view.screen.blit(txt_surface, (self.rect.x + 10, self.rect.y + 10))
         else:
-            if self.show_sliders is True:
+            if self.show_sliders is False:
                 for slider in self.sliders:
                     self.view.remove_element(slider.identifier)
-                self.show_sliders = False

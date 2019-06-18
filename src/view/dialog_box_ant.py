@@ -10,7 +10,6 @@ class DialogBoxAnt(DialogBox):
 
     def draw(self):
         if self.ant.active:
-            print(self.rect)
             for i, stat in enumerate(self.ant.stats):
                 self.view.screen.blit(f"{stat.key} : {stat.value}", (self.rect.x + 5, self.rect.y + (i + 1) * 5))
             pygame.draw.rect(self.view.screen, pygame.Color("black"), self.rect, 2)
