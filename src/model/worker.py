@@ -54,14 +54,14 @@ class Worker(Ant):
 
     """
 
-    def __init__(self, player, home_nest, foodiness=1, inscentiveness=1, directionism=1, explorativeness=1, speed=1):
+    def __init__(self, player, home_nest, foodiness=1, inscentiveness=1, directionism=1, explorativeness=1):
         """Initialize ant object owner and position
 
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
 
         """
-        super(Worker, self).__init__(player, home_nest, foodiness, inscentiveness, directionism, explorativeness, speed)
+        super(Worker, self).__init__(player, home_nest, foodiness, inscentiveness, directionism, explorativeness)
 
         self.has_food = 0.
         self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
@@ -105,14 +105,6 @@ class Worker(Ant):
     @explorativeness.setter
     def explorativeness(self, value):
         self.__explorativeness = value
-
-    @property
-    def speed(self):
-        return self.__speed
-
-    @speed.setter
-    def speed(self, value):
-        self.__speed = value
 
     def get_position(self):
         """
@@ -313,34 +305,10 @@ class Worker(Ant):
             return self.move_to(pheromones[index].position)
 
     def move_randomly(self):
-        """
-        changes the position of the ant using a random walk and combining it with the previous direction
-        direction is updated
-        :return: the updated position is returned
-        """
-        while True:  # to avoid standing still and divide by zero
-            movement = randint(low=-1, high=2, size=2)  # random move
-            self.direction += self.direction_memory * self.direction + movement
-            if distance(self.direction) > 0.:
-                break
-        self.direction /= distance(self.direction)
-        self.position += (self.direction * self.speed)
-        return self.position
+        return super().move_randomly()
 
     def move_to(self, obj_position):
-        """
-        changing the position of the ant towards the given obj_position with step size of one
-        direction is updated
-        :param obj_position: the position of object which the ant should move towards
-        :return: the updated position
-        """
-        # Go towards the position of obj_position
-        if distance(obj_position - self.position) > 0.:
-            self.direction = (obj_position - self.position) / distance(obj_position - self.position)
-        else:
-            self.direction = array([0., 0.])  # THIS IS NOT THE BEST IMPLEMENTATION
-        self.position += (self.direction * self.speed)
-        return self.position
+        return super().move_to(obj_position)
 
     def set_trace(self, noticeable_objects):
         """
@@ -349,6 +317,7 @@ class Worker(Ant):
         :param noticeable_objects:
         :return: None if existing pheromone otherwise a new pheromone object
         """
+
         self.pheromone_strength = max(self.min_pheromone_strength,
                                       self.pheromone_dist_decay * self.pheromone_strength)
         for obj in noticeable_objects:
