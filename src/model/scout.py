@@ -23,7 +23,7 @@ class Scout(Ant):
                 Player object that the ant belongs to
             position: list
                 a list of the ant coordinates
-            has_food: float
+            found_food: float
                 how much food the ant is carrying
             energy: int
                 a number that specifies current energy value the ant has
@@ -63,7 +63,7 @@ class Scout(Ant):
         """
         super(Scout, self).__init__(player, home_nest, foodiness, inscentiveness, directionism, explorativeness)
 
-        self.has_food = 0.
+        self.found_food = 0.
         self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
 
         # setting parameters
@@ -128,7 +128,7 @@ class Scout(Ant):
         """
         super().update()
 
-        if self.has_food:
+        if self.found_food:
 
             if self.at_nest():
                 return self.position, None
@@ -153,13 +153,9 @@ class Scout(Ant):
         foods = get_objects_of_type(noticeable_objects, Food)
         pheromones = get_objects_of_type(noticeable_objects, Pheromone)
 
-        # Priority is to get food
+        # Priority is to find food
         if foods:
             return self.move_to_food(foods)
-
-        # In case there is no food, pheromones are taken into account
-        elif pheromones:
-            return self.move_to_pheromone(pheromones)
 
         # In case there is no food nor pheromone scents, move randomly
         else:
@@ -174,7 +170,7 @@ class Scout(Ant):
 
         if distance(self.position - self.home.position) <= all_params.ant_model_params.min_dist_to_nest:
             self.position = self.home.position.copy()
-            self.unload_food()
+            self.stop_food_trail()
             self.pheromone_strength = 0.
             at_nest = True
 
@@ -196,31 +192,28 @@ class Scout(Ant):
             for obj in foods:
                 if distance(self.position - obj.position) <= all_params.ant_model_params.min_dist_to_food:
                     self.position = obj.position.copy()
-                    self.load_food(obj)
-                    self.pheromone_strength = min(100. * (obj.size / distance(self.position - self.home.position)),
+                    self.start_food_trail()
+                    self.pheromone_strength = min(200. * (obj.size / distance(self.position - self.home.position)),
                                                   self.max_pheromone_strength) / self.pheromone_dist_decay
                     at_food = True
                     break
 
         return at_food
 
-    def unload_food(self):  # TO DO
+    def stop_food_trail(self):  # TO DO
         """
         Flip (has_food) variable to 0 when the ant reaches the nest and unload the food
         :return:
         """
-        self.home.increase_food(self.has_food)
-        self.has_food = 0.
+        self.found_food = False
 
-    def load_food(self, food):
+    def start_food_trail(self):
         """
         increase (has_food) variable to loading capacity when the ant finds food
         :param food: the food object
         :return:
         """
-
-        amount_taken = food.take_some(self.loading_capacity)
-        self.has_food = amount_taken
+        self.found_food = True
 
     def move_to_food(self, foods):
         """
