@@ -14,9 +14,7 @@ class Worker(Ant):
     """
             A class used to represent an ant object
             It inherits from GameObject class
-
             ...
-
             Attributes
             ----------
             owner: Player
@@ -51,17 +49,17 @@ class Worker(Ant):
                 movement preference for previous movement direction
             explorativeness: float
                 movement preference for big distances from nest
-
+            speed: float
+                speed of the movement
     """
 
-    def __init__(self, player, home_nest, foodiness=1, inscentiveness=1, directionism=1, explorativeness=1):
+    def __init__(self, player, home_nest,
+                 foodiness=1., inscentiveness=1., directionism=1., explorativeness=1., speed=1.):
         """Initialize ant object owner and position
-
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
-
         """
-        super(Worker, self).__init__(player, home_nest, foodiness, inscentiveness, directionism, explorativeness)
+        super(Worker, self).__init__(player, home_nest, foodiness, inscentiveness, directionism, explorativeness, speed)
 
         self.has_food = 0.
         self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
@@ -105,6 +103,14 @@ class Worker(Ant):
     @explorativeness.setter
     def explorativeness(self, value):
         self.__explorativeness = value
+
+    @property
+    def speed(self):
+        return self.__speed
+
+    @speed.setter
+    def speed(self, value):
+        self.__speed = value
 
     def get_position(self):
         """
@@ -182,7 +188,6 @@ class Worker(Ant):
 
     def at_food(self, noticeable_objects):
         """from abc import ABC, abstractmethod
-
         checks if ant is at food location, if True, load food and set has_food to loaded food
         :param noticeable_objects:
         :return: True if ant is at food position, else False
