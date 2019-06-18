@@ -54,14 +54,14 @@ class Worker(Ant):
 
     """
 
-    def __init__(self, player, home_nest, foodiness=1, inscentiveness=1, directionism=1, explorativeness=1):
+    def __init__(self, player, home_nest, foodiness=1, inscentiveness=1, directionism=1, explorativeness=1, speed=1):
         """Initialize ant object owner and position
 
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
 
         """
-        super(Worker, self).__init__(player, home_nest, foodiness, inscentiveness, directionism, explorativeness)
+        super(Worker, self).__init__(player, home_nest, foodiness, inscentiveness, directionism, explorativeness, speed)
 
         self.has_food = 0.
         self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
@@ -105,6 +105,14 @@ class Worker(Ant):
     @explorativeness.setter
     def explorativeness(self, value):
         self.__explorativeness = value
+
+    @property
+    def speed(self):
+        return self.__speed
+
+    @speed.setter
+    def speed(self, value):
+        self.__speed = value
 
     def get_position(self):
         """
@@ -316,7 +324,7 @@ class Worker(Ant):
             if distance(self.direction) > 0.:
                 break
         self.direction /= distance(self.direction)
-        self.position = self.position + self.direction
+        self.position += (self.direction * self.speed)
         return self.position
 
     def move_to(self, obj_position):
@@ -328,11 +336,10 @@ class Worker(Ant):
         """
         # Go towards the position of obj_position
         if distance(obj_position - self.position) > 0.:
-            return_movement = (obj_position - self.position) / distance(obj_position - self.position)
+            self.direction = (obj_position - self.position) / distance(obj_position - self.position)
         else:
-            return_movement = array([0., 0.])  # THIS IS NOT THE BEST IMPLEMENTATION
-        self.position += return_movement
-        self.direction = return_movement
+            self.direction = array([0., 0.])  # THIS IS NOT THE BEST IMPLEMENTATION
+        self.position += (self.direction * self.speed)
         return self.position
 
     def set_trace(self, noticeable_objects):
