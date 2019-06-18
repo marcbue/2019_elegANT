@@ -58,7 +58,7 @@ class World(ABC):
         raise NotImplementedError("Please use subclassing.")
 
     @abstractmethod
-    def create_ants(self, nest, amount):
+    def create_ants(self, nest, ant_type, amount):
         """ Create new ant objects in a specific nest with the given amount and update the tree"""
         raise NotImplementedError("Please use subclassing.")
 
