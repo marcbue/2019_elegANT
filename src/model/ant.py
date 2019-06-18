@@ -10,7 +10,8 @@ distance = np.linalg.norm
 
 
 class Ant(GameObject, ABC):
-    def __init__(self, player, home_nest, foodiness=0, inscentiveness=0, directionism=0, explorativeness=0, speed=0):
+    def __init__(self, player, home_nest,
+                 foodiness=0., inscentiveness=0., directionism=0., explorativeness=0., speed=0.):
         """Initialize ant object owner and position
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position

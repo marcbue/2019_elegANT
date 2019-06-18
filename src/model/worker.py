@@ -49,9 +49,12 @@ class Worker(Ant):
                 movement preference for previous movement direction
             explorativeness: float
                 movement preference for big distances from nest
+            speed: float
+                speed of the movement
     """
 
-    def __init__(self, player, home_nest, foodiness=1, inscentiveness=1, directionism=1, explorativeness=1, speed=1):
+    def __init__(self, player, home_nest,
+                 foodiness=1., inscentiveness=1., directionism=1., explorativeness=1., speed=1.):
         """Initialize ant object owner and position
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
