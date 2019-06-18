@@ -10,7 +10,7 @@ from src.settings import all_params
 distance = np.linalg.norm
 
 
-class Worker(Ant):
+class Scout(Ant):
     """
             A class used to represent an ant object
             It inherits from GameObject class
