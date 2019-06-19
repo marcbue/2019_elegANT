@@ -9,8 +9,8 @@ from .ant import Ant
 from .food_source import FoodSource
 
 from src.model.nest import Nest as Model_Nest
-from src.model.ant import Ant as Model_Ant
-from src.model.ant import Food as Model_Food
+from src.model.worker import Worker as Model_Worker
+from src.model.food import Food as Model_Food
 
 
 class World(ViewElement):
@@ -65,7 +65,7 @@ class World(ViewElement):
             if element.id in self.game_elements.keys():
                 view_element = self.game_elements[element.id]
                 view_element.x, view_element.y = self._to_view_coordinates(element.position)
-                if type(element) == Model_Ant:
+                if type(element) == Model_Worker:
                     view_element.direction = element.direction
                     view_element.has_food = element.has_food
                 if type(element) == Model_Food:
@@ -74,13 +74,13 @@ class World(ViewElement):
             else:
                 view_x, view_y = self._to_view_coordinates(element.position)
                 if hasattr(element, 'owner'):
-                    color = element.owner
+                    color = element.owner.color
 
                 if type(element) == Model_Nest:
                     self.game_elements[element.id] = Nest(self.view, element.id, view_x,
                                                           view_y, 128, color, element.health)
 
-                elif type(element) == Model_Ant:
+                elif type(element) == Model_Worker:
                     self.game_elements[element.id] = Ant(self.view, element.id, view_x, view_y,
                                                          color, element.direction, element.energy)
                 elif type(element) == Model_Food:
@@ -92,7 +92,6 @@ class World(ViewElement):
         # Remove out of view elements
         for element_id in list(self.game_elements.keys()):
             if element_id not in element_ids:
-                print(f"Remove Element {element_id} from view")
                 del self.game_elements[element_id]
 
     def _to_view_coordinates(self, position):

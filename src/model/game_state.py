@@ -39,11 +39,10 @@ class GameState:
         """
         self.players = player_list
         self.world = KdTreeAndDict()
-        all_colors = [player.color for player in player_list]
         positions = []
         for i in range(len(player_list)):
             positions.append(random(2) * 250)
-        self.world.create_nests(all_colors, positions, health=100, size=10)
+        self.world.create_nests(player_list, positions, health=100, size=10)
         self.generate_random_food(array([-250, 250]), array([250, -250]), 50, [5] * 50)
 
     def get_objects_in_region(self, top_left, bottom_right):
@@ -61,15 +60,16 @@ class GameState:
         """Return the states of all the objects and their positions at each time iteration """
         self.world.update()
 
-    def create_ants(self, nest, amount):
+    def create_ants(self, nest, ant_type="worker", amount=1):
         """Create new ant objects in the specific nest with the given positions
 
         :param nest: nest
+        :param ant_type: (string) Has to be one of "worker" or "scout", defines the type of Ant to be created
         :param amount: (int) number of ants that should be created
         :return:
 
         """
-        return self.world.create_ants(nest, amount)
+        return self.world.create_ants(nest, ant_type, amount)
 
     def create_nest(self, nest_position, player, size, health):
         return self.world.create_nests(nest_position, player, size, health)
