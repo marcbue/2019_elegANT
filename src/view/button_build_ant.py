@@ -10,10 +10,11 @@ STATE_BUTTON = 'add'
 STATE_LOADING = 'loading'
 
 
-class BuildScoutButton(Button):
-    def __init__(self, *args, **kwargs):
-        super(BuildScoutButton, self).__init__(*args, **kwargs)
+class BuildAntButton(Button):
+    def __init__(self, ant_type, *args, **kwargs):
+        super(BuildAntButton, self).__init__(*args, **kwargs)
 
+        self.ant_type = ant_type
         self.state = STATE_BUTTON
         self.counter = 0
         self._loading_angle = 0
@@ -57,7 +58,10 @@ class BuildScoutButton(Button):
         end = PI / 2
         rect = [self.x, self.y, self.width, self.height]
         self.view.screen.fill(self.color1, rect, 2)
-        pygame.draw.arc(self.view.screen, self.color2, rect, start, end, int(self.width / 2))
+
+        arc_width = int(min(self.width, self.height) / 2)
+
+        pygame.draw.arc(self.view.screen, self.color2, rect, start, end, arc_width)
         denominator_angle = all_params.controller_params.framerate * all_params.controller_params.create_ant_time
         self._loading_angle += 360 / denominator_angle
 
