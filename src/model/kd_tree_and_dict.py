@@ -2,6 +2,7 @@ from scipy.spatial import cKDTree
 import numpy as np
 
 from .worker import Worker
+from .scout import Scout
 from .ant import Ant
 from .food import Food
 from .nest import Nest
@@ -201,9 +202,8 @@ class KdTreeAndDict(World):
 
         if ant_type == "worker":
             CorrectAnt = Worker
-        # TODO: decomment once Scout exists
-        # elif ant_type == "scout"
-        #    CorrectAnt = Scout
+        elif ant_type == "scout":
+            CorrectAnt = Scout
         else:
             raise ValueError("Incorrect Ant type passed at ant creation.")
 

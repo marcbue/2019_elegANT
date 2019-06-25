@@ -15,6 +15,7 @@ class DialogBoxAddAnts(DialogBox):
         print(self.color)
         self.name = "_".join((str(c) for c in self.color))
         self.ant_types = [
+            'worker',
             'scout'
         ]
         self.set_buttons()
