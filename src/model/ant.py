@@ -10,12 +10,11 @@ distance = np.linalg.norm
 
 
 class Ant(GameObject, ABC):
-    def __init__(self, player, home_nest, foodiness=0, inscentiveness=0, directionism=0, explorativeness=0):
+    def __init__(self, player, home_nest,
+                 foodiness=0., inscentiveness=0., directionism=0., explorativeness=0., speed=0.):
         """Initialize ant object owner and position
-
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
-
         """
         position = home_nest.position.copy()
         super(Ant, self).__init__(position)
@@ -37,6 +36,7 @@ class Ant(GameObject, ABC):
         self.inscentiveness = inscentiveness
         self.directionism = directionism
         self.explorativeness = explorativeness
+        self.speed = speed
 
     @property
     def foodiness(self):
@@ -71,13 +71,25 @@ class Ant(GameObject, ABC):
     def explorativeness(self, value):
         self.__explorativeness = None
 
+    @property
+    def speed(self):
+        return self.__speed
+
+    @speed.setter
+    def speed(self, value):
+        self.__speed = None
+
     def __str__(self):
         return ("Ant {} at position {} and energy lvl {} from player {} \n with character variables Foodiness {},  "
-                "Inscentiveness {}, Directionism {}, Explorativeness {}").format(self.id, self.position,
-                                                                                 self.energy, self.owner,
-                                                                                 self.foodiness, self.inscentiveness,
-                                                                                 self.directionism,
-                                                                                 self.explorativeness)
+                "Inscentiveness {}, Directionism {}, Explorativeness {}, speed {}").format(self.id,
+                                                                                           self.position,
+                                                                                           self.energy,
+                                                                                           self.owner,
+                                                                                           self.foodiness,
+                                                                                           self.inscentiveness,
+                                                                                           self.directionism,
+                                                                                           self.explorativeness,
+                                                                                           self.speed)
 
     def get_position(self):
         """
@@ -103,7 +115,7 @@ class Ant(GameObject, ABC):
             if distance(self.direction) > 0.:
                 break
         self.direction /= distance(self.direction)
-        self.position = self.position + self.direction
+        self.position = self.position + (self.direction * self.speed)
         return self.position
 
     def move_to(self, obj_position):
@@ -115,9 +127,8 @@ class Ant(GameObject, ABC):
         """
         # Go towards the position of obj_position
         if distance(obj_position - self.position) > 0.:
-            return_movement = (obj_position - self.position) / distance(obj_position - self.position)
+            self.direction = (obj_position - self.position) / distance(obj_position - self.position)
         else:
-            return_movement = array([0., 0.])  # THIS IS NOT THE BEST IMPLEMENTATION
-        self.position += return_movement
-        self.direction = return_movement
+            self.direction = array([0., 0.])  # THIS IS NOT THE BEST IMPLEMENTATION
+        self.position = self.position + (self.direction * self.speed)
         return self.position
