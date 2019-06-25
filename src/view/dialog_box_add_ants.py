@@ -15,23 +15,34 @@ class DialogBoxAddAnts(DialogBox):
         print(self.color)
         self.name = "_".join((str(c) for c in self.color))
         self.ant_types = [
+            'scout',
             'worker',
-            'scout'
+            'soldier'
         ]
         self.set_buttons()
 
     def set_buttons(self):
-        for index, ant_type in enumerate(self.ant_types):
+        for idx, ant_type in enumerate(self.ant_types):
+
             build_ant_button = BuildAntButton(
                 ant_type,
                 self.view,
-                f"build_{ant_type}", 0.10 + (index * 10), 0.87, 0.05, 0.09, -1, self.color,
-                self.color, 'square', True, f"src/view/images/{self.name}_buildscout.png"
+                f"build_{ant_type}", 0.10 + (idx * 0.10), 0.87, 0.05, 0.09, -1, self.color,
+                self.color, 'square', True, f"src/view/images/{self.name}_build_worker.png"
             )
 
-            build_ant_button.on("click", lambda: self.view.event_dict.update({
-                f"build_{ant_type}": (build_ant_button.identifier,)
-            }))
+            if ant_type == 'scout':
+                build_ant_button.on("click", lambda: self.view.event_dict.update({
+                    'build_scout': ('build_scout',)
+                }))
+            if ant_type == 'worker':
+                build_ant_button.on("click", lambda: self.view.event_dict.update({
+                    'build_worker': ('build_worker',)
+                }))
+            if ant_type == 'soldier':
+                build_ant_button.on("click", lambda: self.view.event_dict.update({
+                    'build_soldier': ('build_soldier',)
+                }))
 
             self.buttons[build_ant_button.identifier] = build_ant_button
 

@@ -25,8 +25,8 @@ class Controller:
         }
 
         self.event_list_game_view = {
-            'build_scout': self.create_ant,
-            'build_worker': self.create_ant,
+            'build_scout': self.create_scout,
+            'build_worker': self.create_worker,
             'show_build_ants': self.show_build_ants_dialog,
             'quit_game': self.exit_game
         }
@@ -62,7 +62,7 @@ class Controller:
         """
         sys.exit()
 
-    def create_ant(self, identifier):
+    def create_worker(self, identifier):
         """
         Event-handler for creating ants using the create ants button
         :param button: Create Ants button
@@ -74,7 +74,24 @@ class Controller:
         def _create_ant():
             time.sleep(all_params.controller_params.create_ant_time)
             nest = self.game_state.get_nests()[0]
-            self.game_state.create_ants(nest, amount=1)
+            self.game_state.create_ants(nest, amount=1, ant_type='worker')
+            self.view.increment_ant_count(type=button.ant_type)
+
+        create_thread(func=_create_ant)
+
+    def create_scout(self, identifier):
+        """
+        Event-handler for creating ants using the create ants button
+        :param button: Create Ants button
+        :return: nothing
+        """
+        button = self.view.get_element_by_id(identifier)
+        button.state = 'loading'
+
+        def _create_ant():
+            time.sleep(all_params.controller_params.create_ant_time)
+            nest = self.game_state.get_nests()[0]
+            self.game_state.create_ants(nest, amount=1, ant_type='scout')
             self.view.increment_ant_count(type=button.ant_type)
 
         create_thread(func=_create_ant)
