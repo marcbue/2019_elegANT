@@ -43,7 +43,7 @@ class Controller:
         :return: returns a game_state object for initialization of the game
         """
         if player_name:
-            self.view.change_view_state(View.GAMEVIEW,color)
+            self.view.change_view_state(View.GAMEVIEW, color)
             player = Player(player_name, color)
             player_list = [player]
             game_state = GameState(player_list)
