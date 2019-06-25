@@ -5,12 +5,15 @@ from .button_ants_dialog import AntsDialogButton
 
 class DialogBoxAddAnts(DialogBox):
     def __init__(self, view, identifier, active=False, name="Dialog_Box"):
-        super(DialogBoxAddAnts, self).__init__(view, identifier, x=3, y=87,
-                                               width=2, height=10)
+        super(DialogBoxAddAnts, self).__init__(view, identifier, x=0.03, y=0.87,
+                                               width=0.02, height=0.10)
         self.active = active
         self.identifier = identifier
         self.name = name
         self.buttons = {}
+        self.color = self.view.usercolor
+        print(self.color)
+        self.name = "_".join((str(c) for c in self.color))
         self.ant_types = [
             'scout'
         ]
@@ -21,8 +24,8 @@ class DialogBoxAddAnts(DialogBox):
             build_ant_button = BuildAntButton(
                 ant_type,
                 self.view,
-                f"build_{ant_type}", 15 + (index * 10), 85, 5, 9, -1, (255, 20, 147),
-                (255, 105, 180), 'square'
+                f"build_{ant_type}", 0.10 + (index * 10), 0.87, 0.05, 0.09, -1, self.color,
+                self.color, 'square', True, f"src/view/images/{self.name}_buildscout.png"
             )
 
             build_ant_button.on("click", lambda: self.view.event_dict.update({
@@ -35,8 +38,9 @@ class DialogBoxAddAnts(DialogBox):
         self.active = not self.active
 
     def draw(self):
-        build_ants_button = AntsDialogButton(self.view, "show_build_ants", 5, 85, 5, 9, -1, (255, 20, 147),
-                                             (255, 105, 180), 'square')
+        super(DialogBoxAddAnts, self).draw()
+        build_ants_button = AntsDialogButton(self.view, "show_build_ants", 0.02, 0.87, 0.05, 0.09, -1, self.color,
+                                             self.color, 'square')
 
         build_ants_button.on("click", lambda: self.view.event_dict.update({
             "show_build_ants": (build_ants_button,)

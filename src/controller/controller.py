@@ -43,7 +43,7 @@ class Controller:
         :return: returns a game_state object for initialization of the game
         """
         if player_name:
-            self.view.change_view_state(View.GAMEVIEW)
+            self.view.change_view_state(View.GAMEVIEW, color)
             player = Player(player_name, color)
             player_list = [player]
             game_state = GameState(player_list)
@@ -144,11 +144,11 @@ class Controller:
             current_time = time.time()
 
             if self.game_state is None:
-                self.view.draw()
+                self.view.draw(self.view.width, self.view.height)
                 self.game_state_init()
 
             else:
-                self.view.draw()
+                self.view.draw(self.view.width, self.view.height)
                 self.game_state_update()
 
             # For frame rate adjustment

@@ -9,7 +9,8 @@ class Ant(ViewElement):
         self.direction = direction
         self.health = health
         self.has_food = False
-        name = "_".join((str(c) for c in color))
+        self.color = color
+        name = "_".join((str(c) for c in self.color))
         self.img = pygame.image.load(f"src/view/images/{name}_worker.png")
         self.img_food = pygame.image.load(f"src/view/images/{name}_worker_food.png")
 
