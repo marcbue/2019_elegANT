@@ -64,8 +64,8 @@ class Controller:
 
     def create_worker(self, identifier):
         """
-        Event-handler for creating ants using the create ants button
-        :param button: Create Ants button
+        Event-handler for creating worker using the create worker button
+        :param identifier: identifier for create worker button
         :return: nothing
         """
         button = self.view.get_element_by_id(identifier)
@@ -81,8 +81,8 @@ class Controller:
 
     def create_scout(self, identifier):
         """
-        Event-handler for creating ants using the create ants button
-        :param button: Create Ants button
+        Event-handler for creating scouts using the create scouts button
+        :param identifier: identifier for create scout button
         :return: nothing
         """
         button = self.view.get_element_by_id(identifier)
