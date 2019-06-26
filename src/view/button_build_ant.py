@@ -20,7 +20,7 @@ class BuildAntButton(Button):
         self._loading_angle = 0
         self.color_background = (0, 0, 0)
         name = "_".join((str(c) for c in self.color))
-        self.image_path = f"src/view/images/{name}_buildscout.png"
+        self.image_path = f"src/view/images/{name}_build_worker.png"
         self.image = pygame.image.load(self.image_path)
 
     def draw(self):
