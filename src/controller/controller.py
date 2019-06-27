@@ -25,7 +25,7 @@ class Controller:
         }
 
         self.event_list_game_view = {
-            'build_scout': self.create_worker,  # change to create_scout as soon as model is updated
+            'build_scout': self.create_worker,  # TODO change to create_scout as soon as model is updated
             'build_worker': self.create_worker,
             'show_build_ants': self.show_build_ants_dialog,
             'quit_game': self.exit_game
@@ -62,6 +62,17 @@ class Controller:
         """
         sys.exit()
 
+    def _create_ant(self, button, ant_type: str):
+        """
+        :param button: create ant button associated with ant type
+        :param ant_type: ant type to be created (scout, worker, soldier)
+        :return:
+        """
+        time.sleep(all_params.controller_params.create_ant_time)
+        nest = self.game_state.get_nests()[0]
+        self.game_state.create_ants(nest, amount=1, ant_type=ant_type)
+        self.view.increment_ant_count(type=button.ant_type)
+
     def create_worker(self, identifier):
         """
         Event-handler for creating worker using the create worker button
@@ -71,13 +82,7 @@ class Controller:
         button = self.view.get_element_by_id(identifier)
         button.state = 'loading'
 
-        def _create_ant():
-            time.sleep(all_params.controller_params.create_ant_time)
-            nest = self.game_state.get_nests()[0]
-            self.game_state.create_ants(nest, amount=1, ant_type='worker')
-            self.view.increment_ant_count(type=button.ant_type)
-
-        create_thread(func=_create_ant)
+        create_thread(func=self._create_ant, args=(button, 'worker'))
 
     def create_scout(self, identifier):
         """
@@ -88,13 +93,7 @@ class Controller:
         button = self.view.get_element_by_id(identifier)
         button.state = 'loading'
 
-        def _create_ant():
-            time.sleep(all_params.controller_params.create_ant_time)
-            nest = self.game_state.get_nests()[0]
-            self.game_state.create_ants(nest, amount=1, ant_type='scout')
-            self.view.increment_ant_count(type=button.ant_type)
-
-        create_thread(func=_create_ant)
+        create_thread(func=self._create_ant, args=(button, 'scout'))
 
     def show_build_ants_dialog(self, button):
         """
