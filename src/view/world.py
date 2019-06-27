@@ -6,10 +6,12 @@ from pygame import K_UP, K_RIGHT, K_DOWN, K_LEFT, K_PLUS, K_MINUS
 from .view_element import ViewElement
 from .nest import Nest
 from .ant import Ant
+# from .scout import Scout
 from .food_source import FoodSource
 
 from src.model.nest import Nest as Model_Nest
 from src.model.worker import Worker as Model_Worker
+# from src.model.scout import Scout as Model_Scout
 from src.model.food import Food as Model_Food
 
 
@@ -68,6 +70,8 @@ class World(ViewElement):
                 if type(element) == Model_Worker:
                     view_element.direction = element.direction
                     view_element.has_food = element.has_food
+                # if type(element) == Model_Scout:
+                #     view_element.direction = element.direction
                 if type(element) == Model_Food:
                     view_element.value = element.size
             # Create elements
@@ -83,6 +87,9 @@ class World(ViewElement):
                 elif type(element) == Model_Worker:
                     self.game_elements[element.id] = Ant(self.view, element.id, view_x, view_y,
                                                          color, element.direction, element.energy)
+                # elif type(element) == Model_Scout:
+                #     self.game_elements[element.id] = Ant(self.view, element.id, view_x, view_y,
+                #                                          color, element.direction, element.energy)
                 elif type(element) == Model_Food:
                     self.game_elements[element.id] = FoodSource(self.view, element.id, view_x, view_y, 128, 100)
                 
