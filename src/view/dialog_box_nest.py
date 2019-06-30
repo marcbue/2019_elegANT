@@ -5,8 +5,8 @@ import pygame
 
 class DialogBoxNest(DialogBox):
     def __init__(self, view, identifier, slider_data=[], active=False, name="Dialog_Box"):
-        super(DialogBoxNest, self).__init__(view, identifier, x=75, y=0,
-                                            width=25, height=100)
+        super(DialogBoxNest, self).__init__(view, identifier, x=0.75, y=0,
+                                            width=0.25, height=1.00)
         self.slider_data = slider_data
         self.active = active
         self.show_sliders = active
@@ -31,6 +31,7 @@ class DialogBoxNest(DialogBox):
                                        name=data["name"]))
 
     def draw(self):
+        super(DialogBoxNest, self).draw()
         if self.active:
             pygame.draw.rect(self.view.screen, pygame.Color("black"), self.rect, 2)
             txt_surface = self.view.FONT.render(self.name, True, pygame.Color("black"))

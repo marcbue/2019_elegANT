@@ -25,7 +25,8 @@ class Controller:
         }
 
         self.event_list_game_view = {
-            'build_scout': self.create_ant,
+            'build_scout': self.create_worker,  # TODO change to create_scout as soon as model is updated
+            'build_worker': self.create_worker,
             'show_build_ants': self.show_build_ants_dialog,
             'quit_game': self.exit_game
         }
@@ -43,7 +44,7 @@ class Controller:
         :return: returns a game_state object for initialization of the game
         """
         if player_name:
-            self.view.change_view_state(View.GAMEVIEW)
+            self.view.change_view_state(View.GAMEVIEW, color)
             player = Player(player_name, color)
             player_list = [player]
             game_state = GameState(player_list)
@@ -61,22 +62,38 @@ class Controller:
         """
         sys.exit()
 
-    def create_ant(self, identifier):
+    def _create_ant(self, button, ant_type: str):
         """
-        Event-handler for creating ants using the create ants button
-        :param button: Create Ants button
+        :param button: create ant button associated with ant type
+        :param ant_type: ant type to be created (scout, worker, soldier)
+        :return:
+        """
+        time.sleep(all_params.controller_params.create_ant_time)
+        nest = self.game_state.get_nests()[0]
+        self.game_state.create_ants(nest, amount=1, ant_type=ant_type)
+        self.view.increment_ant_count(type=button.ant_type)
+
+    def create_worker(self, identifier):
+        """
+        Event-handler for creating worker using the create worker button
+        :param identifier: identifier for create worker button
         :return: nothing
         """
         button = self.view.get_element_by_id(identifier)
         button.state = 'loading'
 
-        def _create_ant():
-            time.sleep(all_params.controller_params.create_ant_time)
-            nest = self.game_state.get_nests()[0]
-            self.game_state.create_ants(nest, amount=1)
-            self.view.increment_ant_count(type=button.ant_type)
+        create_thread(func=self._create_ant, args=(button, 'worker'))
 
-        create_thread(func=_create_ant)
+    def create_scout(self, identifier):
+        """
+        Event-handler for creating scouts using the create scouts button
+        :param identifier: identifier for create scout button
+        :return: nothing
+        """
+        button = self.view.get_element_by_id(identifier)
+        button.state = 'loading'
+
+        create_thread(func=self._create_ant, args=(button, 'scout'))
 
     def show_build_ants_dialog(self, button):
         """
@@ -144,11 +161,11 @@ class Controller:
             current_time = time.time()
 
             if self.game_state is None:
-                self.view.draw()
+                self.view.draw(self.view.width, self.view.height)
                 self.game_state_init()
 
             else:
-                self.view.draw()
+                self.view.draw(self.view.width, self.view.height)
                 self.game_state_update()
 
             # For frame rate adjustment

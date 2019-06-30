@@ -9,10 +9,10 @@ class UIElement(ViewElement):
         self.y_percentage = y
         self.w_percentage = width
         self.h_percentage = height
-        x = 0 + int(x / 100 * view.res_width)
-        y = 0 + int(y / 100 * view.res_height)
-        width = int(width / 100 * view.res_width)
-        height = int(height / 100 * view.res_height)
+        x = 0 + int(x * view.width)
+        y = 0 + int(y * view.height)
+        width = int(width * view.width)
+        height = int(height * view.height)
         super(UIElement, self).__init__(view, identifier, x, y, width, height)
 
         self.active = active
@@ -35,7 +35,6 @@ class UIElement(ViewElement):
             
         else:
             if event.type == pygame.MOUSEBUTTONDOWN:
-                # self.active = False
                 pass
                 
             if self.hovered is True:
@@ -63,5 +62,11 @@ class UIElement(ViewElement):
                 and self.y + self.radius > pos[1] > self.y - self.radius
         elif self.shape == 'square':
             return self.x + self.width > pos[0] > self.x and self.y + self.height > pos[1] > self.y
+
+    def draw(self):
+        self.x = 0 + int(self.x_percentage * self.view.width)
+        self.y = 0 + int(self.y_percentage * self.view.height)
+        self.width = 0 + int(self.w_percentage * self.view.width)
+        self.height = 0 + int(self.h_percentage * self.view.height)
 
 

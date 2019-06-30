@@ -6,7 +6,7 @@ class Slider(UIElement):
     def __init__(self, view, identifier, x, y, width, height, max_value=100, min_value=0, default_value=50,
                  shape="square", name="val:"):
         super(Slider, self).__init__(view, identifier, x, y, width, height)
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+
         self.identifier = identifier
         self.value = default_value
         self.max_value = max_value
@@ -22,6 +22,8 @@ class Slider(UIElement):
         self.view.event_dict.update({f"slider_{self.identifier}": self.value})
 
     def draw(self):
+        super(Slider, self).draw()
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         slider_rect = pygame.Rect(self.x, self.y + self.height // 2 - 3, self.width, 6)
         pygame.draw.rect(self.view.screen, pygame.Color("black"), slider_rect, 0)
         relative_value = self.value / (self.max_value - self.min_value)

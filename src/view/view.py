@@ -11,8 +11,8 @@ from .world import World
 from src.utils import array
 from .dialog_box_nest import DialogBoxNest
 from .dialog_box_add_ants import DialogBoxAddAnts
-# import numpy as np
 import platform
+
 
 # View
 class View:
@@ -22,23 +22,19 @@ class View:
     def __init__(self, width, height):
         pygame.init()
         display_info = pygame.display.Info()
-
-        # Currently not used
-        self.width = width
-        self.height = height
         self.res_width = display_info.current_w
         self.res_height = display_info.current_h
+        self.win_height = height
+        self.win_width = width
+        self.width = width
+        self.height = height
+
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.fullscreenflag = False
+        self.origwidth = self.width
         self.state = None
 
         # Only works for windows --> need to check operating system
-        if platform.system() == 'Windows':
-            from ctypes import windll
-            windll.user32.SetProcessDPIAware()
-            true_res = (windll.user32.GetSystemMetrics(0), windll.user32.GetSystemMetrics(1))
-            self.screen = pygame.display.set_mode(true_res, pygame.FULLSCREEN)
-
-        else:
-            self.screen = pygame.display.set_mode((self.res_width, self.res_height), pygame.FULLSCREEN)
 
         self.background_color = pygame.Color("white")
         self.mouse_pos = pygame.mouse.get_pos()
@@ -47,8 +43,9 @@ class View:
         self.event_dict = {}
         self.FONT = pygame.font.Font(None, 32)
         self.pos = [array([-500, 500]), array([500, -500])]
+        self.usercolor = None
 
-    def change_view_state(self, state):
+    def change_view_state(self, state, usercolor=None):
         if self.state == state:
             return
         # Destroy all UI elements that are no longer needed and clear screen
@@ -57,16 +54,16 @@ class View:
         # Construct new UI elements for the requested state
         if state == View.STARTVIEW:
             self.state = View.STARTVIEW
-            self._start_view()
+            self.start_view()
         if state == View.GAMEVIEW:
             self.state = View.GAMEVIEW
+            self.usercolor = usercolor
             self._game_view()
 
-    def _start_view(self):
+    def start_view(self):
         self.elements = {}
-
         # add elements for the main text
-        text = Text(self, "headline", 17.5, 10, 0.8, 0.9)
+        text = Text(self, "headline", 0.04, 0.05, -1, 0.125)
         text.set_text("ElegANT")
         self.add_element(text)
 
@@ -74,7 +71,7 @@ class View:
         player_colors = [
             (219, 95, 87),
             (219, 194, 87),
-            (145, 219, 87),
+            (145, 209, 87),
             (87, 219, 128),
             (87, 211, 219),
             (87, 112, 219),
@@ -82,9 +79,13 @@ class View:
             (219, 87, 178)
         ]
 
-        self.add_element(ColorSelector(self, "color_selector", 60, 50, 20, 20, player_colors))
+        self.add_element(ColorSelector(self, "color_selector", 0.60, 0.50, 0.20, 0.20, player_colors))
 
-        start_button = Button(self, "start_button", 5, 85, 12.5, 10, -1, (100, 100, 100), (150, 150, 150), 'square')
+        starttext = Text(self, "starttext", 0.06, 0.82, -1, 0.05, (255, 255, 255))
+        starttext.set_text("START GAME")
+
+        start_button = Button(self, "start_button", 0.05, 0.80, (starttext.TextRect.width / self.width) + 0.015,
+                              0.10, - 1, (100, 100, 100), (150, 150, 150), 'square')
 
         # Add start game event
         start_button.on("click", lambda: self.event_dict.update(
@@ -97,42 +98,59 @@ class View:
         ))
 
         self.add_element(start_button)
-
-        starttext = Text(self, "starttext", 11.5, 90, 0.5, 0.6)
-        starttext.set_text("START")
         self.add_element(starttext)
 
-        quit_button = Button(self, "quit_button", 98.25, 0.8, 1.5, 2.5, -1, (250, 0, 0), (150, 150, 150), 'square')
+        quit_button = Button(self, "quit_button", 0.9825, 0.008, 0.015, 0.025, -1,
+                             (250, 0, 0), (150, 150, 150), 'square')
         self.add_element(quit_button)
         
         quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
 
-        quittext = Text(self, "quittext", 99, 2, 0.3, 0.4)
+        quittext = Text(self, "quittext", 0.986, 0.01, -1, 0.02)
         quittext.set_text("X")
         self.add_element(quittext)
 
-        inputname = Text(self, "inputname", 13, 27, 0.5, 0.4)
-        inputname.set_text("Please enter your name")
-        self.add_element(inputname)
+        self.add_element(InputBox(self, "textbox", 0.05, 0.55, 0.125, 0.05, 'Enter your name'))
 
-        self.add_element(InputBox(self, "textbox", 5, 32, 12.5, 5, (0, 0, 0), (255, 100, 100), ''))
+        fullscreen_button = Button(self, "fullscreen_button", 0.9625, 0.008, 0.015, 0.025, -1, (192, 192, 192),
+                                   (150, 150, 150), 'square')
+        self.add_element(fullscreen_button)
 
-        buttontext = Text(self, "buttontext", 60, 27, 0.5, 0.4)
+        fullscreen_button.on("click", self.fullscreen)
+
+        fullscreentext = Text(self, "fullscreentext", 0.966, 0.01, -1, 0.02)
+        fullscreentext.set_text("F")
+        self.add_element(fullscreentext)
+
+        self.add_element(InputBox(self, "textbox", 0.05, 0.55, 0.125, 0.05, 'Enter your name'))
+
+        buttontext = Text(self, "buttontext", 0.52, 0.24, -1, 0.03)
         buttontext.set_text("Please choose color of ant")
         self.add_element(buttontext)
 
     def _game_view(self):
         self.elements = {}
+        self.iteration_copy = {}
 
-        # add quit button
-        quit_button = Button(self, "quit_button", 98.25, 0.8, 1.5, 2.5, -1, (250, 0, 0), (150, 150, 150), 'square')
+        quit_button = Button(self, "quit_button", 0.9825, 0.008, 0.015, 0.025, -1, (250, 0, 0), (150, 150, 150),
+                             'square')
         self.add_element(quit_button)
 
         quit_button.on("click", lambda: self.event_dict.update({"quit_game": ()}))
 
-        quittext = Text(self, "quittext", 99, 2, 0.3, 0.4)
+        quittext = Text(self, "quittext", 0.986, 0.01, -1, 0.02)
         quittext.set_text("X")
         self.add_element(quittext)
+
+        fullscreen_button = Button(self, "fullscreen_button", 0.9625, 0.008, 0.015, 0.025, -1, (192, 192, 192),
+                                   (150, 150, 150), 'square')
+        self.add_element(fullscreen_button)
+
+        fullscreen_button.on("click", self.fullscreen)
+
+        fullscreentext = Text(self, "fullscreentext", 0.966, 0.01, -1, 0.02)
+        fullscreentext.set_text("F")
+        self.add_element(fullscreentext)
 
         # Create world which contains all game objects
         self.add_element(World(self, "world", 0, 0, 250, 250))
@@ -140,7 +158,7 @@ class View:
         dialog_add_ants = DialogBoxAddAnts(self, "view_box_id_add_ants_box", active=False)
         self.add_element(dialog_add_ants)
 
-        change_scout_stats = Button(self, "change_scout_stats", 0, 0, 10, 10, -1, pygame.Color("white"),
+        change_scout_stats = Button(self, "change_scout_stats", 0, 0, 0.10, 0.10, -1, pygame.Color("white"),
                                     (150, 150, 150), 'square', has_image=True,
                                     image_path="src/view/images/scout_stat_button.png")
 
@@ -170,7 +188,28 @@ class View:
         else:
             print("Element does not exist")
 
-    def draw(self, model_state=None):
+    def fullscreen(self):
+        if not self.fullscreenflag:
+            self.height = self.res_height
+            self.width = self.res_width
+            if platform.system() == 'Windows':
+                from ctypes import windll
+                windll.user32.SetProcessDPIAware()
+                true_res = (windll.user32.GetSystemMetrics(0), windll.user32.GetSystemMetrics(1))
+                self.screen = pygame.display.set_mode(true_res, pygame.FULLSCREEN)
+            else:
+                self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+            self.fullscreenflag = True
+        else:
+            self.width = self.win_width
+            self.height = self.win_height
+            self.fullscreenflag = False
+            self.screen = pygame.display.set_mode((self.width, self.height))
+        pygame.display.flip()
+
+    def draw(self, width, height, model_state=None):
+        self.width = width
+        self.height = height
         self.screen.fill(self.background_color)
         iteration_copy = self.elements.copy()
         for element in iteration_copy.values():
