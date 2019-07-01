@@ -36,9 +36,9 @@ class AntModelParams:
         self.loading_capacity = 1.
 
         # Movement and distances
-        self.direction_memory = 0.5
-        self.min_dist_to_nest = 1.
-        self.min_dist_to_food = 1.
+        self.direction_memory = 0.75
+        self.min_dist_to_nest = 1.5
+        self.min_dist_to_food = 1.5
         self.min_dist_to_nest_scout = 4.
         self.min_dist_to_food_scout = 4.
         self.max_dist_to_pheromone = 1.
@@ -80,7 +80,8 @@ class TreeModelParams:
 
     def __init__(self):
         super(TreeModelParams, self).__init__()
-        self.circular_region_radius = 10
+        self.circular_region_radius_scout = 60
+        self.circular_region_radius_worker = 30
 
 
 class ViewParams:

@@ -232,7 +232,7 @@ class Scout(Ant):
         set (found_food) variable to True when the ant finds food
         :return:
         """
-        print("found food")
+        #print("food trail")
         self.found_food = 1.  # TODO change to True when VIEW IS READY
 
     def move_to_food(self, foods):
