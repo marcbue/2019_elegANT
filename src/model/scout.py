@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 from .food import Food
 from .ant import Ant
@@ -54,14 +55,16 @@ class Scout(Ant):
 
     """
 
-    def __init__(self, player, home_nest, foodiness=1, inscentiveness=1, directionism=1, explorativeness=1):
+    def __init__(self, player, home_nest, energy=500.,
+                 foodiness=1, inscentiveness=1, directionism=1, explorativeness=1, speed=10.):
         """Initialize ant object owner and position
 
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
 
         """
-        super(Scout, self).__init__(player, home_nest, foodiness, inscentiveness, directionism, explorativeness)
+        super(Scout, self).__init__(player, home_nest, energy,
+                                    foodiness, inscentiveness, directionism, explorativeness, speed)
 
         self.found_food = 0.
         self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
@@ -73,7 +76,15 @@ class Scout(Ant):
         self.pheromone_dist_decay = all_params.ant_model_params.pheromone_dist_decay
 
     # TODO: Please decide which type of ant is going to use which of these parameters and make 100% sure to remove the
-    #  methods related to unsued ones
+    #  methods related to unused ones
+    @property
+    def energy(self):
+        return self.__energy
+
+    @energy.setter
+    def energy(self, value):
+        self.__energy = value
+
     @property
     def foodiness(self):
         return self.__foodiness
@@ -106,12 +117,23 @@ class Scout(Ant):
     def explorativeness(self, value):
         self.__explorativeness = value
 
+    @property
+    def speed(self):
+        return self.__speed
+
+    @speed.setter
+    def speed(self, value):
+        self.__speed = value
+
     def get_position(self):
         """
         Get the coordinates of the object ant position
         :return:
         """
         return self.position
+
+    def increase_energy(self):
+        return super().increase_energy()
 
     def update(self, *args):
         """
@@ -149,9 +171,10 @@ class Scout(Ant):
         :return: (array) Position to which the ant moves
         """
 
-        # getting list of foods and pheromones from noticeable objects
+        # TODO, scouts can follow enemies too
+
+        # getting list of foods from noticeable objects
         foods = get_objects_of_type(noticeable_objects, Food)
-        pheromones = get_objects_of_type(noticeable_objects, Pheromone)
 
         # Priority is to find food
         if foods:
@@ -172,6 +195,7 @@ class Scout(Ant):
             self.position = self.home.position.copy()
             self.stop_food_trail()
             self.pheromone_strength = 0.
+            self.increase_energy()
             at_nest = True
 
         return at_nest
@@ -200,7 +224,7 @@ class Scout(Ant):
 
         return at_food
 
-    def stop_food_trail(self):  # TO DO
+    def stop_food_trail(self):  # TODO
         """
         Flip (has_food) variable to 0 when the ant reaches the nest and unload the food
         :return:
@@ -298,6 +322,9 @@ class Scout(Ant):
             return self.move_to(pheromones[index].position)
 
     def move_randomly(self):
+        chaos = 1.2
+        seed = int(id(self)+time.time()*2**chaos) % 2**32
+        np.random.seed(seed)
         return super().move_randomly()
 
     def move_to(self, obj_position):

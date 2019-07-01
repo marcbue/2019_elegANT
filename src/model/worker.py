@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 from .food import Food
 from .ant import Ant
@@ -53,13 +54,14 @@ class Worker(Ant):
                 speed of the movement
     """
 
-    def __init__(self, player, home_nest,
+    def __init__(self, player, home_nest, energy=100.,
                  foodiness=1., inscentiveness=1., directionism=1., explorativeness=1., speed=1.):
         """Initialize ant object owner and position
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
         """
-        super(Worker, self).__init__(player, home_nest, foodiness, inscentiveness, directionism, explorativeness, speed)
+        super(Worker, self).__init__(player, home_nest, energy,
+                                     foodiness, inscentiveness, directionism, explorativeness, speed)
 
         self.has_food = 0.
         self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
@@ -70,8 +72,17 @@ class Worker(Ant):
         self.max_pheromone_strength = all_params.ant_model_params.max_pheromone_strength
         self.pheromone_dist_decay = all_params.ant_model_params.pheromone_dist_decay
 
+
     # TODO: Please decide which type of ant is going to use which of these parameters and make 100% sure to remove the
-    #  methods related to unsued ones
+    #  methods related to unused ones
+    @property
+    def energy(self):
+        return self.__energy
+
+    @energy.setter
+    def energy(self, value):
+        self.__energy = value
+
     @property
     def foodiness(self):
         return self.__foodiness
@@ -182,6 +193,7 @@ class Worker(Ant):
             self.position = self.home.position.copy()
             self.unload_food()
             self.pheromone_strength = 0.
+            self.increase_energy()
             at_nest = True
 
         return at_nest
@@ -209,7 +221,7 @@ class Worker(Ant):
 
         return at_food
 
-    def unload_food(self):  # TO DO
+    def unload_food(self):  # TODO
         """
         Flip (has_food) variable to 0 when the ant reaches the nest and unload the food
         :return:
@@ -310,6 +322,9 @@ class Worker(Ant):
             return self.move_to(pheromones[index].position)
 
     def move_randomly(self):
+        chaos = 1.2
+        seed = int(id(self)+time.time()*2**chaos) % 2**32
+        np.random.seed(seed)
         return super().move_randomly()
 
     def move_to(self, obj_position):

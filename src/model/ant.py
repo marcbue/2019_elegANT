@@ -3,14 +3,14 @@ from abc import ABC, abstractmethod
 
 from .game_object import GameObject
 
-from src.utils import randint, array
+from src.utils import randint, array, random
 from src.settings import all_params
 
 distance = np.linalg.norm
 
 
 class Ant(GameObject, ABC):
-    def __init__(self, player, home_nest,
+    def __init__(self, player, home_nest, energy=0.,
                  foodiness=0., inscentiveness=0., directionism=0., explorativeness=0., speed=0.):
         """Initialize ant object owner and position
         :param player: (Player) Owning Player of the ant
@@ -23,7 +23,6 @@ class Ant(GameObject, ABC):
         # self.owner.ants.add(self)
 
         # All ants always have these
-        self.energy = all_params.ant_model_params.initial_energy
         self.direction = all_params.ant_model_params.initial_direction
         self.home = home_nest
         self.direction_memory = all_params.ant_model_params.direction_memory
@@ -32,11 +31,20 @@ class Ant(GameObject, ABC):
         # parameters, and the ant type itself decides which ones to use. This mechanism is consists of the fact that
         # the abstract class has setters for all of these values that automatically set these parameters to an invalid
         # value and each Ant type should override only the setters of the variables that it actually uses.
+        self.energy = energy
         self.foodiness = foodiness
         self.inscentiveness = inscentiveness
         self.directionism = directionism
         self.explorativeness = explorativeness
         self.speed = speed
+
+    @property
+    def energy(self):
+        return self.__energy
+
+    @energy.setter
+    def energy(self, value):
+        self.__energy = None
 
     @property
     def foodiness(self):
@@ -103,6 +111,14 @@ class Ant(GameObject, ABC):
         if self.energy <= all_params.ant_model_params.min_energy:
             return None, None
 
+    def increase_energy(self):
+        """
+        energy of ant is increased (it should happen only when ant is at nest)
+        """
+        if self.energy < all_params.ant_model_params.maximum_energy:
+            self.energy += all_params.ant_model_params.energy_increase
+
+    @abstractmethod
     def move_randomly(self):
         """
         changes the position of the ant using a random walk and combining it with the previous direction
@@ -110,8 +126,10 @@ class Ant(GameObject, ABC):
         :return: the updated position is returned
         """
         while True:  # to avoid standing still and divide by zero
-            movement = randint(low=-1, high=2, size=2)  # random move
-            self.direction += self.direction_memory * self.direction + movement
+            # movement = randint(low=-1, high=2, size=2)  # random move
+            movement = 2 * random(size=2) - 1  # random move
+            # self.direction += self.direction_memory * self.direction + movement
+            self.direction = self.direction_memory * self.direction + movement
             if distance(self.direction) > 0.:
                 break
         self.direction /= distance(self.direction)
