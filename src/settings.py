@@ -39,6 +39,8 @@ class AntModelParams:
         self.direction_memory = 0.5
         self.min_dist_to_nest = 1.
         self.min_dist_to_food = 1.
+        self.min_dist_to_nest_scout = 4.
+        self.min_dist_to_food_scout = 4.
         self.max_dist_to_pheromone = 1.
 
         # Ant features

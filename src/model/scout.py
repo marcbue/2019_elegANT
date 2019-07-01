@@ -20,7 +20,7 @@ class Scout(Ant):
 
             Attributes
             ----------
-            owner: Player
+            player: Player
                 Player object that the ant belongs to
             position: list
                 a list of the ant coordinates
@@ -46,8 +46,6 @@ class Scout(Ant):
                 used for random movement. how much the ant takes into account the previous direction for new movement
             foodiness: float
                 movement preference for big size of food
-            inscentiveness: float
-                movement preference for high intensity of pheromone
             directionism: float
                 movement preference for previous movement direction
             explorativeness: float
@@ -56,7 +54,7 @@ class Scout(Ant):
     """
 
     def __init__(self, player, home_nest, energy=500.,
-                 foodiness=1, inscentiveness=1, directionism=1, explorativeness=1, speed=10.):
+                 foodiness=1, inscentiveness=0., directionism=1, explorativeness=1, speed=8.):
         """Initialize ant object owner and position
 
         :param player: (Player) Owning Player of the ant
@@ -66,7 +64,7 @@ class Scout(Ant):
         super(Scout, self).__init__(player, home_nest, energy,
                                     foodiness, inscentiveness, directionism, explorativeness, speed)
 
-        self.found_food = 0.
+        self.found_food = 0.  # TODO change to False when VIEW IS READY
         self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
 
         # setting parameters
@@ -100,14 +98,6 @@ class Scout(Ant):
     @directionism.setter
     def directionism(self, value):
         self.__directionism = value
-
-    @property
-    def inscentiveness(self):
-        return self.__inscentiveness
-
-    @inscentiveness.setter
-    def inscentiveness(self, value):
-        self.__inscentiveness = value
 
     @property
     def explorativeness(self):
@@ -151,15 +141,19 @@ class Scout(Ant):
         super().update()
 
         if self.found_food:
-
+            # print("found food")
             if self.at_nest():
+                # print("at nest")
                 return self.position, None
-            else:  # Go to nest if has food
+            else:  # Go to nest if ant found food
+                # print("go to nest")
                 return self.move_to(self.home.position), self.set_trace(args[0])
         else:
             if self.at_food(args[0]):
+                # print("at food")
                 return self.position, None
             else:
+                # print("just move")
                 return self.move(args[0]), None
 
     def move(self, noticeable_objects):
@@ -191,7 +185,7 @@ class Scout(Ant):
         """
         at_nest = False
 
-        if distance(self.position - self.home.position) <= all_params.ant_model_params.min_dist_to_nest:
+        if distance(self.position - self.home.position) <= all_params.ant_model_params.min_dist_to_nest_scout:
             self.position = self.home.position.copy()
             self.stop_food_trail()
             self.pheromone_strength = 0.
@@ -213,31 +207,33 @@ class Scout(Ant):
         foods = get_objects_of_type(noticeable_objects, Food)
 
         if foods:
+            # print("no. food: "+str(len(foods)))
             for obj in foods:
-                if distance(self.position - obj.position) <= all_params.ant_model_params.min_dist_to_food:
+                # print("distance to food: "+str(distance(self.position - obj.position)))
+                if distance(self.position - obj.position) <= all_params.ant_model_params.min_dist_to_food_scout:
                     self.position = obj.position.copy()
                     self.start_food_trail()
                     self.pheromone_strength = min(200. * (obj.size / distance(self.position - self.home.position)),
                                                   self.max_pheromone_strength) / self.pheromone_dist_decay
                     at_food = True
                     break
-
+        # print("at food: "+str(at_food))
         return at_food
 
-    def stop_food_trail(self):  # TODO
+    def stop_food_trail(self):
         """
-        Flip (has_food) variable to 0 when the ant reaches the nest and unload the food
+        Set (found_food) variable to False when the ant reaches the nest and finishes the pheromone trail
         :return:
         """
-        self.found_food = False
+        self.found_food = 0.  # TODO change to False when VIEW IS READY
 
     def start_food_trail(self):
         """
-        increase (has_food) variable to loading capacity when the ant finds food
-        :param food: the food object
+        set (found_food) variable to True when the ant finds food
         :return:
         """
-        self.found_food = True
+        print("found food")
+        self.found_food = 1.  # TODO change to True when VIEW IS READY
 
     def move_to_food(self, foods):
         """
@@ -284,43 +280,6 @@ class Scout(Ant):
             else:
                 return None
 
-    def move_to_pheromone(self, pheromones):
-        """
-        Selection of Pheromone to move towards, and ant movement
-        :param pheromones: (list) Pheromone objects in noticeable objects
-        :return: (array) new ant position
-        """
-
-        # Go directly to scent if there is only one source
-        if len(pheromones) == 1:
-            return self.move_to(pheromones[0].position)
-
-        # Compare pheromone sources
-        else:
-
-            # Getting features of pheromone objects
-            data = zeros((len(pheromones), 3))
-            for i, obj in enumerate(pheromones):
-                # Intensity
-                data[i, 0] = obj.strength
-                # Distance to nest
-                data[i, 1] = distance(obj.position - self.home.position)
-                # Difference in momentum
-                # TODO define difference in momentum
-                data[i, 2] = 1
-
-            # Rescaling each feature to have values bounded by 1
-            data /= np.max(data, axis=0)
-
-            # Calculating probability distribution
-            probs = (data[:, 0] ** self.inscentiveness) * (data[:, 1] ** self.explorativeness)
-            probs *= (data[:, 2] ** self.directionism)
-            probs /= np.sum(probs)
-
-            # Draw an object from the prob distribution
-            index = np.random.choice(len(pheromones), p=probs)
-            return self.move_to(pheromones[index].position)
-
     def move_randomly(self):
         chaos = 1.2
         seed = int(id(self) + time.time() * 2**chaos) % 2**32
@@ -328,7 +287,7 @@ class Scout(Ant):
         return super().move_randomly()
 
     def move_to(self, obj_position):
-        return super().move_to()
+        return super().move_to(obj_position)
 
     def set_trace(self, noticeable_objects):
         """
