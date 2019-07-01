@@ -55,25 +55,31 @@ class Worker(Ant):
     """
 
     def __init__(self, player, home_nest, energy=100.,
-                 foodiness=1., inscentiveness=1., directionism=1., explorativeness=1., speed=1.):
-        """Initialize ant object owner and position
+                 foodiness=1., inscentiveness=1., directionism=1., explorativeness=1., speed=1., loading_capacity=1.,
+                 pheromone_strength=1.):
+        """Initialize ant object owner, nest, and ant type-specific parameters
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
         """
         super(Worker, self).__init__(player, home_nest, energy,
-                                     foodiness, inscentiveness, directionism, explorativeness, speed)
+                                     foodiness, inscentiveness, directionism, explorativeness, speed, loading_capacity,
+                                     pheromone_strength)
 
         self.has_food = 0.
-        self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
+        self.owner = player
+        self.home = home_nest
+        # self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
 
         # setting parameters
-        self.loading_capacity = all_params.ant_model_params.loading_capacity
+        # self.loading_capacity = all_params.ant_model_params.loading_capacity
         self.min_pheromone_strength = all_params.ant_model_params.min_pheromone_strength
         self.max_pheromone_strength = all_params.ant_model_params.max_pheromone_strength
         self.pheromone_dist_decay = all_params.ant_model_params.pheromone_dist_decay
 
     # TODO: Please decide which type of ant is going to use which of these parameters and make 100% sure to remove the
     #  methods related to unused ones
+    #  ^^ Adu: But is this necessary? Won't all unused methods just be returned as None?
+
     @property
     def energy(self):
         return self.__energy
@@ -121,6 +127,24 @@ class Worker(Ant):
     @speed.setter
     def speed(self, value):
         self.__speed = value
+
+    @property
+    def loading_capacity(self):
+        return self.__loading_capacity
+
+    @loading_capacity.setter
+    def loading_capacity(self, value):
+        self.__loading_capacity = value
+
+    @property
+    def pheromone_strength(self):
+        return self.__pheromone_strength
+
+    @pheromone_strength.setter
+    def pheromone_strength(self, value):
+        self.__pheromone_strength = value
+
+    # Does it make sense to put initial strength here as a property?
 
     def get_position(self):
         """
@@ -345,4 +369,5 @@ class Worker(Ant):
                     obj.increase(added_strength=self.pheromone_strength)
                     return None
         else:
-            return Pheromone(self.position.copy(), self.owner, initial_strength=self.pheromone_strength)
+            # TODO implement pheromone type
+            return Pheromone(self.position.copy(), self.owner, initial_strength=self.pheromone_strength) # type='food')

@@ -46,6 +46,8 @@ class Scout(Ant):
                 used for random movement. how much the ant takes into account the previous direction for new movement
             foodiness: float
                 movement preference for big size of food
+            inscentiveness: float
+                movement preference for high intensity of pheromone
             directionism: float
                 movement preference for previous movement direction
             explorativeness: float
@@ -54,27 +56,33 @@ class Scout(Ant):
     """
 
     def __init__(self, player, home_nest, energy=500.,
-                 foodiness=1, inscentiveness=0., directionism=1, explorativeness=1, speed=8.):
-        """Initialize ant object owner and position
+                 foodiness=1, inscentiveness=0., directionism=1, explorativeness=1, speed=8., loading_capacity=1.,
+                 pheromone_strength=1.):
+        """Initialize ant object owner, position, and ant type-specific parameters
 
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
 
         """
         super(Scout, self).__init__(player, home_nest, energy,
-                                    foodiness, inscentiveness, directionism, explorativeness, speed)
+                                    foodiness, inscentiveness, directionism, explorativeness, speed, loading_capacity,
+                                    pheromone_strength)
 
         self.found_food = 0.  # TODO change to False when VIEW IS READY
-        self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
+        self.owner = player
+        self.home = home_nest
+        # self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
 
         # setting parameters
-        self.loading_capacity = all_params.ant_model_params.loading_capacity
+        # self.loading_capacity = all_params.ant_model_params.loading_capacity
         self.min_pheromone_strength = all_params.ant_model_params.min_pheromone_strength
         self.max_pheromone_strength = all_params.ant_model_params.max_pheromone_strength
         self.pheromone_dist_decay = all_params.ant_model_params.pheromone_dist_decay
 
     # TODO: Please decide which type of ant is going to use which of these parameters and make 100% sure to remove the
     #  methods related to unused ones
+    #  ^^ Adu: But is this necessary? Won't all unused methods just be returned as None?
+
     @property
     def energy(self):
         return self.__energy
@@ -100,6 +108,14 @@ class Scout(Ant):
         self.__directionism = value
 
     @property
+    def inscentiveness(self):
+        return self.__inscentiveness
+
+    @inscentiveness.setter
+    def inscentiveness(self, value):
+        self.__inscentiveness = value
+
+    @property
     def explorativeness(self):
         return self.__explorativeness
 
@@ -114,6 +130,22 @@ class Scout(Ant):
     @speed.setter
     def speed(self, value):
         self.__speed = value
+
+    @property
+    def loading_capacity(self):
+        return self.__loading_capacity
+
+    @loading_capacity.setter
+    def loading_capacity(self, value):
+        self.__loading_capacity = value
+
+    @property
+    def pheromone_strength(self):
+        return self.__pheromone_strength
+
+    @pheromone_strength.setter
+    def pheromone_strength(self, value):
+        self.__pheromone_strength = value
 
     def get_position(self):
         """
@@ -166,13 +198,19 @@ class Scout(Ant):
         """
 
         # TODO, scouts can follow enemies too
+        # TODO: implement move_to_pheromone method
 
         # getting list of foods from noticeable objects
         foods = get_objects_of_type(noticeable_objects, Food)
+        # pheromones = get_objects_of_type(noticeable_objects, Pheromone)
 
         # Priority is to find food
         if foods:
             return self.move_to_food(foods)
+
+        # In case there is no food, pheromones are taken into account
+        # elif pheromones:
+        #     return self.move_to_pheromone(pheromones)
 
         # In case there is no food nor pheromone scents, move randomly
         else:
@@ -304,4 +342,5 @@ class Scout(Ant):
                     obj.increase(added_strength=self.pheromone_strength)
                     return None
         else:
-            return Pheromone(self.position.copy(), self.owner, initial_strength=self.pheromone_strength)
+            # TODO implement pheromone type
+            return Pheromone(self.position.copy(), self.owner, initial_strength=self.pheromone_strength) #, type='food')
