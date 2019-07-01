@@ -11,7 +11,8 @@ distance = np.linalg.norm
 
 class Ant(GameObject, ABC):
     def __init__(self, player, home_nest, energy=0.,
-                 foodiness=0., inscentiveness=0., directionism=0., explorativeness=0., speed=0.):
+                 foodiness=0., inscentiveness=0., directionism=0., explorativeness=0., speed=0., loading_capacity=0.,
+                 pheromone_strength=0.):
         """Initialize ant object owner and position
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
@@ -36,6 +37,8 @@ class Ant(GameObject, ABC):
         self.inscentiveness = inscentiveness
         self.directionism = directionism
         self.explorativeness = explorativeness
+        self.loading_capacity = loading_capacity
+        self.pheromone_strength = pheromone_strength
         self.speed = speed
 
     @property
@@ -87,9 +90,27 @@ class Ant(GameObject, ABC):
     def speed(self, value):
         self.__speed = None
 
+    @property
+    def loading_capacity(self):
+        return self.__loading_capacity
+
+    @loading_capacity.setter
+    def loading_capacity(self, value):
+        self.__loading_capacity = None
+
+    @property
+    def pheromone_strength(self):
+        return self.__pheromone_strength
+
+    @pheromone_strength.setter
+    def pheromone_strength(self, value):
+        self.__pheromone_strength = None
+
+
     def __str__(self):
         return ("Ant {} at position {} and energy lvl {} from player {} \n with character variables Foodiness {},  "
-                "Inscentiveness {}, Directionism {}, Explorativeness {}, speed {}").format(self.id,
+                "Inscentiveness {}, Directionism {}, Explorativeness {}, speed {}, loading capacity {},"
+                "pheromone_strength {}").format(self.id,
                                                                                            self.position,
                                                                                            self.energy,
                                                                                            self.owner,
@@ -97,7 +118,9 @@ class Ant(GameObject, ABC):
                                                                                            self.inscentiveness,
                                                                                            self.directionism,
                                                                                            self.explorativeness,
-                                                                                           self.speed)
+                                                                                           self.speed,
+                                                                                           self.loading_capacity,
+                                                                                           self.pheromone_strength)
 
     def get_position(self):
         """
