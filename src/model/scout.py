@@ -5,7 +5,7 @@ from .food import Food
 from .ant import Ant
 from .pheromone import Pheromone
 
-from src.utils import randint, array, get_objects_of_type, zeros
+from src.utils import get_objects_of_type, zeros
 from src.settings import all_params
 
 distance = np.linalg.norm
@@ -323,7 +323,7 @@ class Scout(Ant):
 
     def move_randomly(self):
         chaos = 1.2
-        seed = int(id(self)+time.time()*2**chaos) % 2**32
+        seed = int(id(self) + time.time() * 2**chaos) % 2**32
         np.random.seed(seed)
         return super().move_randomly()
 

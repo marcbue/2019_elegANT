@@ -5,7 +5,7 @@ from .food import Food
 from .ant import Ant
 from .pheromone import Pheromone
 
-from src.utils import randint, array, get_objects_of_type, zeros
+from src.utils import get_objects_of_type, zeros
 from src.settings import all_params
 
 distance = np.linalg.norm
@@ -71,7 +71,6 @@ class Worker(Ant):
         self.min_pheromone_strength = all_params.ant_model_params.min_pheromone_strength
         self.max_pheromone_strength = all_params.ant_model_params.max_pheromone_strength
         self.pheromone_dist_decay = all_params.ant_model_params.pheromone_dist_decay
-
 
     # TODO: Please decide which type of ant is going to use which of these parameters and make 100% sure to remove the
     #  methods related to unused ones
@@ -323,7 +322,7 @@ class Worker(Ant):
 
     def move_randomly(self):
         chaos = 1.2
-        seed = int(id(self)+time.time()*2**chaos) % 2**32
+        seed = int(id(self) + time.time() * 2**chaos) % 2**32
         np.random.seed(seed)
         return super().move_randomly()
 

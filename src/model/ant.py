@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 from .game_object import GameObject
 
-from src.utils import randint, array, random
+from src.utils import array, random
 from src.settings import all_params
 
 distance = np.linalg.norm

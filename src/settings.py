@@ -20,7 +20,7 @@ class AntModelParams:
     def __init__(self):
         super(AntModelParams, self).__init__()
         # Energy
-        self.initial_energy = 100. # TODO remove when different initial values per ant are created
+        self.initial_energy = 100.  # TODO remove when different initial values per ant are created
         self.energy_increase = 10.
         self.maximum_energy = 1000.
         self.min_energy = 0.
