@@ -19,23 +19,33 @@ class AntModelParams:
 
     def __init__(self):
         super(AntModelParams, self).__init__()
-        self.initial_energy = 100.
-        self.initial_direction = array([0., 0.])
-        self.initial_pheromone_strength = 0.
+        # Energy
+        self.initial_energy = 100. # TODO remove when different initial values per ant are created
+        self.energy_increase = 10.
+        self.maximum_energy = 1000.
+        self.min_energy = 0.
 
-        self.loading_capacity = 1.
+        # Pheromone
+        self.initial_pheromone_strength = 0.
+        self.initial_direction = array([0., 0.])
         self.min_pheromone_strength = 1.
         self.max_pheromone_strength = 10.
         self.pheromone_dist_decay = 0.95
+
+        # Food
+        self.loading_capacity = 1.
+
+        # Movement and distances
         self.direction_memory = 0.5
+        self.min_dist_to_nest = 1.
+        self.min_dist_to_food = 1.
+        self.max_dist_to_pheromone = 1.
+
+        # Ant features
         self.foodiness = 1.
         self.inscentiveness = 1.
         self.directionism = 1.
         self.explorativeness = 1.
-        self.min_energy = 0.
-        self.min_dist_to_nest = 1.
-        self.min_dist_to_food = 1.
-        self.max_dist_to_pheromone = 1.
 
 
 class FoodModelParams:
