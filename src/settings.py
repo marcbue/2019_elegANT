@@ -29,7 +29,7 @@ class AntModelParams:
         self.initial_pheromone_strength = 0.
         self.initial_direction = array([0., 0.])
         self.min_pheromone_strength = 1.
-        self.max_pheromone_strength = 10.
+        self.max_pheromone_strength = 100.
         self.pheromone_dist_decay = 0.95
 
         # Food
