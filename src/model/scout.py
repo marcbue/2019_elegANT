@@ -270,7 +270,7 @@ class Scout(Ant):
         set (found_food) variable to True when the ant finds food
         :return:
         """
-        #print("food trail")
+        # print("food trail")
         self.found_food = 1.  # TODO change to True when VIEW IS READY
 
     def move_to_food(self, foods):
@@ -320,7 +320,7 @@ class Scout(Ant):
 
     def move_randomly(self):
         chaos = 1.2
-        seed = int(id(self) + time.time() * 2**chaos) % 2**32
+        seed = int(id(self) + time.time() * 2 ** chaos) % 2 ** 32
         np.random.seed(seed)
         return super().move_randomly()
 
@@ -343,4 +343,5 @@ class Scout(Ant):
                     return None
         else:
             # TODO implement pheromone type
-            return Pheromone(self.position.copy(), self.owner, initial_strength=self.pheromone_strength) #, type='food')
+            return Pheromone(self.position.copy(), self.owner,
+                             initial_strength=self.pheromone_strength)  # , type='food')

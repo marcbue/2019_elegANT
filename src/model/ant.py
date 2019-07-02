@@ -106,21 +106,20 @@ class Ant(GameObject, ABC):
     def pheromone_strength(self, value):
         self.__pheromone_strength = None
 
-
     def __str__(self):
         return ("Ant {} at position {} and energy lvl {} from player {} \n with character variables Foodiness {},  "
                 "Inscentiveness {}, Directionism {}, Explorativeness {}, speed {}, loading capacity {},"
                 "pheromone_strength {}").format(self.id,
-                                                                                           self.position,
-                                                                                           self.energy,
-                                                                                           self.owner,
-                                                                                           self.foodiness,
-                                                                                           self.inscentiveness,
-                                                                                           self.directionism,
-                                                                                           self.explorativeness,
-                                                                                           self.speed,
-                                                                                           self.loading_capacity,
-                                                                                           self.pheromone_strength)
+                                                self.position,
+                                                self.energy,
+                                                self.owner,
+                                                self.foodiness,
+                                                self.inscentiveness,
+                                                self.directionism,
+                                                self.explorativeness,
+                                                self.speed,
+                                                self.loading_capacity,
+                                                self.pheromone_strength)
 
     def get_position(self):
         """
