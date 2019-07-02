@@ -2,6 +2,7 @@ from scipy.spatial import cKDTree
 import numpy as np
 
 from .worker import Worker
+from .scout import Scout
 from .ant import Ant
 from .food import Food
 from .nest import Nest
@@ -153,8 +154,12 @@ class KdTreeAndDict(World):
 
                 if isinstance(item, Ant):
                     # TODO: pick radius (or implement it in ant class)
-                    noticeable_objects = self.get_circular_region(
-                        item.position, radius=all_params.tree_model_params.circular_region_radius)
+                    if isinstance(item, Scout):
+                        radius = all_params.tree_model_params.circular_region_radius_scout
+                    elif isinstance(item, Worker):
+                        radius = all_params.tree_model_params.circular_region_radius_worker
+
+                    noticeable_objects = self.get_circular_region(item.position, radius=radius)
                     new_position, new_pheromone = item.update(noticeable_objects)
 
                     # Only handle if new pheromone object needs to be created.
@@ -201,9 +206,8 @@ class KdTreeAndDict(World):
 
         if ant_type == "worker":
             CorrectAnt = Worker
-        # TODO: decomment once Scout exists
-        # elif ant_type == "scout"
-        #    CorrectAnt = Scout
+        elif ant_type == "scout":
+            CorrectAnt = Scout
         else:
             raise ValueError("Incorrect Ant type passed at ant creation.")
 

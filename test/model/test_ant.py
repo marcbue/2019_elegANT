@@ -15,7 +15,7 @@ import pytest
 def set_up_environment():
     player = Player(name="Nobody", color=(178, 58, 238))
     nest = Nest(position=array([0., 0.]), player=player, size=10., health=100.)
-    ant = Worker(player=player, home_nest=nest)
+    ant = Worker(player=player, home_nest=nest, speed=1)
     return player, nest, ant
 
 

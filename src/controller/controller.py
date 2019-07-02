@@ -25,7 +25,7 @@ class Controller:
         }
 
         self.event_list_game_view = {
-            'build_scout': self.create_worker,  # TODO change to create_scout as soon as model is updated
+            'build_scout': self.create_scout,
             'build_worker': self.create_worker,
             'show_build_ants': self.show_build_ants_dialog,
             'quit_game': self.exit_game

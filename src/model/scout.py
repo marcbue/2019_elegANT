@@ -11,18 +11,20 @@ from src.settings import all_params
 distance = np.linalg.norm
 
 
-class Worker(Ant):
+class Scout(Ant):
     """
             A class used to represent an ant object
             It inherits from GameObject class
+
             ...
+
             Attributes
             ----------
-            owner: Player
+            player: Player
                 Player object that the ant belongs to
             position: list
                 a list of the ant coordinates
-            has_food: float
+            found_food: float
                 how much food the ant is carrying
             energy: int
                 a number that specifies current energy value the ant has
@@ -50,22 +52,23 @@ class Worker(Ant):
                 movement preference for previous movement direction
             explorativeness: float
                 movement preference for big distances from nest
-            speed: float
-                speed of the movement
+
     """
 
-    def __init__(self, player, home_nest, energy=100.,
-                 foodiness=1., inscentiveness=1., directionism=1., explorativeness=1., speed=1., loading_capacity=1.,
+    def __init__(self, player, home_nest, energy=500.,
+                 foodiness=1, inscentiveness=0., directionism=1, explorativeness=1, speed=8., loading_capacity=1.,
                  pheromone_strength=1.):
-        """Initialize ant object owner, nest, and ant type-specific parameters
+        """Initialize ant object owner, position, and ant type-specific parameters
+
         :param player: (Player) Owning Player of the ant
         :param home_nest: (Nest) Coordinates of ant position
-        """
-        super(Worker, self).__init__(player, home_nest, energy,
-                                     foodiness, inscentiveness, directionism, explorativeness, speed, loading_capacity,
-                                     pheromone_strength)
 
-        self.has_food = 0.
+        """
+        super(Scout, self).__init__(player, home_nest, energy,
+                                    foodiness, inscentiveness, directionism, explorativeness, speed, loading_capacity,
+                                    pheromone_strength)
+
+        self.found_food = 0.  # TODO change to False when VIEW IS READY
         self.owner = player
         self.home = home_nest
         # self.pheromone_strength = all_params.ant_model_params.initial_pheromone_strength
@@ -144,14 +147,15 @@ class Worker(Ant):
     def pheromone_strength(self, value):
         self.__pheromone_strength = value
 
-    # Does it make sense to put initial strength here as a property?
-
     def get_position(self):
         """
         Get the coordinates of the object ant position
         :return:
         """
         return self.position
+
+    def increase_energy(self):
+        return super().increase_energy()
 
     def update(self, *args):
         """
@@ -168,16 +172,20 @@ class Worker(Ant):
         """
         super().update()
 
-        if self.has_food:
-
+        if self.found_food:
+            # print("found food")
             if self.at_nest():
+                # print("at nest")
                 return self.position, None
-            else:  # Go to nest if has food
+            else:  # Go to nest if ant found food
+                # print("go to nest")
                 return self.move_to(self.home.position), self.set_trace(args[0])
         else:
             if self.at_food(args[0]):
+                # print("at food")
                 return self.position, None
             else:
+                # print("just move")
                 return self.move(args[0]), None
 
     def move(self, noticeable_objects):
@@ -189,17 +197,20 @@ class Worker(Ant):
         :return: (array) Position to which the ant moves
         """
 
-        # getting list of foods and pheromones from noticeable objects
-        foods = get_objects_of_type(noticeable_objects, Food)
-        pheromones = get_objects_of_type(noticeable_objects, Pheromone)
+        # TODO, scouts can follow enemies too
+        # TODO: implement move_to_pheromone method
 
-        # Priority is to get food
+        # getting list of foods from noticeable objects
+        foods = get_objects_of_type(noticeable_objects, Food)
+        # pheromones = get_objects_of_type(noticeable_objects, Pheromone)
+
+        # Priority is to find food
         if foods:
             return self.move_to_food(foods)
 
         # In case there is no food, pheromones are taken into account
-        elif pheromones:
-            return self.move_to_pheromone(pheromones)
+        # elif pheromones:
+        #     return self.move_to_pheromone(pheromones)
 
         # In case there is no food nor pheromone scents, move randomly
         else:
@@ -212,9 +223,9 @@ class Worker(Ant):
         """
         at_nest = False
 
-        if distance(self.position - self.home.position) <= all_params.ant_model_params.min_dist_to_nest:
+        if distance(self.position - self.home.position) <= all_params.ant_model_params.min_dist_to_nest_scout:
             self.position = self.home.position.copy()
-            self.unload_food()
+            self.stop_food_trail()
             self.pheromone_strength = 0.
             self.increase_energy()
             at_nest = True
@@ -223,6 +234,7 @@ class Worker(Ant):
 
     def at_food(self, noticeable_objects):
         """from abc import ABC, abstractmethod
+
         checks if ant is at food location, if True, load food and set has_food to loaded food
         :param noticeable_objects:
         :return: True if ant is at food position, else False
@@ -233,34 +245,33 @@ class Worker(Ant):
         foods = get_objects_of_type(noticeable_objects, Food)
 
         if foods:
+            # print("no. food: "+str(len(foods)))
             for obj in foods:
-                if distance(self.position - obj.position) <= all_params.ant_model_params.min_dist_to_food:
+                # print("distance to food: "+str(distance(self.position - obj.position)))
+                if distance(self.position - obj.position) <= all_params.ant_model_params.min_dist_to_food_scout:
                     self.position = obj.position.copy()
-                    self.load_food(obj)
-                    self.pheromone_strength = min(100. * (obj.size / distance(self.position - self.home.position)),
+                    self.start_food_trail()
+                    self.pheromone_strength = min(200. * (obj.size / distance(self.position - self.home.position)),
                                                   self.max_pheromone_strength) / self.pheromone_dist_decay
                     at_food = True
                     break
-
+        # print("at food: "+str(at_food))
         return at_food
 
-    def unload_food(self):  # TODO
+    def stop_food_trail(self):
         """
-        Flip (has_food) variable to 0 when the ant reaches the nest and unload the food
+        Set (found_food) variable to False when the ant reaches the nest and finishes the pheromone trail
         :return:
         """
-        self.home.increase_food(self.has_food)
-        self.has_food = 0.
+        self.found_food = 0.  # TODO change to False when VIEW IS READY
 
-    def load_food(self, food):
+    def start_food_trail(self):
         """
-        increase (has_food) variable to loading capacity when the ant finds food
-        :param food: the food object
+        set (found_food) variable to True when the ant finds food
         :return:
         """
-
-        amount_taken = food.take_some(self.loading_capacity)
-        self.has_food = amount_taken
+        # print("food trail")
+        self.found_food = 1.  # TODO change to True when VIEW IS READY
 
     def move_to_food(self, foods):
         """
@@ -303,52 +314,13 @@ class Worker(Ant):
 
                 # Drawing an object from the prob distribution
                 index = np.random.choice(len(sub_food), p=probs)
-                # index = np.argmax(probs)
                 return self.move_to(sub_food[index].position)
             else:
                 return None
 
-    def move_to_pheromone(self, pheromones):
-        """
-        Selection of Pheromone to move towards, and ant movement
-        :param pheromones: (list) Pheromone objects in noticeable objects
-        :return: (array) new ant position
-        """
-
-        # Go directly to scent if there is only one source
-        if len(pheromones) == 1:
-            return self.move_to(pheromones[0].position)
-
-        # Compare pheromone sources
-        else:
-
-            # Getting features of pheromone objects
-            data = zeros((len(pheromones), 3))
-            for i, obj in enumerate(pheromones):
-                # Intensity
-                data[i, 0] = obj.strength
-                # Distance to nest
-                data[i, 1] = distance(obj.position - self.home.position)
-                # Difference in momentum
-                # TODO define difference in momentum
-                data[i, 2] = 1
-
-            # Rescaling each feature to have values bounded by 1
-            data /= np.max(data, axis=0)
-
-            # Calculating probability distribution
-            probs = (data[:, 0] ** self.inscentiveness) * (data[:, 1] ** self.explorativeness)
-            probs *= (data[:, 2] ** self.directionism)
-            probs /= np.sum(probs)
-
-            # Draw an object from the prob distribution
-            index = np.random.choice(len(pheromones), p=probs)
-            # index = np.argmax(probs)
-            return self.move_to(pheromones[index].position)
-
     def move_randomly(self):
         chaos = 1.2
-        seed = int(id(self) + time.time() * 2**chaos) % 2**32
+        seed = int(id(self) + time.time() * 2 ** chaos) % 2 ** 32
         np.random.seed(seed)
         return super().move_randomly()
 
@@ -362,7 +334,6 @@ class Worker(Ant):
         :param noticeable_objects:
         :return: None if existing pheromone otherwise a new pheromone object
         """
-
         self.pheromone_strength = max(self.min_pheromone_strength,
                                       self.pheromone_dist_decay * self.pheromone_strength)
         for obj in noticeable_objects:
@@ -372,4 +343,5 @@ class Worker(Ant):
                     return None
         else:
             # TODO implement pheromone type
-            return Pheromone(self.position.copy(), self.owner, initial_strength=self.pheromone_strength)  # type='food')
+            return Pheromone(self.position.copy(), self.owner,
+                             initial_strength=self.pheromone_strength)  # , type='food')
